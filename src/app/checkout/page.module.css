@@ -1,0 +1,389 @@
+.checkoutPage {
+  padding: var(--spacing-xxl) 0;
+  background-color: var(--bg-primary);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr;
+  gap: var(--spacing-jumbo);
+}
+
+/* Wizard steps indicator */
+.stepsHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xl);
+  position: relative;
+}
+
+.stepsHeader::after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--border-color);
+  z-index: 1;
+}
+
+.stepIndicator {
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  z-index: 2;
+  position: relative;
+}
+
+.stepActive {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold-hover);
+  background-color: var(--accent-gold-light);
+}
+
+.stepDone {
+  border-color: var(--accent-blue);
+  color: var(--bg-secondary);
+  background-color: var(--accent-blue);
+}
+
+.stepText {
+  position: absolute;
+  top: 38px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transform: translateX(-35%);
+  color: var(--text-muted);
+}
+
+.stepTextActive {
+  color: var(--text-primary);
+}
+
+/* Forms Section */
+.formSection {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.sectionTitle {
+  font-family: var(--font-headings);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-sm);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.fullWidth {
+  grid-column: 1 / span 2;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.input, .select {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  font-size: 0.9rem;
+  background-color: var(--bg-primary);
+  width: 100%;
+}
+
+.input:focus, .select:focus {
+  border-color: var(--accent-gold);
+  background-color: var(--bg-secondary);
+}
+
+.errorText {
+  color: var(--accent-terracotta);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Payment selection styling */
+.paymentOptions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.paymentCard {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  transition: all var(--transition-fast);
+}
+
+.paymentCard:hover {
+  border-color: var(--accent-gold);
+}
+
+.paymentCardSelected {
+  border-color: var(--accent-blue);
+  background-color: var(--accent-blue-light);
+}
+
+.radioInput {
+  accent-color: var(--accent-blue);
+  margin-top: 4px;
+}
+
+.paymentDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.paymentName {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.paymentDesc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Summary Panel Sidebar */
+.summarySidebar {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.summaryTitle {
+  font-family: var(--font-headings);
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.summaryItems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-height: 240px;
+  overflow-y: auto;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.summaryItem {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.summaryThumb {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.summaryInfo {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.summaryQtyPrice {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.summaryTotalCol {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* Accordion tables */
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.rowBold {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-top: 1px dashed var(--border-color);
+  padding-top: var(--spacing-sm);
+}
+
+.discountVal {
+  color: var(--accent-sage);
+}
+
+/* Button navigations */
+.buttonRow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--spacing-lg);
+}
+
+.prevBtn {
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+}
+
+.prevBtn:hover {
+  background-color: var(--bg-primary);
+}
+
+.nextBtn {
+  background-color: var(--accent-blue);
+  color: var(--bg-secondary);
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+}
+
+.nextBtn:hover {
+  background-color: var(--accent-blue-hover);
+}
+
+.submitBtn {
+  background-color: var(--accent-gold);
+  color: var(--bg-secondary);
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+}
+
+.submitBtn:hover {
+  background-color: var(--accent-gold-hover);
+}
+
+/* Warning alert */
+.paymentWarning {
+  background-color: var(--accent-gold-light);
+  border: 1px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  color: var(--accent-gold-hover);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin-top: var(--spacing-md);
+}
+
+/* Confirm Details list */
+.reviewList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.reviewItem {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-xs);
+}
+
+.reviewItem:last-child {
+  border-bottom: none;
+}
+
+.reviewLabel {
+  width: 140px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.reviewVal {
+  flex-grow: 1;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Responsive grid modifications */
+@media (max-width: 992px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .fullWidth {
+    grid-column: 1;
+  }
+  
+  .buttonRow {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .buttonRow button {
+    width: 100%;
+  }
+}
