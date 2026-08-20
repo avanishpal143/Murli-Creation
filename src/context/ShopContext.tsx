@@ -1,11 +1,18 @@
-"use client";
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Product, INITIAL_PRODUCTS } from "../data/products";
 
 export interface CartItem {
   product: Product;
   quantity: number;
+}
+
+export interface Review {
+  id: string;
+  productId: string;
+  userName: string;
+  rating: number; // 1-5
+  comment: string;
+  date: string;
 }
 
 export interface Order {
@@ -37,6 +44,7 @@ interface ShopContextType {
   products: Product[];
   cart: CartItem[];
   orders: Order[];
+  reviews: Review[];
   toasts: ToastMessage[];
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
@@ -49,76 +57,171 @@ interface ShopContextType {
   updateOrderStatus: (orderId: string, status: Order["orderStatus"]) => void;
   showToast: (text: string, type?: ToastMessage["type"]) => void;
   removeToast: (id: string) => void;
+  addReview: (productId: string, userName: string, rating: number, comment: string) => void;
 }
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
+const INITIAL_REVIEWS: Review[] = [
+  {
+    id: "rev-1",
+    productId: "prod-1",
+    userName: "Rahul Sharma",
+    rating: 5,
+    comment: "Absolutely stunning piece! The mirror layout is mathematically perfect, and the indigo background fits my entryway beautifully. Packing was double-crate wood, very secure.",
+    date: "14 Aug 2026"
+  },
+  {
+    id: "rev-2",
+    productId: "prod-1",
+    userName: "Priya Patel",
+    rating: 5,
+    comment: "Gorgeous traditional Kutchi art. You can tell it's completely handcrafted from the organic texture of the clay paste. Highly recommend Suman's work!",
+    date: "10 Aug 2026"
+  },
+  {
+    id: "rev-3",
+    productId: "prod-2",
+    userName: "Amit Verma",
+    rating: 4,
+    comment: "Very heavy solid mango wood window. The distressed teal green and gold finish is gorgeous, feels like a piece from a royal haveli. Took 10 days to deliver, but worth the wait.",
+    date: "12 Aug 2026"
+  },
+  {
+    id: "rev-4",
+    productId: "prod-2",
+    userName: "Ritu Jangra",
+    rating: 5,
+    comment: "Beautiful mirror frame! Fits my guest room gallery wall perfectly. Suresh Jangra's carving details are masterclass.",
+    date: "08 Aug 2026"
+  },
+  {
+    id: "rev-5",
+    productId: "prod-3",
+    userName: "Meera Bai",
+    rating: 5,
+    comment: "Bhav and devotion captured beautifully. The velvet fabric is very rich and fitting for Khatu Shyam Baba. Highly satisfied.",
+    date: "15 Aug 2026"
+  },
+  {
+    id: "rev-6",
+    productId: "prod-3",
+    userName: "Krishna Das",
+    rating: 5,
+    comment: "The zari work is incredibly detailed, and the peacock feather print mukut is highly beautiful. Will buy again for festive occasions.",
+    date: "11 Aug 2026"
+  },
+  {
+    id: "rev-7",
+    productId: "prod-4",
+    userName: "Deepak Kumar",
+    rating: 4,
+    comment: "Nice shringar set. The peacock feathers are fresh and high quality. Looks gorgeous in my home temple.",
+    date: "06 Aug 2026"
+  },
+  {
+    id: "rev-8",
+    productId: "prod-5",
+    userName: "Sarla Devi",
+    rating: 5,
+    comment: "Very auspicious Swastik plaques. Decorated my main door for early Diwali setup. Bells have a sweet sound.",
+    date: "16 Aug 2026"
+  },
+  {
+    id: "rev-9",
+    productId: "prod-6",
+    userName: "Sanjay Singhal",
+    rating: 5,
+    comment: "Perfect custom name plate. Suman contacted us for customization colors and text, and delivered within 12 days. Absolute masterpiece on our entryway!",
+    date: "13 Aug 2026"
+  },
+  {
+    id: "rev-10",
+    productId: "prod-7",
+    userName: "Ananya Roy",
+    rating: 5,
+    comment: "Concentric dot painting is flawless. Sealed with gloss varnish so it is very easy to dust clean. Adds a warm pop of mustard to my gallery wall.",
+    date: "09 Aug 2026"
+  },
+  {
+    id: "rev-11",
+    productId: "prod-8",
+    userName: "Gaurav Joshi",
+    rating: 5,
+    comment: "Spiritual Swastik panel sculpted beautifully in clay. Highly auspicious vibes in my pooja room.",
+    date: "07 Aug 2026"
+  }
+];
+
 export function ShopProvider({ children }: { children: React.ReactNode }) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load state on mount
-  useEffect(() => {
+  // Synchronous initializers to avoid React render race conditions
+  const [products, setProducts] = useState<Product[]>(() => {
     try {
-      const storedProducts = localStorage.getItem("mc_products");
-      const storedCart = localStorage.getItem("mc_cart");
-      const storedOrders = localStorage.getItem("mc_orders");
-
-      if (storedProducts) {
-        const loaded: Product[] = JSON.parse(storedProducts);
-        const validated = loaded.map((p) => {
-          const match = INITIAL_PRODUCTS.find((init) => init.id === p.id);
-          return {
-            ...p,
-            mrp: p.mrp || match?.mrp || Math.round(p.price * 1.3),
-            rating: p.rating || match?.rating || 4.8,
-            reviewsCount: p.reviewsCount || match?.reviewsCount || 15,
-            artist: p.artist || match?.artist || "Master Craftsman Murli Prasad",
-            folklore: p.folklore || match?.folklore || ""
-          };
-        });
-        setProducts(validated);
-        localStorage.setItem("mc_products", JSON.stringify(validated));
-      } else {
-        setProducts(INITIAL_PRODUCTS);
-        localStorage.setItem("mc_products", JSON.stringify(INITIAL_PRODUCTS));
-      }
-
-      if (storedCart) {
-        setCart(JSON.parse(storedCart));
-      }
-
-      if (storedOrders) {
-        setOrders(JSON.parse(storedOrders));
+      const stored = localStorage.getItem("mc_products");
+      if (stored) {
+        const loaded: Product[] = JSON.parse(stored);
+        if (loaded.length < INITIAL_PRODUCTS.length) {
+          // If we expanded the store code database, force reset the local storage to load all 36 items
+          localStorage.setItem("mc_products", JSON.stringify(INITIAL_PRODUCTS));
+          return INITIAL_PRODUCTS;
+        }
+        return loaded;
       }
     } catch (e) {
-      console.error("Error accessing localStorage", e);
-      setProducts(INITIAL_PRODUCTS);
+      console.error("Error reading products cache", e);
     }
-    setIsLoaded(true);
-  }, []);
+    return INITIAL_PRODUCTS;
+  });
 
-  // Save states to localStorage when updated
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem("mc_products", JSON.stringify(products));
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    try {
+      const stored = localStorage.getItem("mc_cart");
+      if (stored) return JSON.parse(stored);
+    } catch (e) {
+      console.error("Error reading cart cache", e);
     }
-  }, [products, isLoaded]);
+    return [];
+  });
+
+  const [orders, setOrders] = useState<Order[]>(() => {
+    try {
+      const stored = localStorage.getItem("mc_orders");
+      if (stored) return JSON.parse(stored);
+    } catch (e) {
+      console.error("Error reading orders cache", e);
+    }
+    return [];
+  });
+
+  const [reviews, setReviews] = useState<Review[]>(() => {
+    try {
+      const stored = localStorage.getItem("mc_reviews");
+      if (stored) return JSON.parse(stored);
+    } catch (e) {
+      print: console.error("Error reading reviews cache", e);
+    }
+    return INITIAL_REVIEWS;
+  });
+
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const [isLoaded, setIsLoaded] = useState(true);
+
+  // Sync state changes back to localStorage
+  useEffect(() => {
+    localStorage.setItem("mc_products", JSON.stringify(products));
+  }, [products]);
 
   useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem("mc_cart", JSON.stringify(cart));
-    }
-  }, [cart, isLoaded]);
+    localStorage.setItem("mc_cart", JSON.stringify(cart));
+  }, [cart]);
 
   useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem("mc_orders", JSON.stringify(orders));
-    }
-  }, [orders, isLoaded]);
+    localStorage.setItem("mc_orders", JSON.stringify(orders));
+  }, [orders]);
+
+  useEffect(() => {
+    localStorage.setItem("mc_reviews", JSON.stringify(reviews));
+  }, [reviews]);
 
   // Toast notifications manager
   const showToast = (text: string, type: ToastMessage["type"] = "success") => {
@@ -208,6 +311,44 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Add Comment/Review
+  const addReview = (productId: string, userName: string, rating: number, comment: string) => {
+    const newReview: Review = {
+      id: "rev-" + Date.now(),
+      productId,
+      userName,
+      rating,
+      comment,
+      date: new Date().toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      })
+    };
+
+    setReviews((prev) => [newReview, ...prev]);
+
+    // Recalculate average stars and count
+    setProducts((prevProducts) =>
+      prevProducts.map((p) => {
+        if (p.id === productId) {
+          const currentReviewsCount = p.reviewsCount || 0;
+          const currentRating = p.rating || 4.8;
+          const newCount = currentReviewsCount + 1;
+          const newRating = parseFloat((((currentRating * currentReviewsCount) + rating) / newCount).toFixed(1));
+          return {
+            ...p,
+            reviewsCount: newCount,
+            rating: newRating
+          };
+        }
+        return p;
+      })
+    );
+
+    showToast("Review submitted successfully!", "success");
+  };
+
   // Checkout and Order Placement
   const placeOrder = (
     customer: Order["customer"],
@@ -295,6 +436,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
         products,
         cart,
         orders,
+        reviews,
         toasts,
         addToCart,
         removeFromCart,
@@ -306,7 +448,8 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
         placeOrder,
         updateOrderStatus,
         showToast,
-        removeToast
+        removeToast,
+        addReview
       }}
     >
       {children}

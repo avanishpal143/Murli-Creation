@@ -1,94 +1,79 @@
-"use client";
-
-import React, { useState } from "react";
-import Link from "next/link";
-import { useShop } from "../context/ShopContext";
+import React from "react";
+import { Link } from "react-router-dom";
 import styles from "./Footer.module.css";
+import Interactive3DTilt from "./Interactive3DTilt";
 
 export default function Footer() {
-  const { showToast } = useShop();
-  const [email, setEmail] = useState("");
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    showToast(`Subscribed successfully with ${email}! Welcome to our art journal.`, "success");
-    setEmail("");
-  };
-
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
-        {/* Brand Column */}
-        <div className={styles.columnBrand}>
-          <Link href="/" className={styles.logoContainer}>
-            <h2 className={styles.wordmark}>MURLI</h2>
-            <span className={styles.tagline}>Creations</span>
-          </Link>
-          <p className={styles.blurb}>
-            Handcrafting premium Lippan art murals, vintage wooden Jharokhas, and hand-painted spiritual mandala plates. Bring authentic Indian heritage into modern living spaces.
-          </p>
-          <div className={styles.socials}>
-            <a
-              href="https://www.instagram.com/murlicreationsofficial"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.socialLink}
-              aria-label="Instagram Profile"
-            >
-              Instagram @murlicreationsofficial
-            </a>
+        {/* Column 1: Brand details wrapped in 3D tilt */}
+        <Interactive3DTilt maxTilt={8} scale={1.02} className={styles.tiltWrapper}>
+          <div className={styles.columnBrand}>
+            <Link to="/" className={styles.logoContainer} style={{ display: 'block', marginBottom: '12px' }}>
+              <img
+                src="/images/brand/white_logo.png"
+                alt="Murli Creations Logo"
+                width={110}
+                height={59}
+                style={{ objectFit: "contain" }}
+              />
+            </Link>
+            <p className={styles.blurb}>
+              Handcrafting premium Lippan art murals, vintage wooden Jharokhas, and hand-painted spiritual mandala plates. Bring authentic Indian heritage into modern living spaces.
+            </p>
+          </div>
+        </Interactive3DTilt>
+
+        {/* Column 2: Address and Contact details */}
+        <div className={styles.columnLinks}>
+          <h3 className={styles.title}>Address</h3>
+          <div className={styles.addressList}>
+            <p className={styles.addressItem}>
+              <strong>📍 Workshop Studio:</strong><br />
+              Budh Bazar Road, Rohtak, Haryana, India - 124001
+            </p>
+            <p className={styles.addressItem}>
+              <strong>✉️ Email:</strong><br />
+              care@murlicreations.com
+            </p>
+            <p className={styles.addressItem}>
+              <strong>📞 Call:</strong><br />
+              +91 98765 43210
+            </p>
           </div>
         </div>
 
-        {/* Sitemap Links Column */}
+        {/* Column 3: Shop Collections */}
         <div className={styles.columnLinks}>
-          <h3 className={styles.title}>Shop Collections</h3>
+          <h3 className={styles.title}>Collections</h3>
           <ul className={styles.linkList}>
-            <li><Link href="/shop?category=Lippan+Art">Lippan Clay Murals</Link></li>
-            <li><Link href="/shop?category=Jharokhas+%26+Frames">Wooden Jharokha Mirrors</Link></li>
-            <li><Link href="/shop?category=Wall+Plates+%26+Mandalas">Handpainted Wall Plates</Link></li>
-            <li><Link href="/shop">All Handcrafts</Link></li>
+            <li><Link to="/shop?category=Lippan+Art">Lippan Clay Murals</Link></li>
+            <li><Link to="/shop?category=Jharokhas+%26+Frames">Wooden Jharokha Mirrors</Link></li>
+            <li><Link to="/shop?category=Wall+Plates+%26+Mandalas">Handpainted Wall Plates</Link></li>
+            <li><Link to="/shop">All Handcrafts</Link></li>
           </ul>
         </div>
 
-        {/* Studio Info Column */}
+        {/* Column 4: Our Studio */}
         <div className={styles.columnLinks}>
           <h3 className={styles.title}>Our Studio</h3>
           <ul className={styles.linkList}>
-            <li><Link href="/our-craft">Artisan Process</Link></li>
-            <li><Link href="/contact">FAQs & Care Info</Link></li>
-            <li><Link href="/contact">Contact & Map</Link></li>
-            <li><Link href="/admin" className={styles.adminFooterLink}>Staff Portal (Admin)</Link></li>
+            <li><Link to="/founder-story">Founder's Story</Link></li>
+            <li><Link to="/our-craft">Artisan Process</Link></li>
+            <li><Link to="/contact">Contact & Map</Link></li>
           </ul>
         </div>
 
-        {/* Contact Details & Newsletter Column */}
-        <div className={styles.columnContact}>
-          <h3 className={styles.title}>Join Our Journal</h3>
-          <p className={styles.newsletterText}>
-            Subscribe for sneak peeks of new collections, artisan interviews, and home styling tips.
-          </p>
-          <form onSubmit={handleSubscribe} className={styles.newsletterForm}>
-            <input
-              type="email"
-              placeholder="Your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className={styles.newsletterInput}
-              aria-label="Email address for newsletter"
-            />
-            <button type="submit" className={styles.subscribeBtn}>
-              Subscribe
-            </button>
-          </form>
-
-          <div className={styles.contactDetails}>
-            <p><strong>Studio:</strong> Rohtak, Haryana, India - 124001</p>
-            <p><strong>Email:</strong> care@murlicreations.com</p>
-            <p><strong>Call:</strong> +91 98765 43210</p>
-          </div>
+        {/* Column 5: Support / Policies */}
+        <div className={styles.columnLinks}>
+          <h3 className={styles.title}>Support</h3>
+          <ul className={styles.linkList}>
+            <li><Link to="/contact">FAQs & Care Info</Link></li>
+            <li><Link to="/contact">Return & Refund</Link></li>
+            <li><Link to="/contact">Shipping Policy</Link></li>
+            <li><Link to="/contact">Terms of Service</Link></li>
+          </ul>
         </div>
       </div>
 
@@ -98,11 +83,26 @@ export default function Footer() {
           <p className={styles.copyright}>
             &copy; {new Date().getFullYear()} Murli Creations. All Rights Reserved. Handcrafted in Haryana, India.
           </p>
-          <div className={styles.payments}>
-            <span className={styles.paymentBadge}>UPI (Paytm/GPay)</span>
-            <span className={styles.paymentBadge}>Debit & Credit Cards</span>
-            <span className={styles.paymentBadge}>Net Banking</span>
-            <span className={styles.paymentBadge}>Cash on Delivery</span>
+          <div className={styles.socials}>
+            <a
+              href="https://www.instagram.com/murlicreationsofficial"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialLink}
+              aria-label="Instagram Profile"
+            >
+              Instagram
+            </a>
+            <span className={styles.socialSeparator}>|</span>
+            <a
+              href="https://wa.me/919876543210"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialLink}
+              aria-label="WhatsApp Studio"
+            >
+              WhatsApp Support
+            </a>
           </div>
         </div>
       </div>

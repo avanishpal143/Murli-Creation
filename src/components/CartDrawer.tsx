@@ -1,8 +1,5 @@
-"use client";
-
 import React, { useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import { Link } from "react-router-dom";
 import { useShop } from "../context/ShopContext";
 import styles from "./CartDrawer.module.css";
 
@@ -51,7 +48,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <div className={styles.emptyIcon}>🎨</div>
               <p className={styles.emptyText}>Your cart is empty.</p>
               <p className={styles.emptySubtext}>Explore our handcrafted pieces to bring life to your spaces.</p>
-              <Link href="/shop" onClick={onClose} className={styles.shopBtn}>
+              <Link to="/shop" onClick={onClose} className={styles.shopBtn}>
                 Browse Shop
               </Link>
             </div>
@@ -60,12 +57,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               {cart.map((item) => (
                 <div key={item.product.id} className={styles.item}>
                   <div className={styles.imageContainer}>
-                    <Image
+                    <img
                       src={item.product.images[0]}
                       alt={item.product.name}
                       width={80}
                       height={80}
                       className={styles.image}
+                      style={{ objectFit: "cover" }}
                     />
                   </div>
                   <div className={styles.details}>
@@ -116,10 +114,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
             <p className={styles.shippingNotice}>GST included. Shipping calculated at checkout.</p>
             <div className={styles.actions}>
-              <Link href="/cart" onClick={onClose} className={styles.viewCartBtn}>
+              <Link to="/cart" onClick={onClose} className={styles.viewCartBtn}>
                 View Full Cart
               </Link>
-              <Link href="/checkout" onClick={onClose} className={styles.checkoutBtn}>
+              <Link to="/checkout" onClick={onClose} className={styles.checkoutBtn}>
                 Checkout Now
               </Link>
             </div>

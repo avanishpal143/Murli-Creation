@@ -1,8 +1,5 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "react-router-dom";
 import { useShop } from "../context/ShopContext";
 import styles from "./Header.module.css";
 
@@ -16,7 +13,7 @@ export default function Header({ onCartOpen }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   
-  const pathname = usePathname();
+  const pathname = useLocation().pathname;
   const { cart } = useShop();
 
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -41,6 +38,7 @@ export default function Header({ onCartOpen }: HeaderProps) {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
+    { name: "Founder's Story", path: "/founder-story" },
     { name: "Our Craft", path: "/our-craft" },
     { name: "Journal", path: "/instagram" },
     { name: "Contact", path: "/contact" },
@@ -48,13 +46,14 @@ export default function Header({ onCartOpen }: HeaderProps) {
   ];
 
   return (
-    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ""}`}>
+    <>
       {/* Top Promotional Offer Banner */}
       <div className={styles.promoBanner}>
         ✨ Festive Offer: Use code <strong>MURLI10</strong> for 10% OFF + Free Shipping above ₹3,000! ✨
       </div>
 
-      <div className={styles.container}>
+      <header className={`${styles.header} ${isScrolled ? styles.scrolled : ""}`}>
+        <div className={styles.container}>
         {/* Mobile Toggle Hamburger */}
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -66,9 +65,14 @@ export default function Header({ onCartOpen }: HeaderProps) {
         </button>
 
         {/* Wordmark Logo Left */}
-        <Link href="/" className={styles.logoContainer}>
-          <h1 className={styles.wordmark}>MURLI</h1>
-          <span className={styles.tagline}>Creations</span>
+        <Link to="/" className={styles.logoContainer}>
+          <img
+            src="/images/brand/black_logo.png"
+            alt="Murli Creations Logo"
+            width={120}
+            height={69}
+            className={styles.logoImage}
+          />
         </Link>
 
         {/* Centered Desktop Nav Links */}
@@ -76,7 +80,7 @@ export default function Header({ onCartOpen }: HeaderProps) {
           {navLinks.map((link) => (
             <Link
               key={link.path}
-              href={link.path}
+              to={link.path}
               className={`${styles.navLink} ${pathname === link.path ? styles.active : ""} ${
                 link.isSpecial ? styles.specialLink : ""
               }`}
@@ -122,50 +126,56 @@ export default function Header({ onCartOpen }: HeaderProps) {
           </button>
         </div>
       </div>
+    </header>
 
-      {/* Mobile Menu Panel */}
-      <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ""}`}>
-        <div className={styles.mobileMenuHeader}>
-          <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className={styles.logoContainer}>
-            <h2 className={styles.wordmark}>MURLI</h2>
-            <span className={styles.tagline}>Creations</span>
-          </Link>
-          <button
+    {/* Mobile Menu Panel (Moved outside of <header> to prevent transform: translateX positioning bug) */}
+    <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ""}`}>
+      <div className={styles.mobileMenuHeader}>
+        <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className={styles.logoContainer}>
+          <img
+            src="/images/brand/black_logo.png"
+            alt="Murli Creations Logo"
+            width={100}
+            height={58}
+            className={styles.logoImageMobile}
+          />
+        </Link>
+        <button
+          onClick={() => setIsMobileMenuOpen(false)}
+          className={styles.closeMenuBtn}
+          aria-label="Close menu"
+        >
+          &times;
+        </button>
+      </div>
+      <nav className={styles.navMobile}>
+        {navLinks.map((link) => (
+          <Link
+            key={link.path}
+            to={link.path}
             onClick={() => setIsMobileMenuOpen(false)}
-            className={styles.closeMenuBtn}
-            aria-label="Close menu"
+            className={`${styles.mobileNavLink} ${pathname === link.path ? styles.mobileActive : ""} ${
+              link.isSpecial ? styles.mobileSpecialLink : ""
+            }`}
           >
-            &times;
-          </button>
-        </div>
-        <nav className={styles.navMobile}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`${styles.mobileNavLink} ${pathname === link.path ? styles.mobileActive : ""} ${
-                link.isSpecial ? styles.mobileSpecialLink : ""
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
-        <div className={styles.mobileMenuFooter}>
-          <p className={styles.studioInfo}>Studio: Rohtak, Haryana</p>
-          <div className={styles.instaLink}>
-            <a href="https://www.instagram.com/murlicreationsofficial" target="_blank" rel="noopener noreferrer">
-              Follow @murlicreationsofficial
-            </a>
-          </div>
+            {link.name}
+          </Link>
+        ))}
+      </nav>
+      <div className={styles.mobileMenuFooter}>
+        <p className={styles.studioInfo}>Studio: Rohtak, Haryana</p>
+        <div className={styles.instaLink}>
+          <a href="https://www.instagram.com/murlicreationsofficial" target="_blank" rel="noopener noreferrer">
+            Follow @murlicreationsofficial
+          </a>
         </div>
       </div>
+    </div>
 
-      {/* Backdrop */}
-      {isMobileMenuOpen && (
-        <div className={styles.menuBackdrop} onClick={() => setIsMobileMenuOpen(false)} />
-      )}
-    </header>
-  );
+    {/* Backdrop (Moved outside of <header> to prevent transform: translateX positioning bug) */}
+    {isMobileMenuOpen && (
+      <div className={styles.menuBackdrop} onClick={() => setIsMobileMenuOpen(false)} />
+    )}
+  </>
+);
 }
