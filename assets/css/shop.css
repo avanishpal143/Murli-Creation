@@ -1,0 +1,361 @@
+/* =======================================================
+   MYNTRA-INSPIRED SHOP CATALOG & TOP CATEGORIES BAR
+   ======================================================= */
+
+.shop-page {
+  padding: 16px 0 60px 0;
+  background-color: var(--bg-primary);
+}
+
+/* 1. Top Primary Category Pills (Horizontal scrolling bar) */
+.top-categories-bar {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 6px 2px 14px 2px;
+  margin-bottom: var(--spacing-md);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.top-categories-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.top-cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(30, 166, 89, 0.2);
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: all var(--transition-fast);
+}
+
+.top-cat-pill:hover {
+  border-color: var(--accent-green-vibrant);
+  color: var(--accent-green-vibrant);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 166, 89, 0.15);
+}
+
+.top-cat-pill.active {
+  background: var(--gradient-primary);
+  color: #FFFFFF;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(30, 166, 89, 0.35);
+}
+
+.top-cat-pill.active .top-cat-icon {
+  color: #FFFFFF;
+}
+
+.top-cat-pill.active .top-cat-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+.top-cat-icon {
+  color: var(--accent-green-vibrant);
+  display: flex;
+  align-items: center;
+}
+
+.top-cat-count {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: #F3F4F6;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+
+/* 2. Subcategories Chips Bar */
+.subcategories-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 12px 16px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+.sub-filter-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-right: 4px;
+}
+
+.sub-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  background: #F8FAF8;
+  border: 1px solid rgba(30, 166, 89, 0.15);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.sub-chip:hover {
+  background: #FFFFFF;
+  border-color: var(--accent-green-vibrant);
+  color: var(--accent-green-vibrant);
+}
+
+.sub-chip.active {
+  background: rgba(30, 166, 89, 0.12);
+  border-color: var(--accent-green-vibrant);
+  color: var(--accent-green-vibrant);
+  font-weight: 700;
+}
+
+/* 3. Toolbar Bar (Sort & Filter Controls) */
+.shop-toolbar-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.results-count {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.results-count strong {
+  color: var(--text-primary);
+}
+
+.clear-all-filters-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #EF4444;
+  background: #FEE2E2;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.clear-all-filters-btn:hover {
+  background: #EF4444;
+  color: #FFFFFF;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+/* Price range input */
+.budget-slider-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.budget-label {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  display: flex;
+  gap: 4px;
+}
+
+.budget-label strong {
+  color: var(--accent-green-vibrant);
+}
+
+.budget-range-input {
+  width: 110px;
+  accent-color: var(--accent-green-vibrant);
+  cursor: pointer;
+}
+
+/* Sort Dropdown */
+.sort-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sort-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sort-dropdown {
+  background: #F8FAF8;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.sort-dropdown:focus {
+  border-color: var(--accent-green-vibrant);
+}
+
+/* Search Query Banner */
+.active-query-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(30, 166, 89, 0.08);
+  border: 1px solid rgba(30, 166, 89, 0.2);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.clear-search-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-green-vibrant);
+  text-decoration: underline;
+}
+
+/* 4. Myntra-Style 4-Column Responsive Catalog Grid */
+.myntra-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Empty State */
+.shop-empty-state {
+  text-align: center;
+  padding: 60px var(--spacing-md);
+  background: #FFFFFF;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.shop-empty-icon {
+  color: var(--accent-green-vibrant);
+  margin-bottom: 4px;
+}
+
+.shop-empty-title {
+  font-family: var(--font-headings);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.shop-empty-text {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.shop-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gradient-primary);
+  color: #FFFFFF;
+  padding: 10px 24px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(30, 166, 89, 0.25);
+  margin-top: 8px;
+}
+
+/* Responsive Grid Breakpoints */
+@media (max-width: 992px) {
+  .myntra-catalog-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .myntra-catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .top-categories-bar {
+    justify-content: flex-start;
+  }
+
+  .shop-toolbar-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-right {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .myntra-catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+}

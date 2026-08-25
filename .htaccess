@@ -1,0 +1,20 @@
+RewriteEngine On
+
+# Allow direct access to existing files and directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Clean URL Rewriting for root pages
+RewriteRule ^shop/?$ shop.php [L,QSA]
+RewriteRule ^about/?$ about.php [L,QSA]
+RewriteRule ^product/([^/]+)/?$ product.php?slug=$1 [L,QSA]
+RewriteRule ^cart/?$ cart.php [L,QSA]
+RewriteRule ^checkout/?$ checkout.php [L,QSA]
+RewriteRule ^order-confirmation/?$ order-confirmation.php [L,QSA]
+RewriteRule ^founder-story/?$ about.php [L,QSA]
+RewriteRule ^contact/?$ contact.php [L,QSA]
+RewriteRule ^admin/?$ admin.php [L,QSA]
+
+# 404 Fallback
+ErrorDocument 404 /404.php
