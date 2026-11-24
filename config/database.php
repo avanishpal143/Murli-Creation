@@ -46,7 +46,19 @@ function get_db_connection() {
             PDO::ATTR_EMULATE_PREPARES   => false
         ];
 
-        $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+        try {
+            $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+        } catch (PDOException $connErr) {
+            // Automatic Hostinger socket/TCP fallback between localhost and 127.0.0.1
+            $altHost = (DB_HOST === '127.0.0.1') ? 'localhost' : ((DB_HOST === 'localhost') ? '127.0.0.1' : null);
+            if ($altHost !== null) {
+                $altDsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=%s', $altHost, DB_PORT, DB_NAME, DB_CHARSET);
+                $pdo = new PDO($altDsn, DB_USER, DB_PASS, $options);
+            } else {
+                throw $connErr;
+            }
+        }
+
         $pdo->exec("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
         return $pdo;
     } catch (PDOException $e) {
