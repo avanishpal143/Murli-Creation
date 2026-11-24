@@ -6,8 +6,13 @@ $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 if ($action === 'place_order') {
     $customerJson = $_POST['customer'] ?? '';
-    $paymentMethod = $_POST['paymentMethod'] ?? 'COD';
+    $paymentMethod = $_POST['paymentMethod'] ?? 'Partial COD';
     $paymentStatus = $_POST['paymentStatus'] ?? 'Pending';
+    $couponCode = $_POST['couponCode'] ?? '';
+    $discountAmount = (float)($_POST['discountAmount'] ?? 0);
+    $shippingFee = isset($_POST['shippingFee']) ? (float)$_POST['shippingFee'] : null;
+    $tokenAmount = (float)($_POST['tokenAmount'] ?? 0);
+    $remainingBalance = (float)($_POST['remainingBalance'] ?? 0);
 
     $customer = json_decode($customerJson, true);
     if (!$customer || empty($customer['name']) || empty($customer['phone'])) {
@@ -21,11 +26,25 @@ if ($action === 'place_order') {
         exit;
     }
 
-    $order = place_new_order($customer, $paymentMethod, $paymentStatus, $cart);
+    $order = place_new_order(
+        $customer,
+        $paymentMethod,
+        $paymentStatus,
+        $cart,
+        $couponCode,
+        $discountAmount,
+        $shippingFee,
+        $tokenAmount,
+        $remainingBalance
+    );
+
     echo json_encode([
         'success' => true,
         'orderId' => $order['id'],
-        'message' => "Order {$order['id']} placed successfully!"
+        'message' => "Order {$order['id']} placed successfully!",
+        'tokenPaid' => $order['tokenPaid'],
+        'balanceOnDelivery' => $order['balanceOnDelivery'],
+        'totalPayable' => $order['totalPayable']
     ]);
     exit;
 }

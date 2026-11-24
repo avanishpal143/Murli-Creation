@@ -30,7 +30,7 @@
         "totalAmount": 3690,
         "paymentMethod": "UPI \/ QR",
         "paymentStatus": "Failed",
-        "status": "Processing",
-        "orderStatus": "Cancelled"
+        "status": "Shipped",
+        "orderStatus": "Shipped"
     }
 ]

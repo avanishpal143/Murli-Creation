@@ -1,7 +1,13 @@
+<?php
+$site_settings = function_exists('get_site_settings') ? get_site_settings() : [];
+$studio = $site_settings['studio'] ?? [];
+$rawWa = preg_replace('/\D/', '', $studio['whatsapp'] ?? '9582316454');
+$waNum = str_starts_with($rawWa, '91') ? $rawWa : ('91' . $rawWa);
+?>
 <div class="widgets-container">
   <!-- WhatsApp Button (Bottom-Left) -->
   <a
-    href="https://wa.me/919876543210?text=Hello%20Murli%20Creations,%20I'd%20like%20to%20inquire%20about%20your%20handcrafted%20Lippan%20Art."
+    href="https://wa.me/<?php echo $waNum; ?>?text=<?php echo urlencode("Hello Murli Creations, I'd like to inquire about your handcrafted Lippan Art."); ?>"
     target="_blank"
     rel="noopener noreferrer"
     class="whatsapp-btn"

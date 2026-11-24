@@ -1,130 +1,203 @@
 [
-  {
-    "id": "rev-1",
-    "productId": "prod-1",
-    "userName": "Aarav Sharma",
-    "rating": 5,
-    "comment": "The Peacock Jharokha is an absolute showstopper in our living room! The carved wood arch and mirror relief are royal and flawless. Packing was super secure.",
-    "date": "18 Aug 2026"
-  },
-  {
-    "id": "rev-2",
-    "productId": "prod-1",
-    "userName": "Pooja Singhania",
-    "rating": 5,
-    "comment": "Stunning craftsmanship! The peacock artwork combined with Kutchi Lippan mirrors gives genuine Rajasthani palace vibes. 100% worth every rupee.",
-    "date": "12 Aug 2026"
-  },
-  {
-    "id": "rev-3",
-    "productId": "prod-2",
-    "userName": "Ritu Verma",
-    "rating": 5,
-    "comment": "The Lotus Mandala has completely elevated our pooja room ambience. The symmetrical clay coils and mirrors sparkle beautifully in ambient light.",
-    "date": "15 Aug 2026"
-  },
-  {
-    "id": "rev-4",
-    "productId": "prod-3",
-    "userName": "Siddharth Mehta",
-    "rating": 5,
-    "comment": "The Teal and Gold combination is mesmerizing! Looks even better in person than the pictures. Received well packaged in wooden reinforcement.",
-    "date": "14 Aug 2026"
-  },
-  {
-    "id": "rev-5",
-    "productId": "prod-4",
-    "userName": "Neha Gupta",
-    "rating": 5,
-    "comment": "Vibrant festive colours on the Utsav mandala panel. Perfect 8x8 size for creating an art cluster in our corridor.",
-    "date": "10 Aug 2026"
-  },
-  {
-    "id": "rev-6",
-    "productId": "prod-5",
-    "userName": "Ananya Joshi",
-    "rating": 5,
-    "comment": "Rajsi Kamal is so delicately sculpted. You can feel the handmade texture and love in every single petal.",
-    "date": "08 Aug 2026"
-  },
-  {
-    "id": "rev-7",
-    "productId": "prod-6",
-    "userName": "Vikram Malhotra",
-    "rating": 5,
-    "comment": "Put this Evil Eye Lippan piece right above our front door. High quality mirrors, heavy board, and gorgeous cobalt blue shades.",
-    "date": "16 Aug 2026"
-  },
-  {
-    "id": "rev-8",
-    "productId": "prod-7",
-    "userName": "Meenakshi Iyer",
-    "rating": 5,
-    "comment": "The Neel Tara star symmetry is brilliant. Murli Prasad's clay line control is simply mastery.",
-    "date": "09 Aug 2026"
-  },
-  {
-    "id": "rev-9",
-    "productId": "prod-8",
-    "userName": "Kiran Patel",
-    "rating": 5,
-    "comment": "Ordered 5 pieces of this Swastik mini art for housewarming return gifts. Every guest loved the sacred mirror detailing!",
-    "date": "17 Aug 2026"
-  },
-  {
-    "id": "rev-10",
-    "productId": "prod-9",
-    "userName": "Sunita Aggarwal",
-    "rating": 5,
-    "comment": "Laxmi Charan mini art in our mandir looks so auspicious and divine. Bright red and glistening mirrors.",
-    "date": "11 Aug 2026"
-  },
-  {
-    "id": "rev-11",
-    "productId": "prod-10",
-    "userName": "Harish Rawat",
-    "rating": 5,
-    "comment": "Lord Ganesha mini frame is perfect for my car dashboard and office table. Very neatly finished clay relief.",
-    "date": "13 Aug 2026"
-  },
-  {
-    "id": "rev-12",
-    "productId": "prod-11",
-    "userName": "Debashish Mohapatra",
-    "rating": 5,
-    "comment": "Jai Jagannath! The sacred round eyes sculpted with Kutchi Lippan craft is very unique and devotional.",
-    "date": "07 Aug 2026"
-  },
-  {
-    "id": "rev-13",
-    "productId": "prod-12",
-    "userName": "Alok Deshmukh",
-    "rating": 5,
-    "comment": "Warli tribal folk dancers crafted in miniature Lippan relief. Very charming piece on natural wood base.",
-    "date": "06 Aug 2026"
-  },
-  {
-    "id": "rev-14",
-    "productId": "prod-13",
-    "userName": "Rashmi Nambiar",
-    "rating": 5,
-    "comment": "Matsya Rang has lovely aquatic colors and smooth scales. Looks wonderful next to our indoor water fountain.",
-    "date": "05 Aug 2026"
-  },
-  {
-    "id": "rev-15",
-    "productId": "prod-14",
-    "userName": "Manoj Khandelwal",
-    "rating": 5,
-    "comment": "Shubh Labh pair arrived well packed. Installed on our entrance door for Diwali preparation. Looks grand!",
-    "date": "19 Aug 2026"
-  },
-  {
-    "id": "rev-16",
-    "productId": "prod-15",
-    "userName": "Gopal Soni",
-    "rating": 5,
-    "comment": "Jai Shree Shyam! This Khatu Shyam Baba temple mini decor brings immense peace to our home altar. Beautiful Mor Pankh work.",
-    "date": "20 Aug 2026"
-  }
+    {
+        "id": "rev-1",
+        "productId": "prod-1",
+        "userName": "Aarav Sharma",
+        "rating": 5,
+        "comment": "The Peacock Jharokha is an absolute showstopper in our living room! The carved wood arch and mirror relief are royal and flawless. Packing was super secure.",
+        "date": "18 Aug 2026",
+        "is_approved": 1
+    },
+    {
+        "id": "rev-2",
+        "productId": "prod-1",
+        "userName": "Pooja Singhania",
+        "rating": 5,
+        "comment": "Stunning craftsmanship! The peacock artwork combined with Kutchi Lippan mirrors gives genuine Rajasthani palace vibes. 100% worth every rupee.",
+        "date": "12 Aug 2026"
+    },
+    {
+        "id": "rev-3",
+        "productId": "prod-2",
+        "userName": "Ritu Verma",
+        "rating": 5,
+        "comment": "The Lotus Mandala has completely elevated our pooja room ambience. The symmetrical clay coils and mirrors sparkle beautifully in ambient light.",
+        "date": "15 Aug 2026"
+    },
+    {
+        "id": "rev-4",
+        "productId": "prod-3",
+        "userName": "Siddharth Mehta",
+        "rating": 5,
+        "comment": "The Teal and Gold combination is mesmerizing! Looks even better in person than the pictures. Received well packaged in wooden reinforcement.",
+        "date": "14 Aug 2026"
+    },
+    {
+        "id": "rev-5",
+        "productId": "prod-4",
+        "userName": "Neha Gupta",
+        "rating": 5,
+        "comment": "Vibrant festive colours on the Utsav mandala panel. Perfect 8x8 size for creating an art cluster in our corridor.",
+        "date": "10 Aug 2026"
+    },
+    {
+        "id": "rev-6",
+        "productId": "prod-5",
+        "userName": "Ananya Joshi",
+        "rating": 5,
+        "comment": "Rajsi Kamal is so delicately sculpted. You can feel the handmade texture and love in every single petal.",
+        "date": "08 Aug 2026"
+    },
+    {
+        "id": "rev-7",
+        "productId": "prod-6",
+        "userName": "Vikram Malhotra",
+        "rating": 5,
+        "comment": "Put this Evil Eye Lippan piece right above our front door. High quality mirrors, heavy board, and gorgeous cobalt blue shades.",
+        "date": "16 Aug 2026"
+    },
+    {
+        "id": "rev-8",
+        "productId": "prod-7",
+        "userName": "Meenakshi Iyer",
+        "rating": 5,
+        "comment": "The Neel Tara star symmetry is brilliant. Murli Prasad's clay line control is simply mastery.",
+        "date": "09 Aug 2026"
+    },
+    {
+        "id": "rev-9",
+        "productId": "prod-8",
+        "userName": "Kiran Patel",
+        "rating": 5,
+        "comment": "Ordered 5 pieces of this Swastik mini art for housewarming return gifts. Every guest loved the sacred mirror detailing!",
+        "date": "17 Aug 2026"
+    },
+    {
+        "id": "rev-10",
+        "productId": "prod-9",
+        "userName": "Sunita Aggarwal",
+        "rating": 5,
+        "comment": "Laxmi Charan mini art in our mandir looks so auspicious and divine. Bright red and glistening mirrors.",
+        "date": "11 Aug 2026"
+    },
+    {
+        "id": "rev-11",
+        "productId": "prod-10",
+        "userName": "Harish Rawat",
+        "rating": 5,
+        "comment": "Lord Ganesha mini frame is perfect for my car dashboard and office table. Very neatly finished clay relief.",
+        "date": "13 Aug 2026"
+    },
+    {
+        "id": "rev-12",
+        "productId": "prod-11",
+        "userName": "Debashish Mohapatra",
+        "rating": 5,
+        "comment": "Jai Jagannath! The sacred round eyes sculpted with Kutchi Lippan craft is very unique and devotional.",
+        "date": "07 Aug 2026"
+    },
+    {
+        "id": "rev-13",
+        "productId": "prod-12",
+        "userName": "Alok Deshmukh",
+        "rating": 5,
+        "comment": "Warli tribal folk dancers crafted in miniature Lippan relief. Very charming piece on natural wood base.",
+        "date": "06 Aug 2026"
+    },
+    {
+        "id": "rev-14",
+        "productId": "prod-13",
+        "userName": "Rashmi Nambiar",
+        "rating": 5,
+        "comment": "Matsya Rang has lovely aquatic colors and smooth scales. Looks wonderful next to our indoor water fountain.",
+        "date": "05 Aug 2026"
+    },
+    {
+        "id": "rev-15",
+        "productId": "prod-14",
+        "userName": "Manoj Khandelwal",
+        "rating": 5,
+        "comment": "Shubh Labh pair arrived well packed. Installed on our entrance door for Diwali preparation. Looks grand!",
+        "date": "19 Aug 2026"
+    },
+    {
+        "id": "rev-16",
+        "productId": "prod-15",
+        "userName": "Gopal Soni",
+        "rating": 5,
+        "comment": "Jai Shree Shyam! This Khatu Shyam Baba temple mini decor brings immense peace to our home altar. Beautiful Mor Pankh work.",
+        "date": "20 Aug 2026"
+    },
+    {
+        "id": "rev-17",
+        "productId": "prod-16",
+        "userName": "Priyanka Sharma",
+        "rating": 5,
+        "comment": "Lord Ganesha mini art is so vibrant and divine! Placed it right on our car dashboard and home mandir. The rhinestone work and pearl tassel are top notch.",
+        "date": "24 Aug 2026"
+    },
+    {
+        "id": "rev-18",
+        "productId": "prod-17",
+        "userName": "Rajesh Verma",
+        "rating": 5,
+        "comment": "Har Har Mahadev! The Damru and Trishul clay relief work is stunning. Excellent mirror placement and deep spiritual vibe.",
+        "date": "25 Aug 2026"
+    },
+    {
+        "id": "rev-19",
+        "productId": "prod-18",
+        "userName": "Meenakshi Khandelwal",
+        "rating": 5,
+        "comment": "Jai Shree Shyam! The Basanti Pushp Poshak is magnificent. Heavy zari embroidery, rich silk, and perfect fitting for Baba Shyam. Extremely pleased!",
+        "date": "26 Aug 2026"
+    },
+    {
+        "id": "rev-20",
+        "productId": "prod-19",
+        "userName": "Sanjay Agarwal",
+        "rating": 5,
+        "comment": "Pachrangi Hariyali poshak has divine colors and brilliant sequin work. Offered this for Ekadashi shringar and everyone praised it.",
+        "date": "26 Aug 2026"
+    },
+    {
+        "id": "rev-21",
+        "productId": "prod-20",
+        "userName": "Kavita Singhal",
+        "rating": 5,
+        "comment": "Hariyali Kunj poshak in deep green looks majestic on Khatu Baba. The golden peacock embroidery and fine laces are superb.",
+        "date": "27 Aug 2026"
+    },
+    {
+        "id": "rev-22",
+        "productId": "prod-21",
+        "userName": "Deepak Goel",
+        "rating": 5,
+        "comment": "Mayura Nilam poshak in royal blue is breathtaking. The cloth quality and craftsmanship are truly devotional.",
+        "date": "27 Aug 2026"
+    },
+    {
+        "id": "rev-23",
+        "productId": "prod-22",
+        "userName": "Sunita Mittal",
+        "rating": 5,
+        "comment": "Shahi Jamuni poshak has a royal imperial purple shade and delicate gotta borders. Delivered safely and on time.",
+        "date": "28 Aug 2026"
+    },
+    {
+        "id": "rev-24",
+        "productId": "prod-23",
+        "userName": "Anil Jindal",
+        "rating": 5,
+        "comment": "Rangrez Diamond poshak is rich in colors and diamond sparkle. Made with genuine love and devotion by Murli Prasad studio.",
+        "date": "28 Aug 2026"
+    },
+    {
+        "id": "rev-33",
+        "productId": "prod-32",
+        "userName": "Gaurav Malhotra",
+        "rating": 5,
+        "comment": "An extraordinary Lord Ganesha wall decor! The clay relief details, sparkling mirrors, and lotus design bring immense grace and divinity to our home temple entrance.",
+        "date": "22 Sep 2026"
+    }
 ]

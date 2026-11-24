@@ -1,24 +1,103 @@
 // Core UI Interactions, Progressive Animations, Testimonial Slider & Standard Handlers for Murli Creations
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Scroll-reveal Observer
-  const revealElements = document.querySelectorAll('.reveal-on-scroll');
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
+  // 1. Comprehensive Auto-Detecting Scroll-Reveal Engine
+  function initScrollAnimations() {
+    const autoSelectors = [
+      '.reveal-on-scroll',
+      '.reveal-fade',
+      '.reveal-scale',
+      '.reveal-left',
+      '.reveal-right',
+      'main > section',
+      '.hero-content-col',
+      '.hero-card-col',
+      '.home-stats',
+      '.category-card',
+      '.product-card',
+      '.season-card',
+      '.home-story-visual',
+      '.home-story-content',
+      '.testimonial-card',
+      '.community-cta-card',
+      '.home-contact-intro',
+      '.home-contact-form-box',
+      '.shop-header',
+      '.shop-filter-bar',
+      '.about-hero-content',
+      '.about-hero-image-frame',
+      '.about-quote-box',
+      '.founder-grid > div',
+      '.milestone-card',
+      '.about-cta-card',
+      '.contact-card',
+      '.contact-form-container',
+      '.cart-content-grid > div',
+      '.checkout-grid > div',
+      '.order-confirm-card',
+      '.policy-header',
+      '.policy-sidebar',
+      '.policy-section',
+      '.admin-stats-grid',
+      '.admin-table-card'
+    ];
+
+    const elementsToObserve = new Set();
+    autoSelectors.forEach((sel) => {
+      document.querySelectorAll(sel).forEach((el) => {
+        if (!el.closest('.mega-dropdown-menu') && !el.closest('.mobile-menu')) {
+          elementsToObserve.add(el);
+          if (
+            !el.classList.contains('reveal-on-scroll') &&
+            !el.classList.contains('reveal-fade') &&
+            !el.classList.contains('reveal-scale') &&
+            !el.classList.contains('reveal-left') &&
+            !el.classList.contains('reveal-right')
+          ) {
+            el.classList.add('reveal-on-scroll');
+          }
+        }
+      });
+    });
+
+    // Automatically apply cascading stagger delays to card grids
+    const gridContainers = document.querySelectorAll(
+      '.category-grid, .products-grid, .season-vibe-grid, .home-stats-grid, .milestones-grid, .policy-steps-grid, .admin-stats-grid'
+    );
+
+    gridContainers.forEach((grid) => {
+      const children = Array.from(grid.children);
+      children.forEach((child, index) => {
+        child.classList.add('reveal-on-scroll', `stagger-${(index % 8) + 1}`);
+        elementsToObserve.add(child);
+      });
+    });
+
+    const observerOptions = {
+      threshold: 0.06,
+      rootMargin: '0px 0px -40px 0px'
+    };
+
+    const scrollObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('active');
-          revealObserver.unobserve(entry.target);
+          scrollObserver.unobserve(entry.target);
         }
       });
-    },
-    {
-      threshold: 0.05,
-      rootMargin: '0px 0px -40px 0px'
-    }
-  );
+    }, observerOptions);
 
-  revealElements.forEach((el) => revealObserver.observe(el));
+    elementsToObserve.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        setTimeout(() => el.classList.add('active'), 50);
+      } else {
+        scrollObserver.observe(el);
+      }
+    });
+  }
+
+  initScrollAnimations();
 
   // Initialize Interactive Hero Background Particles
   initHeroParticles();
@@ -245,14 +324,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initTestimonialsSlider();
 
   // 7. Accordions (Home & Page FAQs)
-  document.querySelectorAll('.faq-header-btn, .accordion-header-btn').forEach((btn) => {
+  document.querySelectorAll('.faq-header-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const parent = btn.closest('.faq-accordion') || btn.closest('.product-accordion');
+      const parent = btn.closest('.faq-accordion');
       if (parent) {
         const isOpen = parent.classList.contains('open');
         const container = parent.parentElement;
         if (container) {
-          container.querySelectorAll('.faq-accordion, .product-accordion').forEach((item) => {
+          container.querySelectorAll('.faq-accordion').forEach((item) => {
             if (item !== parent) item.classList.remove('open');
           });
         }
@@ -409,7 +488,7 @@ function openQuickViewModal(product) {
             ${product.code ? `<p><strong>Product Code:</strong> <span style="font-weight: 700; color: var(--gold-accent, #c99846);">${product.code}</span></p>` : ''}
             <p><strong>Dimensions:</strong> ${product.size || '18 x 18 inches'}</p>
             <p><strong>Artisan Materials:</strong> ${product.material || 'Clay Relief, MDF Board, Shimmer Mirrors'}</p>
-            <p><strong>Craft Origin:</strong> ${product.origin || 'Rohtak, Haryana, India'}</p>
+            <p><strong>Craft Origin:</strong> ${product.origin || 'Delhi, India'}</p>
             <p>
               <strong>Status:</strong>
               ${product.stock > 0 

@@ -10,18 +10,69 @@ $footer = $site_settings['footer'] ?? [];
     <!-- Brand / Blurb -->
     <div class="footer-tilt-wrapper">
       <div class="footer-column-brand">
-        <a href="/index.php" class="footer-logo-container">
-          <img
-            src="/images/brand/white_logo.png"
-            alt="Murli Creations Logo"
-            width="120"
-            height="62"
-            class="footer-logo-image"
-          />
+        <a href="/index.php" class="footer-logo-link" aria-label="Murli Creations Home">
+          <div class="brand-lockup" style="margin-bottom: 12px;">
+            <img
+              src="/images/brand/Favicon.png?v=3"
+              alt="Murli Creations"
+              width="36"
+              height="46"
+              class="brand-emblem-img"
+            />
+            <div class="brand-text-wrap">
+              <span class="brand-name-main" style="font-size: 1.35rem;">MURLI</span>
+              <span class="brand-name-sub" style="font-size: 0.65rem;">CREATIONS</span>
+            </div>
+          </div>
         </a>
         <p class="footer-blurb">
           <?php echo htmlspecialchars($footer['about_text'] ?? 'Sacred mud & mirror art handcrafted by Murli Prasad. Bringing positive energy, devotion, and traditional Indian grandeur to homes across the globe.'); ?>
         </p>
+
+        <!-- Social Icons with Logos -->
+        <div class="footer-social-icons">
+          <?php if (!empty($social['instagram'])): ?>
+            <a href="<?php echo htmlspecialchars($social['instagram']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Instagram" title="Follow on Instagram">
+              <?php echo icon_svg('instagram', '', 17); ?>
+            </a>
+          <?php endif; ?>
+
+          <?php if (!empty($social['facebook'])): ?>
+            <a href="<?php echo htmlspecialchars($social['facebook']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Facebook" title="Follow on Facebook">
+              <?php echo icon_svg('facebook', '', 17); ?>
+            </a>
+          <?php endif; ?>
+
+          <?php if (!empty($social['linkedin'])): ?>
+            <a href="<?php echo htmlspecialchars($social['linkedin']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="LinkedIn" title="Connect on LinkedIn">
+              <?php echo icon_svg('linkedin', '', 17); ?>
+            </a>
+          <?php endif; ?>
+
+          <?php if (!empty($social['pinterest'])): ?>
+            <a href="<?php echo htmlspecialchars($social['pinterest']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Pinterest" title="Follow on Pinterest">
+              <?php echo icon_svg('pinterest', '', 17); ?>
+            </a>
+          <?php endif; ?>
+
+          <?php if (!empty($social['whatsapp'])): ?>
+            <a href="<?php echo htmlspecialchars($social['whatsapp']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="WhatsApp" title="Chat on WhatsApp">
+              <?php echo icon_svg('whatsapp', '', 17); ?>
+            </a>
+          <?php endif; ?>
+
+          <?php if (!empty($social['linktree'])): ?>
+            <a href="<?php echo htmlspecialchars($social['linktree']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Linktree" title="All Links on Linktree">
+              <?php echo icon_svg('linktree', '', 17); ?>
+            </a>
+          <?php endif; ?>
+
+          <?php if (!empty($social['youtube'])): ?>
+            <a href="<?php echo htmlspecialchars($social['youtube']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="YouTube" title="Subscribe on YouTube">
+              <?php echo icon_svg('youtube', '', 17); ?>
+            </a>
+          <?php endif; ?>
+        </div>
       </div>
     </div>
 
@@ -31,7 +82,7 @@ $footer = $site_settings['footer'] ?? [];
         <h4 class="footer-title">Studio & Contact</h4>
         <div class="footer-address-list">
           <p class="footer-address-item">
-            <strong>Studio:</strong> <?php echo htmlspecialchars($studio['address'] ?? 'Rohtak, Haryana, 124001, India'); ?>
+            <strong>Studio:</strong> <?php echo htmlspecialchars($studio['address'] ?? 'Pitampura, Delhi - 110034, India'); ?>
           </p>
           <p class="footer-address-item">
             <strong>Care:</strong> <?php echo htmlspecialchars($studio['email'] ?? 'contact@murlicreations.com'); ?>
@@ -65,28 +116,26 @@ $footer = $site_settings['footer'] ?? [];
         <ul class="footer-link-list">
           <li><a href="/index.php">Home</a></li>
           <li><a href="/shop.php">Full Catalog</a></li>
-          <li><a href="/about.php">About Us</a></li>
-          <li><a href="/contact.php">Contact & Support</a></li>
-          <li><a href="/cart.php">Shopping Bag</a></li>
+          <li><a href="/track-order.php" style="color:#d4af37; font-weight:600;">Track Order Live 📦</a></li>
+          <li><a href="/founder-story.php">Founder's Story</a></li>
+          <li><a href="/blog.php">Artisan Blog & Vastu</a></li>
+          <li><a href="/about.php">About Studio</a></li>
+          <li><a href="/contact.php">Contact & Custom Art</a></li>
         </ul>
       </div>
     </div>
 
-    <!-- Trust Guarantees -->
+    <!-- Policies & Legal Links -->
     <div class="footer-tilt-wrapper">
       <div class="footer-column-links">
-        <h4 class="footer-title">Studio Promise</h4>
-        <div class="footer-address-list">
-          <p class="footer-address-item">
-            <?php echo icon_svg('truck', '', 14); ?> <strong>Free Shipping:</strong> On orders above ₹<?php echo number_format($shipping['free_threshold'] ?? 3000); ?>
-          </p>
-          <p class="footer-address-item">
-            <?php echo icon_svg('shield-check', '', 14); ?> <strong>Transit Safe:</strong> <?php echo htmlspecialchars($shipping['transit_safe_note'] ?? '5-layer wood crate pack'); ?>
-          </p>
-          <p class="footer-address-item">
-            <?php echo icon_svg('award', '', 14); ?> <strong>100% Artisan:</strong> <?php echo htmlspecialchars($studio['location'] ?? 'Made in Haryana'); ?>
-          </p>
-        </div>
+        <h4 class="footer-title">Policies</h4>
+        <ul class="footer-link-list">
+          <li><a href="/return-policy.php">Refund & Return Policy</a></li>
+          <li><a href="/shipping-policy.php">Shipping & Delivery Policy</a></li>
+          <li><a href="/privacy-policy.php">Privacy Policy</a></li>
+          <li><a href="/terms.php">Terms of Service</a></li>
+          <li><a href="/cancellation-policy.php">Cancellation Policy</a></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -98,10 +147,55 @@ $footer = $site_settings['footer'] ?? [];
         <?php echo htmlspecialchars($footer['copyright'] ?? ('© ' . date('Y') . ' Murli Creations. Handcrafted in India with Devotion. All Rights Reserved.')); ?>
       </p>
       <div class="footer-socials">
-        <a href="<?php echo htmlspecialchars($social['instagram'] ?? 'https://instagram.com/murlicreations'); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-link">Instagram</a>
-        <span class="footer-social-separator">•</span>
-        <a href="<?php echo htmlspecialchars($social['whatsapp'] ?? 'https://wa.me/919999999999'); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-link">WhatsApp</a>
-        <span class="footer-social-separator">•</span>
+        <?php if (!empty($social['instagram'])): ?>
+          <a href="<?php echo htmlspecialchars($social['instagram']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+            <?php echo icon_svg('instagram', '', 14); ?> <span>Instagram</span>
+          </a>
+          <span class="footer-social-separator">•</span>
+        <?php endif; ?>
+
+        <?php if (!empty($social['facebook'])): ?>
+          <a href="<?php echo htmlspecialchars($social['facebook']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+            <?php echo icon_svg('facebook', '', 14); ?> <span>Facebook</span>
+          </a>
+          <span class="footer-social-separator">•</span>
+        <?php endif; ?>
+
+        <?php if (!empty($social['linkedin'])): ?>
+          <a href="<?php echo htmlspecialchars($social['linkedin']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+            <?php echo icon_svg('linkedin', '', 14); ?> <span>LinkedIn</span>
+          </a>
+          <span class="footer-social-separator">•</span>
+        <?php endif; ?>
+
+        <?php if (!empty($social['pinterest'])): ?>
+          <a href="<?php echo htmlspecialchars($social['pinterest']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+            <?php echo icon_svg('pinterest', '', 14); ?> <span>Pinterest</span>
+          </a>
+          <span class="footer-social-separator">•</span>
+        <?php endif; ?>
+
+        <?php if (!empty($social['whatsapp'])): ?>
+          <a href="<?php echo htmlspecialchars($social['whatsapp']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+            <?php echo icon_svg('whatsapp', '', 14); ?> <span>WhatsApp</span>
+          </a>
+          <span class="footer-social-separator">•</span>
+        <?php endif; ?>
+
+        <?php if (!empty($social['youtube'])): ?>
+          <a href="<?php echo htmlspecialchars($social['youtube']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+            <?php echo icon_svg('youtube', '', 14); ?> <span>YouTube</span>
+          </a>
+          <span class="footer-social-separator">•</span>
+        <?php endif; ?>
+
+        <?php if (!empty($social['linktree'])): ?>
+          <a href="<?php echo htmlspecialchars($social['linktree']); ?>" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+            <?php echo icon_svg('linktree', '', 14); ?> <span>Linktree</span>
+          </a>
+          <span class="footer-social-separator">•</span>
+        <?php endif; ?>
+
         <a href="/contact.php" class="footer-social-link">Support</a>
       </div>
     </div>

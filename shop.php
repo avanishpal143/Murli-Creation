@@ -8,12 +8,13 @@ $category_tree = get_category_tree();
 // Read URL parameters
 $selectedCategory = $_GET['category'] ?? 'All';
 $selectedSubcategory = $_GET['subcategory'] ?? 'All';
+$selectedAvailability = $_GET['availability'] ?? 'all';
 $maxPrice = isset($_GET['maxPrice']) ? (float)$_GET['maxPrice'] : 10000;
 $sortBy = $_GET['sort'] ?? 'default';
 $searchQuery = trim($_GET['search'] ?? '');
 
 // Filter products
-$filtered_products = array_filter($all_products, function($p) use ($selectedCategory, $selectedSubcategory, $maxPrice, $searchQuery) {
+$filtered_products = array_filter($all_products, function($p) use ($selectedCategory, $selectedSubcategory, $selectedAvailability, $maxPrice, $searchQuery) {
     // Category match
     $matchesCategory = ($selectedCategory === 'All' || $p['category'] === $selectedCategory);
     
@@ -23,22 +24,55 @@ $filtered_products = array_filter($all_products, function($p) use ($selectedCate
         $matchesSubcategory = (isset($p['subcategory']) && $p['subcategory'] === $selectedSubcategory);
     }
 
+    // Availability match
+    $matchesAvailability = true;
+    if ($selectedAvailability === 'in_stock') {
+        $matchesAvailability = (($p['stock'] ?? 0) > 0);
+    } elseif ($selectedAvailability === 'out_of_stock') {
+        $matchesAvailability = (($p['stock'] ?? 0) <= 0);
+    }
+
     // Price match
     $matchesPrice = ($p['price'] <= $maxPrice);
     
-    // Search query match
+    // Search query match (supports title, SKU product code, tags, category, material, size, description)
     $matchesSearch = true;
     if ($searchQuery !== '') {
         $q = strtolower($searchQuery);
+        $qClean = preg_replace('/[^a-z0-9]/', '', $q);
+        $code = strtolower($p['code'] ?? '');
+        $codeClean = preg_replace('/[^a-z0-9]/', '', $code);
+        $id = strtolower($p['id'] ?? '');
+
+        // SKU Code / ID matches (exact substring, e.g. "MC/S-016" or normalized e.g. "mcs016", "s016")
+        $matchesCode = ($code !== '' && strpos($code, $q) !== false) ||
+                       ($qClean !== '' && $codeClean !== '' && strpos($codeClean, $qClean) !== false) ||
+                       ($id !== '' && strpos($id, $q) !== false);
+
+        // Tags match
+        $matchesTags = false;
+        if (!empty($p['tags']) && is_array($p['tags'])) {
+            foreach ($p['tags'] as $tag) {
+                if (strpos(strtolower($tag), $q) !== false) {
+                    $matchesTags = true;
+                    break;
+                }
+            }
+        }
+
         $matchesSearch = (
+            $matchesCode ||
             strpos(strtolower($p['name']), $q) !== false ||
             strpos(strtolower($p['category']), $q) !== false ||
             strpos(strtolower($p['subcategory'] ?? ''), $q) !== false ||
-            strpos(strtolower($p['description']), $q) !== false
+            strpos(strtolower($p['description']), $q) !== false ||
+            strpos(strtolower($p['material'] ?? ''), $q) !== false ||
+            strpos(strtolower($p['size'] ?? ''), $q) !== false ||
+            $matchesTags
         );
     }
     
-    return $matchesCategory && $matchesSubcategory && $matchesPrice && $matchesSearch;
+    return $matchesCategory && $matchesSubcategory && $matchesAvailability && $matchesPrice && $matchesSearch;
 });
 
 // Sort products
@@ -73,8 +107,12 @@ if ($selectedCategory !== 'All' && isset($category_tree[$selectedCategory])) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Art Catalog | Murli Creations Handcrafted Heritage</title>
-  <meta name="description" content="Explore handcrafted Lippan art panels, Shyam Baba poshak, Vastu sacred creations, and traditional carved Jharokhas by master artisan Murli Prasad.">
+  <?php if (function_exists('render_page_seo_head')): ?>
+    <?php echo render_page_seo_head('shop'); ?>
+  <?php else: ?>
+    <title>The Art Catalog | Murli Creations Handcrafted Heritage</title>
+    <meta name="description" content="Explore handcrafted Lippan art panels, Shyam Baba poshak, Vastu sacred creations, and traditional carved Jharokhas by master artisan Murli Prasad.">
+  <?php endif; ?>
 
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="/assets/css/globals.css">
@@ -180,6 +218,16 @@ if ($selectedCategory !== 'All' && isset($category_tree[$selectedCategory])) {
               />
             </div>
 
+            <!-- Availability Filter Dropdown -->
+            <div class="sort-box">
+              <label for="availability-select" class="sort-label">Stock:</label>
+              <select id="availability-select" class="sort-dropdown" aria-label="Filter by stock">
+                <option value="all" <?php echo ($selectedAvailability === 'all') ? 'selected' : ''; ?>>All Items</option>
+                <option value="in_stock" <?php echo ($selectedAvailability === 'in_stock') ? 'selected' : ''; ?>>In Stock</option>
+                <option value="out_of_stock" <?php echo ($selectedAvailability === 'out_of_stock') ? 'selected' : ''; ?>>Sold Out</option>
+              </select>
+            </div>
+
             <!-- Premium Sort By Dropdown (A-Z removed, added Bestsellers & Rating) -->
             <div class="sort-box">
               <label for="sort-select" class="sort-label">Sort By:</label>
@@ -218,7 +266,7 @@ if ($selectedCategory !== 'All' && isset($category_tree[$selectedCategory])) {
               We couldn't find any artworks matching your combined filters. Try clearing your search query or choosing another category above.
             </p>
             <a href="/shop.php" class="shop-reset-btn">
-              Browse All 36 Creations
+              Browse All <?php echo count($all_products); ?> Creations
             </a>
           </div>
         <?php else: ?>

@@ -9,7 +9,7 @@ $seasonalCards = $seasonal['cards'] ?? [];
 $festiveOffer = $homepage_content['festive_offer'] ?? [];
 $story = $homepage_content['story'] ?? [];
 $customCommission = $homepage_content['custom_commission'] ?? [];
-$faqs = $homepage_content['faqs'] ?? [];
+$faqs = !empty($site_settings['faqs']) ? $site_settings['faqs'] : ($homepage_content['faqs'] ?? []);
 
 $featured_products = get_featured_products(8);
 if (empty($featured_products)) {
@@ -22,8 +22,12 @@ if (empty($featured_products)) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Murli Creations | Handcrafted Lippan Art & Sacred Wall Decor</title>
-  <meta name="description" content="Discover authentic handcrafted Lippan art, Jharokhas, and sacred spiritual wall mandalas by master artisan Murli Prasad. Made in Rohtak, Haryana." />
+  <?php if (function_exists('render_page_seo_head')): ?>
+    <?php echo render_page_seo_head('home'); ?>
+  <?php else: ?>
+    <title>Murli Creations | Handcrafted Lippan Art & Sacred Wall Decor</title>
+    <meta name="description" content="Discover authentic handcrafted Lippan art, Jharokhas, and sacred spiritual wall mandalas by master artisan Murli Prasad. Made in Delhi, India." />
+  <?php endif; ?>
   
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="/assets/css/globals.css" />
@@ -56,7 +60,16 @@ if (empty($featured_products)) {
 
       <div class="container hero-grid">
         <div class="hero-content reveal-on-scroll">
-          <span class="hero-badge"><?php echo htmlspecialchars($hero['badge'] ?? 'Handcrafted in Rohtak, Haryana'); ?></span>
+          <div class="hero-contact-badge-wrap">
+            <a href="tel:<?php echo preg_replace('/[^0-9+]/', '', $site_settings['studio']['phone'] ?? '+919999999999'); ?>" class="hero-contact-badge" title="Call Direct Studio Support">
+              <?php echo icon_svg('phone', 'hero-badge-svg', 13); ?>
+              <span>Direct Support: <strong><?php echo htmlspecialchars($site_settings['studio']['phone'] ?? '+91 99999 99999'); ?></strong></span>
+            </a>
+            <a href="<?php echo htmlspecialchars($site_settings['social']['whatsapp'] ?? ('https://wa.me/' . preg_replace('/[^0-9]/', '', $site_settings['studio']['whatsapp'] ?? '919999999999'))); ?>" target="_blank" rel="noopener noreferrer" class="hero-contact-badge hero-whatsapp-badge" title="Chat with Studio on WhatsApp">
+              <?php echo icon_svg('whatsapp', 'hero-badge-svg', 14); ?>
+              <span>WhatsApp Studio</span>
+            </a>
+          </div>
           <h1 class="hero-title">
             <?php echo htmlspecialchars($hero['title_main'] ?? 'Authentic Handcrafted Lippan Art for'); ?> <span class="hero-title-highlight"><?php echo htmlspecialchars($hero['title_highlight'] ?? 'Soulful Living Spaces'); ?></span>
           </h1>
@@ -170,9 +183,9 @@ if (empty($featured_products)) {
           <!-- Visual Column -->
           <div class="home-story-visual">
             <div class="home-story-frame">
-              <img src="<?php echo htmlspecialchars($story['image'] ?? '/img-prodcut/IMG_3495.png'); ?>" alt="Wall Art by Murli Creations" loading="lazy" />
+              <img src="<?php echo htmlspecialchars($story['image'] ?? '/img-prodcut/IMG_3495.png'); ?>" alt="Handcrafted Lotus Mandala by Murli Creations" loading="lazy" />
               <div class="story-floating-badge">
-                <span>🦚 Inspired by Shyam Baba</span>
+                <span>🌸 Handcrafted with Love & Devotion</span>
               </div>
             </div>
             <div class="home-story-quote-card">
@@ -217,7 +230,7 @@ if (empty($featured_products)) {
             </div>
 
             <div class="home-story-actions">
-              <a href="/about.php" class="home-story-btn">
+              <a href="/founder-story.php" class="home-story-btn">
                 Read Our Full Story <?php echo icon_svg('arrow-right', '', 15); ?>
               </a>
               <a href="/shop.php?category=Shyam+Ji+Decor" class="home-story-link">
@@ -237,7 +250,6 @@ if (empty($featured_products)) {
           <div class="offer-badge-col">
             <span class="offer-tag"><?php echo icon_svg('tag', '', 14); ?> <?php echo htmlspecialchars($festiveOffer['badge'] ?? 'Limited Period Offer'); ?></span>
             <div class="offer-discount-huge"><?php echo htmlspecialchars($festiveOffer['discount_label'] ?? '10% OFF'); ?></div>
-            <span class="offer-extra">+ Free Insured Shipping</span>
           </div>
 
           <div class="offer-content-col">
@@ -363,7 +375,7 @@ if (empty($featured_products)) {
                   <?php for ($i=0; $i<5; $i++) echo icon_svg('star', 'star-gold', 14); ?>
                 </div>
                 <p class="testimonial-quote">
-                  "The Gilded Jharokha is the centerpiece of our living room in Bangalore. The mirrors catch the morning sun in a magical way. Packaging was 10/10 with wooden crate protection."
+                  "The Gilded Jharokha is the centerpiece of our living room in Bangalore. The mirrors catch the morning sun in a magical way. Packaging was 10/10 with super secure protective pack."
                 </p>
                 <div class="testimonial-author">
                   <div class="author-avatar">VR</div>
@@ -437,13 +449,17 @@ if (empty($featured_products)) {
 
           <div class="faq-accordions">
             <?php foreach ($faqs as $idx => $f): ?>
+              <?php 
+                $faqQ = $f['question'] ?? $f['q'] ?? '';
+                $faqA = $f['answer'] ?? $f['a'] ?? '';
+              ?>
               <div class="faq-accordion <?php echo ($idx === 0) ? 'open' : ''; ?>">
                 <button class="faq-header-btn">
-                  <span><?php echo htmlspecialchars($f['question'] ?? ''); ?></span>
+                  <span><?php echo htmlspecialchars($faqQ); ?></span>
                   <span class="faq-icon"><?php echo icon_svg('plus', '', 16); ?></span>
                 </button>
                 <div class="faq-content">
-                  <?php echo htmlspecialchars($f['answer'] ?? ''); ?>
+                  <?php echo htmlspecialchars($faqA); ?>
                 </div>
               </div>
             <?php endforeach; ?>
@@ -466,7 +482,7 @@ if (empty($featured_products)) {
             <div class="contact-quick-list">
               <div class="contact-quick-item">
                 <?php echo icon_svg('map-pin', 'contact-svg', 18); ?>
-                <span>Workshop: <?php echo htmlspecialchars($site_settings['studio']['location'] ?? 'Rohtak, Haryana, India'); ?></span>
+                <span>Workshop: <?php echo htmlspecialchars($site_settings['studio']['location'] ?? 'Pitampura, Delhi, India'); ?></span>
               </div>
               <div class="contact-quick-item">
                 <?php echo icon_svg('phone', 'contact-svg', 18); ?>

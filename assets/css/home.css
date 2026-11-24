@@ -136,6 +136,76 @@
   gap: var(--spacing-sm);
 }
 
+.hero-contact-badge-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 2px;
+}
+
+.hero-contact-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  background: rgba(30, 166, 89, 0.12);
+  border: 1px solid #1ea659;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0e502c;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+  box-shadow: 0 2px 6px rgba(30, 166, 89, 0.08);
+}
+
+.hero-contact-badge strong {
+  font-weight: 800;
+  color: #0e502c;
+}
+
+.hero-contact-badge:hover {
+  background: #1ea659;
+  border-color: #15803d;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 166, 89, 0.25);
+}
+
+.hero-contact-badge:hover strong,
+.hero-contact-badge:hover svg {
+  color: #FFFFFF;
+  stroke: #FFFFFF;
+}
+
+.hero-contact-badge.hero-whatsapp-badge {
+  background: rgba(37, 211, 102, 0.14);
+  border: 1px solid #25D366;
+  color: #075E54;
+}
+
+.hero-contact-badge.hero-whatsapp-badge:hover {
+  background: #25D366;
+  border-color: #128C7E;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.hero-contact-badge.hero-whatsapp-badge:hover strong,
+.hero-contact-badge.hero-whatsapp-badge:hover svg {
+  color: #FFFFFF;
+  stroke: #FFFFFF;
+}
+
+.hero-badge-svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .hero-badge {
   font-family: var(--font-playful);
   font-size: 1.05rem;
@@ -179,19 +249,22 @@
   align-items: center;
   gap: 8px;
   padding: 12px 28px;
-  border-radius: var(--radius-full);
+  border-radius: 9999px;
   font-weight: 700;
   font-size: 0.88rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   background: var(--gradient-primary);
   color: #FFFFFF;
+  border: 1px solid #0e502c;
   box-shadow: 0 4px 15px rgba(30, 166, 89, 0.3);
   transition: all var(--transition-fast);
+  box-sizing: border-box;
 }
 
 .hero-primary-btn:hover {
   background: var(--gradient-primary-hover);
+  border-color: #136337;
   transform: translateY(-2px);
   box-shadow: 0 8px 22px rgba(30, 166, 89, 0.4);
 }
@@ -766,7 +839,7 @@
 
 .offer-card {
   background: var(--bg-secondary);
-  border: 1.5px dashed var(--accent-green-vibrant);
+  border: 1px dashed var(--accent-green-vibrant);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   display: grid;
@@ -856,17 +929,19 @@
   gap: 6px;
   background: rgba(30, 166, 89, 0.1);
   color: var(--accent-green-vibrant);
-  border: 1.5px solid var(--accent-green-vibrant);
+  border: 1px solid var(--accent-green-vibrant);
   padding: 10px 22px;
   border-radius: var(--radius-full);
   font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;
   transition: all var(--transition-fast);
+  box-sizing: border-box;
 }
 
 .offer-copy-btn:hover {
   background: var(--gradient-primary);
+  border-color: #0e502c;
   color: #FFFFFF;
 }
 
@@ -895,11 +970,11 @@
 }
 
 .glass-cta-card {
-  background: linear-gradient(135deg, rgba(30, 166, 89, 0.92) 0%, rgba(45, 125, 124, 0.9) 50%, rgba(81, 123, 92, 0.94) 100%);
+  background: linear-gradient(135deg, #0d4626 0%, #136034 45%, #1ea659 100%);
   backdrop-filter: blur(20px) saturate(190%);
   -webkit-backdrop-filter: blur(20px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 12px 36px rgba(20, 45, 30, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  box-shadow: 0 16px 48px rgba(10, 40, 22, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.25);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xxl) var(--spacing-xl);
   color: #FFFFFF;
@@ -985,16 +1060,18 @@
   gap: 8px;
   background: rgba(255, 255, 255, 0.15);
   color: #FFFFFF;
-  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   padding: 12px 28px;
   border-radius: var(--radius-full);
   font-weight: 700;
   font-size: 0.88rem;
   transition: all var(--transition-fast);
+  box-sizing: border-box;
 }
 
 .glass-cta-outline-btn:hover {
   background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.85);
   transform: translateY(-2px);
 }
 
@@ -1122,7 +1199,7 @@
   height: 44px;
   border-radius: 50%;
   background: #FFFFFF;
-  border: 1.5px solid rgba(30, 166, 89, 0.3);
+  border: 1px solid rgba(30, 166, 89, 0.3);
   color: var(--accent-green-vibrant);
   box-shadow: 0 6px 20px rgba(20, 45, 30, 0.12);
   cursor: pointer;
@@ -1131,12 +1208,13 @@
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
+  box-sizing: border-box;
 }
 
 .slider-nav-btn:hover {
   background: var(--gradient-primary);
   color: #FFFFFF;
-  border-color: transparent;
+  border: 1px solid #0e502c;
   transform: translateY(-50%) scale(1.08);
   box-shadow: 0 8px 25px rgba(30, 166, 89, 0.35);
 }
@@ -1430,15 +1508,27 @@
 }
 
 .community-cta-card {
-  background: linear-gradient(135deg, rgba(30, 166, 89, 0.92) 0%, rgba(45, 125, 124, 0.9) 50%, rgba(81, 123, 92, 0.94) 100%);
-  backdrop-filter: blur(20px) saturate(190%);
-  -webkit-backdrop-filter: blur(20px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 12px 36px rgba(20, 45, 30, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, #0b3d21 0%, #12572e 42%, #1ea659 100%);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  box-shadow: 0 16px 48px rgba(10, 40, 22, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.25);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xxl) var(--spacing-xl);
   color: #FFFFFF;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.community-cta-card::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -15%;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(30, 166, 89, 0.22) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .community-cta-content {
@@ -1520,16 +1610,18 @@
   gap: 8px;
   background: rgba(255, 255, 255, 0.15);
   color: #FFFFFF;
-  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   padding: 12px 28px;
   border-radius: var(--radius-full);
   font-weight: 700;
   font-size: 0.88rem;
   transition: all var(--transition-fast);
+  box-sizing: border-box;
 }
 
 .community-outline-btn:hover {
   background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.8);
   transform: translateY(-2px);
 }
 

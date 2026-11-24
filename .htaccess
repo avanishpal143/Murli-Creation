@@ -12,7 +12,7 @@ RewriteRule ^product/([^/]+)/?$ product.php?slug=$1 [L,QSA]
 RewriteRule ^cart/?$ cart.php [L,QSA]
 RewriteRule ^checkout/?$ checkout.php [L,QSA]
 RewriteRule ^order-confirmation/?$ order-confirmation.php [L,QSA]
-RewriteRule ^founder-story/?$ about.php [L,QSA]
+RewriteRule ^founder-story/?$ founder-story.php [L,QSA]
 RewriteRule ^contact/?$ contact.php [L,QSA]
 RewriteRule ^admin/?$ admin.php [L,QSA]
 

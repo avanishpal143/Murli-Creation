@@ -201,7 +201,7 @@ require_once __DIR__ . '/config/functions.php';
             <div class="milestone-card">
               <div class="milestone-num" data-count="4.9" data-decimals="1" data-suffix="★">0.0★</div>
               <div class="milestone-label">Patron Rating</div>
-              <p class="milestone-desc">Acclaimed for 5-layer transit safe packaging, precision, and sacred aesthetic.</p>
+              <p class="milestone-desc">Acclaimed for safe protective packaging, precision, and sacred aesthetic.</p>
             </div>
           </div>
         </div>

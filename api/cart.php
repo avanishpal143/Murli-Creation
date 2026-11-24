@@ -14,6 +14,14 @@ if ($action === 'add') {
         exit;
     }
 
+    if (($product['stock'] ?? 0) <= 0) {
+        echo json_encode([
+            'success' => false,
+            'message' => "Sorry, \"{$product['name']}\" is currently Sold Out. You can inquire for a custom bespoke piece via WhatsApp."
+        ]);
+        exit;
+    }
+
     $cart = add_to_session_cart($product, $quantity);
     echo json_encode([
         'success' => true,
@@ -78,6 +86,12 @@ if ($action === 'apply_coupon') {
         unset($_SESSION['mc_applied_coupon']);
         echo json_encode(['success' => false, 'message' => $val['message']]);
     }
+    exit;
+}
+
+if ($action === 'remove_coupon') {
+    unset($_SESSION['mc_applied_coupon']);
+    echo json_encode(['success' => true, 'message' => 'Coupon removed']);
     exit;
 }
 

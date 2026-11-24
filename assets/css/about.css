@@ -511,16 +511,18 @@
   gap: 6px;
   background: rgba(255, 255, 255, 0.15);
   color: #FFFFFF;
-  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   padding: 10px 24px;
   border-radius: var(--radius-full);
   font-weight: 700;
   font-size: 0.85rem;
   transition: all var(--transition-fast);
+  box-sizing: border-box;
 }
 
 .cta-outline-btn:hover {
   background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.85);
   transform: translateY(-2px);
 }
 

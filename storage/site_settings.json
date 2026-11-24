@@ -1,35 +1,60 @@
 {
-  "announcement": {
-    "enabled": true,
-    "text": "Festive Offer: Use code {coupon} for 10% OFF + Free Insured Shipping!",
-    "coupon_code": "MURLI10",
-    "badge": "✨ Special Celebration ✨",
-    "link": "/shop.php"
-  },
-  "studio": {
-    "name": "Murli Creations",
-    "tagline": "Handcrafted Lippan Art & Sacred Devotional Heritage",
-    "founder": "Master Craftsman Murli Prasad",
-    "location": "Rohtak, Haryana, India",
-    "address": "Opp. Civil Lines, Rohtak, Haryana 124001, India",
-    "phone": "+91 99999 99999",
-    "whatsapp": "+91 99999 99999",
-    "email": "contact@murlicreations.com",
-    "hours": "Mon - Sat: 10:00 AM - 7:30 PM (IST)"
-  },
-  "shipping": {
-    "free_threshold": 3000,
-    "standard_charge": 149,
-    "transit_safe_note": "5-layer wooden crate & shock-absorbent cushioning",
-    "dispatch_time": "Dispatched in 2-3 business days"
-  },
-  "social": {
-    "instagram": "https://instagram.com/murlicreations",
-    "whatsapp": "https://wa.me/919999999999",
-    "youtube": "https://youtube.com"
-  },
-  "footer": {
-    "about_text": "Sacred mud & mirror art handcrafted by Murli Prasad. Bringing positive energy, devotion, and traditional Indian grandeur to homes across the globe.",
-    "copyright": "© 2026 Murli Creations. Handcrafted in India with Devotion. All Rights Reserved."
-  }
+    "announcement": {
+        "enabled": true,
+        "text": "Festive Offer: Use code {coupon} for 10% OFF on all orders!",
+        "coupon_code": "MURLI10",
+        "badge": "✨ Special Celebration ✨",
+        "link": "/shop.php"
+    },
+    "studio": {
+        "name": "Murli Creations",
+        "tagline": "Handcrafted Lippan Art & Sacred Devotional Heritage",
+        "founder": "Master Craftsman Murli Prasad",
+        "location": "Pitampura, Delhi, India",
+        "address": "ITL Twin Tower, Netaji Subhash Place, Pitampura, Delhi - 110034, India",
+        "phone": "+91 95823 16454",
+        "whatsapp": "+91 95823 16454",
+        "email": "contact@murlicreations.com",
+        "hours": "Mon - Sat: 10:00 AM - 7:30 PM (IST)"
+    },
+    "shipping": {
+        "free_threshold": 2500,
+        "standard_charge": 199,
+        "transit_safe_note": "100% Insured Safe Doorstep Delivery",
+        "dispatch_time": "Dispatched in 3 to 5 business days",
+        "serviceable_area": "Delivering Exclusively across Delhi & NCR"
+    },
+    "social": {
+        "instagram": "https://instagram.com/murlicreationsofficial",
+        "facebook": "https://www.facebook.com/61590873986487",
+        "linkedin": "https://www.linkedin.com/company/murli-creations",
+        "linktree": "https://linktr.ee/murlicreations",
+        "pinterest": "https://pinterest.com/murlicreations",
+        "whatsapp": "https://wa.me/919582316454",
+        "youtube": "https://youtube.com/@murlicreations"
+    },
+    "footer": {
+        "about_text": "Sacred mud & mirror art handcrafted by Murli Prasad. Bringing positive energy, devotion, and traditional Indian grandeur to homes across the globe.",
+        "copyright": "© 2026 Murli Creations. Handcrafted in India with Devotion. All Rights Reserved."
+    },
+    "faqs": [
+        {
+            "question": "How are the delicate mirrors and clay reliefs protected during shipping?",
+            "answer": "Every artwork is protected with multi-layer high-density cushioning, moisture-resistant film, and heavy-duty reinforced packaging to ensure 100% safe transit across India.",
+            "q": "How are the delicate mirrors and clay reliefs protected during shipping?",
+            "a": "Every artwork is protected with multi-layer high-density cushioning, moisture-resistant film, and heavy-duty reinforced packaging to ensure 100% safe transit across India."
+        },
+        {
+            "question": "Are these authentic handmade Lippan artworks?",
+            "answer": "Yes, each artwork is 100% hand-sculpted by Master Craftsman Murli Prasad in our Delhi studio, using traditional clay relief paste, genuine glass mirrors, and premium wooden backings.",
+            "q": "Are these authentic handmade Lippan artworks?",
+            "a": "Yes, each artwork is 100% hand-sculpted by Master Craftsman Murli Prasad in our Delhi studio, using traditional clay relief paste, genuine glass mirrors, and premium wooden backings."
+        },
+        {
+            "question": "Test Question 3: Can I request custom sizes?",
+            "answer": "Yes, custom dimensions are available upon request via our WhatsApp helpline.",
+            "q": "Test Question 3: Can I request custom sizes?",
+            "a": "Yes, custom dimensions are available upon request via our WhatsApp helpline."
+        }
+    ]
 }

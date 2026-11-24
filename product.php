@@ -3,7 +3,11 @@ require_once __DIR__ . '/config/functions.php';
 require_once __DIR__ . '/includes/product-card.php';
 
 $slug = $_GET['slug'] ?? '';
-$product = get_product_by_slug($slug);
+$id = $_GET['id'] ?? '';
+$product = $slug ? get_product_by_slug($slug) : ($id ? get_product_by_id($id) : null);
+if (!$product && $id) {
+    $product = get_product_by_id($id);
+}
 
 if (!$product) {
     // If not found, redirect to shop
@@ -63,12 +67,22 @@ $discountPercent = round((($mrpVal - $product['price']) / $mrpVal) * 100);
         <div class="product-layout">
           <!-- Left Column: Media Gallery -->
           <div class="product-gallery">
-            <div class="main-media-container">
+            <div class="main-media-container" id="main-media-container" title="Click to view full picture" role="button" tabindex="0" aria-label="View full product image">
               <img
+                id="main-product-img"
                 src="<?php echo htmlspecialchars($product['images'][0]); ?>"
                 alt="<?php echo htmlspecialchars($product['name']); ?>"
                 class="main-media-image"
               />
+              <button type="button" class="main-media-zoom-btn" id="main-media-zoom-trigger" aria-label="View full picture">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <polyline points="9 21 3 21 3 15"></polyline>
+                  <line x1="21" y1="3" x2="14" y2="10"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+                <span>Full View</span>
+              </button>
             </div>
 
             <!-- Thumbnail Reel -->
@@ -105,10 +119,12 @@ $discountPercent = round((($mrpVal - $product['price']) / $mrpVal) * 100);
             <span class="product-meta-category"><?php echo htmlspecialchars($product['category']); ?></span>
             
             <div class="product-rating-row">
-              <span class="product-stars">
-                <?php echo icon_svg('star', 'star-gold', 14); ?> <?php echo $ratingVal; ?>
-              </span>
-              <span class="product-rating-count">(<?php echo $reviewsCountVal; ?> Customer Reviews)</span>
+              <a href="#reviews-section" class="product-rating-link" title="Jump to customer reviews and feedback">
+                <span class="product-stars">
+                  <?php echo icon_svg('star', 'star-gold', 14); ?> <?php echo $ratingVal; ?>
+                </span>
+                <span class="product-rating-count">(<?php echo $reviewsCountVal; ?> Customer Reviews)</span>
+              </a>
               <span class="product-artist-name">• Handcrafted by <?php echo htmlspecialchars($product['artist'] ?? 'Master Craftsman Murli Prasad'); ?></span>
             </div>
 
@@ -141,33 +157,66 @@ $discountPercent = round((($mrpVal - $product['price']) / $mrpVal) * 100);
               </div>
               <div class="product-spec-row">
                 <span class="product-spec-label">Craft Origin</span>
-                <span class="product-spec-val"><?php echo htmlspecialchars($product['origin'] ?? 'Rohtak, Haryana, India'); ?></span>
+                <span class="product-spec-val"><?php echo htmlspecialchars($product['origin'] ?? 'Delhi, India'); ?></span>
               </div>
               <div class="product-spec-row">
                 <span class="product-spec-label">Inventory Status</span>
-                <span class="product-spec-val" style="<?php echo ($product['stock'] > 0) ? 'color: var(--accent-green-vibrant); font-weight: 700;' : 'color: var(--accent-terracotta); font-weight: 700;'; ?>">
-                  <?php echo ($product['stock'] > 0) ? "In Stock ({$product['stock']} units available)" : "Sold Out"; ?>
+                <span class="product-spec-val">
+                  <?php if (($product['stock'] ?? 0) > 0): ?>
+                    <?php if ((int)$product['stock'] === 1): ?>
+                      <span style="color: #b45309; font-weight: 700; background: #fef3c7; padding: 4px 12px; border-radius: 12px; border: 1px solid #fde68a; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 4px;">
+                        ● In stock - Only 1 left
+                      </span>
+                    <?php elseif ((int)$product['stock'] <= 3): ?>
+                      <span style="color: #b45309; font-weight: 700; background: #fef3c7; padding: 4px 12px; border-radius: 12px; border: 1px solid #fde68a; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 4px;">
+                        ● In stock - Only <?php echo (int)$product['stock']; ?> left
+                      </span>
+                    <?php else: ?>
+                      <span style="color: #15803d; font-weight: 700; background: #dcfce7; padding: 4px 12px; border-radius: 12px; border: 1px solid #bbf7d0; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 4px;">
+                        ● In Stock (<?php echo (int)$product['stock']; ?> units available)
+                      </span>
+                    <?php endif; ?>
+                  <?php else: ?>
+                    <span style="color: #b91c1c; font-weight: 700; background: #fee2e2; padding: 4px 12px; border-radius: 12px; border: 1px solid #fecaca; font-size: 0.82rem;">
+                      ● Sold Out
+                    </span>
+                  <?php endif; ?>
                 </span>
               </div>
             </div>
 
             <!-- Purchase Controls -->
             <div class="product-purchase-section">
-              <div class="product-qty-picker">
-                <button type="button" id="purchase-qty-dec" class="product-qty-btn" aria-label="Decrease quantity">-</button>
-                <span id="purchase-quantity-val" class="product-qty-val" data-max-stock="<?php echo $product['stock']; ?>">1</span>
-                <button type="button" id="purchase-qty-inc" class="product-qty-btn" aria-label="Increase quantity">+</button>
-              </div>
+              <?php if (($product['stock'] ?? 0) > 0): ?>
+                <div class="product-qty-picker">
+                  <button type="button" id="purchase-qty-dec" class="product-qty-btn" aria-label="Decrease quantity">-</button>
+                  <span id="purchase-quantity-val" class="product-qty-val" data-max-stock="<?php echo (int)$product['stock']; ?>">1</span>
+                  <button type="button" id="purchase-qty-inc" class="product-qty-btn" aria-label="Increase quantity">+</button>
+                </div>
 
-              <button
-                type="button"
-                id="product-page-add-btn"
-                class="product-add-btn"
-                data-product-id="<?php echo htmlspecialchars($product['id']); ?>"
-                <?php echo ($product['stock'] === 0) ? 'disabled' : ''; ?>
-              >
-                <?php echo ($product['stock'] === 0) ? 'Currently Sold Out' : icon_svg('shopping-bag', '', 16) . ' Add Piece to Cart'; ?>
-              </button>
+                <button
+                  type="button"
+                  id="product-page-add-btn"
+                  class="product-add-btn"
+                  data-product-id="<?php echo htmlspecialchars($product['id']); ?>"
+                >
+                  <?php echo icon_svg('shopping-bag', '', 16); ?> Add Piece to Cart
+                </button>
+              <?php else: ?>
+                <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
+                  <button
+                    type="button"
+                    class="product-add-btn"
+                    disabled
+                    style="background: #e5e7eb; color: #6b7280; cursor: not-allowed; border: 1px solid #d1d5db; box-shadow: none;"
+                  >
+                    Currently Sold Out
+                  </button>
+                  <a href="https://wa.me/919582316454?text=<?php echo urlencode("Namaste Murli Creations, I noticed that " . $product['name'] . " (SKU: " . ($product['code'] ?? '') . ") is Sold Out. Can you custom handcraft a similar bespoke piece for me?"); ?>" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #25D366; color: #fff; font-weight: 700; padding: 12px 18px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(37,211,102,0.25);">
+                    <span>Request Bespoke Handcrafted Piece on WhatsApp</span> <?php echo icon_svg('send', '', 14); ?>
+                  </a>
+                </div>
+              <?php endif; ?>
             </div>
 
             <!-- Accordions -->
@@ -206,7 +255,7 @@ $discountPercent = round((($mrpVal - $product['price']) / $mrpVal) * 100);
                 </button>
                 <div class="accordion-content-panel">
                   <p>
-                    • All art murals are cushioned with high-density foam, corner edge guards, 4 layers of bubble wrap, and packed inside shatterproof wooden crates.<br />
+                    • All artworks are protected with multi-layer high-density cushioning and sturdy reinforced packaging.<br />
                     • Transit replacement policy: In the rare event of damage or mirror crack during transit, we dispatch a brand new piece at no extra charge.
                   </p>
                 </div>
@@ -216,7 +265,7 @@ $discountPercent = round((($mrpVal - $product['price']) / $mrpVal) * 100);
         </div>
 
         <!-- Reviews Section -->
-        <section class="reviews-section">
+        <section class="reviews-section" id="reviews-section">
           <h3 class="reviews-title">Patron Reviews & Reflections</h3>
           
           <div class="reviews-layout">
@@ -328,11 +377,30 @@ $discountPercent = round((($mrpVal - $product['price']) / $mrpVal) * 100);
   <?php include __DIR__ . '/includes/floating-widgets.php'; ?>
   <?php include __DIR__ . '/includes/toast.php'; ?>
 
+  <!-- Full-Screen Product Lightbox Modal -->
+  <div id="product-lightbox" class="product-lightbox-modal" aria-hidden="true" role="dialog" aria-label="Product Image Viewer">
+    <button type="button" class="lightbox-close-btn" id="lightbox-close" aria-label="Close full view">&times;</button>
+    <?php if (count($product['images']) > 1): ?>
+      <button type="button" class="lightbox-nav-btn lightbox-nav-prev" id="lightbox-prev" aria-label="Previous image">&#10094;</button>
+      <button type="button" class="lightbox-nav-btn lightbox-nav-next" id="lightbox-next" aria-label="Next image">&#10095;</button>
+    <?php endif; ?>
+    <div class="lightbox-content-wrap">
+      <img id="lightbox-img" src="<?php echo htmlspecialchars($product['images'][0]); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="lightbox-main-img" />
+    </div>
+    <div class="lightbox-footer-info">
+      <span><?php echo htmlspecialchars($product['name']); ?></span>
+      <span class="lightbox-counter" id="lightbox-counter">1 of <?php echo count($product['images']); ?></span>
+    </div>
+  </div>
+
+  <script>
+    window.PRODUCT_IMAGES = <?php echo json_encode(array_values($product['images'] ?? [])); ?>;
+    window.PRODUCT_NAME = <?php echo json_encode($product['name'] ?? ''); ?>;
+  </script>
   <script src="/assets/js/tilt.js"></script>
   <script src="/assets/js/toast.js"></script>
   <script src="/assets/js/main.js"></script>
   <script src="/assets/js/cart.js"></script>
-  <script src="/assets/js/shop.js"></script>
   <script src="/assets/js/product.js"></script>
 </body>
 </html>

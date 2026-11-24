@@ -84,12 +84,14 @@
   align-self: flex-start;
   transition: all var(--transition-fast);
   box-shadow: 0 4px 15px rgba(30, 166, 89, 0.3);
-  border: none;
+  border: 1px solid #0e502c;
+  box-sizing: border-box;
   cursor: pointer;
 }
 
 .contact-submit-btn:hover {
   background: var(--gradient-primary-hover);
+  border-color: #136337;
   transform: translateY(-1px);
 }
 

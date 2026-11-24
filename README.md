@@ -1,6 +1,6 @@
 # Murli Creations - Pure PHP E-Commerce Platform
 
-A production-quality, visually stunning, multi-page e-commerce website for **Murli Creations**, a handcrafted wall art and home décor studio in Rohtak, Haryana, India.
+A production-quality, visually stunning, multi-page e-commerce website for **Murli Creations**, a handcrafted wall art and home décor studio in Pitampura, Delhi, India.
 
 This project is built using **Pure PHP**, **Vanilla CSS**, and **Vanilla JavaScript** with zero third-party framework dependencies.
 

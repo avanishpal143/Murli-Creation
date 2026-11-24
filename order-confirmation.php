@@ -43,25 +43,37 @@ $estimated_delivery = date('F d, Y', strtotime('+6 days'));
 
             <div class="confirmation-details-grid">
               <div class="confirmation-detail-col">
-                <span class="confirmation-detail-title">Payment Method</span>
-                <span class="confirmation-detail-val"><?php echo htmlspecialchars($order['paymentMethod']); ?> (<?php echo htmlspecialchars($order['paymentStatus']); ?>)</span>
+                <span class="confirmation-detail-title">Payment Mode</span>
+                <span class="confirmation-detail-val"><?php echo htmlspecialchars($order['paymentMethod'] ?? 'Prepaid'); ?></span>
               </div>
 
               <div class="confirmation-detail-col">
                 <span class="confirmation-detail-title">Order Total</span>
-                <span class="confirmation-detail-val">₹<?php echo format_inr($order['totalAmount']); ?></span>
+                <span class="confirmation-detail-val">₹<?php echo format_inr($order['totalPayable'] ?? $order['totalAmount'] ?? $order['subtotal'] ?? 0); ?></span>
               </div>
+
+              <?php if (!empty($order['balanceOnDelivery']) && $order['balanceOnDelivery'] > 0): ?>
+                <div class="confirmation-detail-col">
+                  <span class="confirmation-detail-title">Advance Token Paid</span>
+                  <span class="confirmation-detail-val" style="color: var(--accent-green-vibrant); font-weight: 700;">₹<?php echo format_inr($order['tokenPaid'] ?? 500); ?></span>
+                </div>
+
+                <div class="confirmation-detail-col">
+                  <span class="confirmation-detail-title">Balance Due on Delivery</span>
+                  <span class="confirmation-detail-val" style="color: #d97706; font-weight: 700;">₹<?php echo format_inr($order['balanceOnDelivery']); ?></span>
+                </div>
+              <?php endif; ?>
 
               <div class="confirmation-detail-col">
                 <span class="confirmation-detail-title">Shipping Address</span>
                 <span class="confirmation-detail-val">
-                  <?php echo htmlspecialchars($order['customer']['address']); ?>, <?php echo htmlspecialchars($order['customer']['city']); ?>, <?php echo htmlspecialchars($order['customer']['state']); ?> - <?php echo htmlspecialchars($order['customer']['pinCode']); ?>
+                  <?php echo htmlspecialchars($order['customer']['address'] ?? ''); ?>, <?php echo htmlspecialchars($order['customer']['city'] ?? ''); ?>, <?php echo htmlspecialchars($order['customer']['state'] ?? ''); ?> - <?php echo htmlspecialchars($order['customer']['pinCode'] ?? $order['customer']['pin'] ?? ''); ?>
                 </span>
               </div>
 
               <div class="confirmation-detail-col">
                 <span class="confirmation-detail-title">Contact Phone</span>
-                <span class="confirmation-detail-val"><?php echo htmlspecialchars($order['customer']['phone']); ?></span>
+                <span class="confirmation-detail-val"><?php echo htmlspecialchars($order['customer']['phone'] ?? ''); ?></span>
               </div>
             </div>
 

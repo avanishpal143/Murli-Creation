@@ -23,7 +23,11 @@ if ($coupon === 'MURLI10') {
     $coupon_status = 'promo-error';
 }
 
-$shipping = ($subtotal >= 3000 || empty($cart)) ? 0 : 250;
+$settings = get_site_settings();
+$freeThreshold = (float)($settings['shipping']['free_threshold'] ?? 2500);
+$standardCharge = (float)($settings['shipping']['standard_charge'] ?? 199);
+
+$shipping = ($subtotal >= $freeThreshold || empty($cart)) ? 0 : $standardCharge;
 $final_total = max(0, $subtotal - $discount + $shipping);
 ?>
 <!DOCTYPE html>
@@ -123,12 +127,6 @@ $final_total = max(0, $subtotal - $discount + $shipping);
                   <?php endif; ?>
                 </span>
               </div>
-
-              <?php if ($subtotal < 3000): ?>
-                <p style="font-size: 0.75rem; color: var(--accent-gold-hover); margin-top: -6px;">
-                  Add ₹<?php echo format_inr(3000 - $subtotal); ?> more for <strong>FREE Shipping</strong>!
-                </p>
-              <?php endif; ?>
 
               <!-- Coupon Code Box -->
               <div class="promo-box">
