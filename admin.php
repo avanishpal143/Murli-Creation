@@ -106,6 +106,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link rel="stylesheet" href="/assets/css/globals.css?v=<?php echo filemtime(__DIR__ . '/assets/css/globals.css'); ?>">
   <link rel="stylesheet" href="/assets/css/admin.css?v=<?php echo filemtime(__DIR__ . '/assets/css/admin.css'); ?>">
   <link rel="stylesheet" href="/assets/css/toast.css?v=<?php echo filemtime(__DIR__ . '/assets/css/toast.css'); ?>">
@@ -204,7 +205,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
 
       <div style="margin-top: 24px; font-size: 0.76rem; color: #88b894;">
         Studio Master: <code style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; color:#fff;">admin</code> / <code style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; color:#fff;">murli@2026</code><br>
-        Database: <?php echo $db_connected ? '<span style="color:#4ade80; font-weight:700;">● MySQL Connected</span>' : '<span style="color:#fbbf24; font-weight:700;">● Storage Mode Active</span>'; ?>
+        Database: <?php echo $db_connected ? '<span style="color:#4ade80; font-weight:700;"><span class="live-status-dot pulse"></span> <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">database</span> MySQL Connected</span>' : '<span style="color:#fbbf24; font-weight:700;">● Storage Mode Active</span>'; ?>
       </div>
     </div>
   </div>
@@ -229,22 +230,22 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
       
       <!-- 1. Product Management -->
       <button type="button" class="admin-nav-item active" data-tab="products" onclick="window.switchAdminTab('products'); return false;">
-        <span class="nav-icon">🎨</span>
-        <span>Product Management</span>
+        <span class="nav-icon"><span class="material-symbols-outlined">inventory_2</span></span>
+        <span class="nav-label">Product Management</span>
         <span class="nav-badge"><?php echo count($products); ?></span>
       </button>
 
       <!-- 2. Order Tracking/Approval/status -->
       <button type="button" class="admin-nav-item" data-tab="orders" onclick="window.switchAdminTab('orders'); return false;">
-        <span class="nav-icon">📦</span>
-        <span>Order Tracking/Approval/status</span>
+        <span class="nav-icon"><span class="material-symbols-outlined">local_shipping</span></span>
+        <span class="nav-label">Order Tracking/Approval/status</span>
         <span class="nav-badge"><?php echo count($orders); ?></span>
       </button>
 
       <!-- 3. Contact Form Inquiries (NEW) -->
       <button type="button" class="admin-nav-item" data-tab="contact-inquiries" onclick="window.switchAdminTab('contact-inquiries'); return false;">
-        <span class="nav-icon">📬</span>
-        <span>Contact Form Inquiries</span>
+        <span class="nav-icon"><span class="material-symbols-outlined">mark_email_unread</span></span>
+        <span class="nav-label">Contact Form Inquiries</span>
         <?php if ($newInquiriesCount > 0): ?>
           <span class="nav-badge" style="background:#fee2e2; color:#991b1b;"><?php echo $newInquiriesCount; ?> New</span>
         <?php else: ?>
@@ -254,14 +255,14 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
 
       <!-- 4. Navbar Pages & Studio Details CMS (NEW) -->
       <button type="button" class="admin-nav-item" data-tab="pages-content" onclick="window.switchAdminTab('pages-content'); return false;">
-        <span class="nav-icon">📄</span>
-        <span>Page Details & Studio CMS</span>
+        <span class="nav-icon"><span class="material-symbols-outlined">edit_document</span></span>
+        <span class="nav-label">Page Details & Studio CMS</span>
       </button>
 
       <!-- 5. Customer reminders/ -->
       <button type="button" class="admin-nav-item" data-tab="reminders" onclick="window.switchAdminTab('reminders'); return false;">
-        <span class="nav-icon">⏰</span>
-        <span>Customer reminders/</span>
+        <span class="nav-icon"><span class="material-symbols-outlined">notifications_active</span></span>
+        <span class="nav-label">Customer reminders/</span>
         <?php if ($newLeadsCount > 0): ?>
           <span class="nav-badge" style="background:#fee2e2; color:#991b1b;"><?php echo $newLeadsCount; ?></span>
         <?php endif; ?>
@@ -269,27 +270,27 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
 
       <!-- 6. Meta Tags management per page wise -->
       <button type="button" class="admin-nav-item" data-tab="seo" onclick="window.switchAdminTab('seo'); return false;">
-        <span class="nav-icon">🌐</span>
-        <span>Meta Tags management per page wise</span>
+        <span class="nav-icon"><span class="material-symbols-outlined">travel_explore</span></span>
+        <span class="nav-label">Meta Tags management per page wise</span>
       </button>
 
       <!-- 7. Email communication -->
       <button type="button" class="admin-nav-item" data-tab="email" onclick="window.switchAdminTab('email'); return false;">
-        <span class="nav-icon">✉️</span>
-        <span>Email communication</span>
+        <span class="nav-icon"><span class="material-symbols-outlined">mail</span></span>
+        <span class="nav-label">Email communication</span>
       </button>
 
       <!-- 8. offer management -->
       <button type="button" class="admin-nav-item" data-tab="offers" onclick="window.switchAdminTab('offers'); return false;">
-        <span class="nav-icon">🏷️</span>
-        <span>offer management</span>
+        <span class="nav-icon"><span class="material-symbols-outlined">loyalty</span></span>
+        <span class="nav-label">offer management</span>
         <span class="nav-badge"><?php echo count($coupons); ?></span>
       </button>
 
       <!-- 9. Customer Reviews & Testimonials Hub (NEW) -->
       <button type="button" class="admin-nav-item" data-tab="reviews" onclick="window.switchAdminTab('reviews'); return false;">
-        <span class="nav-icon">⭐</span>
-        <span>Customer Reviews</span>
+        <span class="nav-icon"><span class="material-symbols-outlined">reviews</span></span>
+        <span class="nav-label">Customer Reviews</span>
         <?php if ($pendingReviewsCount > 0): ?>
           <span class="nav-badge" style="background:#fee2e2; color:#991b1b;"><?php echo $pendingReviewsCount; ?> New</span>
         <?php else: ?>
@@ -299,8 +300,8 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
 
       <!-- 10. Logins Management -->
       <button type="button" class="admin-nav-item" data-tab="logins" onclick="window.switchAdminTab('logins'); return false;">
-        <span class="nav-icon">🛡️</span>
-        <span>Logins Management</span>
+        <span class="nav-icon"><span class="material-symbols-outlined">admin_panel_settings</span></span>
+        <span class="nav-label">Logins Management</span>
       </button>
     </nav>
 
@@ -313,7 +314,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
         </div>
       </div>
       <button type="button" class="portal-logout-btn" title="Sign Out" style="background:transparent; border:none; color:#a89988; cursor:pointer; font-size:1.15rem;">
-        🚪
+        <span class="material-symbols-outlined">logout</span>
       </button>
     </div>
   </aside>
@@ -323,7 +324,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
     <!-- Top Minimal Bar -->
     <header class="admin-topbar">
       <div class="topbar-left">
-        <button type="button" class="mobile-sidebar-toggle" id="mobileSidebarToggle" aria-label="Toggle navigation">☰</button>
+        <button type="button" class="mobile-sidebar-toggle" id="mobileSidebarToggle" aria-label="Toggle navigation"><span class="material-symbols-outlined">menu</span></button>
         <h1 class="topbar-title" id="topbarPageTitle">Product Management</h1>
       </div>
 
@@ -331,7 +332,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
         <!-- Interactive Notification Bell with Dropdown & Web Audio Chime -->
         <div class="notification-bell-wrap" style="position:relative;">
           <button type="button" class="topbar-icon-btn" id="topbarNotificationBtn" title="Studio Alerts & Notifications" aria-label="Notifications">
-            🔔
+            <span class="material-symbols-outlined">notifications</span>
             <?php 
               $totalAlerts = $newInquiriesCount + $lowStockCount + $pendingOrdersCount + $pendingReviewsCount;
               if ($totalAlerts > 0): 
@@ -342,13 +343,13 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
           
           <div class="notification-dropdown" id="notificationDropdown">
             <div class="notif-header">
-              <h4 style="margin:0; font-size:0.88rem; font-weight:800; color:var(--admin-text-main);">🔔 Studio Alerts</h4>
-              <button type="button" class="notif-chime-test" id="btnTestChime" title="Test Alert Audio Chime">🔊 Chime</button>
+              <h4 style="margin:0; font-size:0.88rem; font-weight:800; color:var(--admin-text-main);"><span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle; margin-right:4px;">notifications</span> Studio Alerts</h4>
+              <button type="button" class="notif-chime-test" id="btnTestChime" title="Test Alert Audio Chime"><span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">volume_up</span> Chime</button>
             </div>
             <div class="notif-list">
               <?php if ($newInquiriesCount > 0): ?>
                 <div class="notif-item" onclick="window.switchAdminTab('contact-inquiries');">
-                  <div class="notif-icon">📬</div>
+                  <div class="notif-icon"><span class="material-symbols-outlined">mark_email_unread</span></div>
                   <div class="notif-text">
                     <strong><?php echo $newInquiriesCount; ?> New Contact Inquiries</strong>
                     <small>Patrons waiting for response on bespoke artworks</small>
@@ -357,7 +358,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               <?php endif; ?>
               <?php if ($lowStockCount > 0): ?>
                 <div class="notif-item" onclick="window.switchAdminTab('products');">
-                  <div class="notif-icon">⚠️</div>
+                  <div class="notif-icon"><span class="material-symbols-outlined">warning</span></div>
                   <div class="notif-text">
                     <strong><?php echo $lowStockCount; ?> Artworks Low in Stock</strong>
                     <small>Immediate artisan craftsmanship replenishment needed</small>
@@ -366,7 +367,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               <?php endif; ?>
               <?php if ($pendingOrdersCount > 0): ?>
                 <div class="notif-item" onclick="window.switchAdminTab('orders');">
-                  <div class="notif-icon">📦</div>
+                  <div class="notif-icon"><span class="material-symbols-outlined">package_2</span></div>
                   <div class="notif-text">
                     <strong><?php echo $pendingOrdersCount; ?> Orders Pending Fulfillment</strong>
                     <small>Assign courier AWB & print parcel label</small>
@@ -375,7 +376,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               <?php endif; ?>
               <?php if ($pendingReviewsCount > 0): ?>
                 <div class="notif-item" onclick="window.switchAdminTab('reviews');">
-                  <div class="notif-icon">⭐</div>
+                  <div class="notif-icon"><span class="material-symbols-outlined">reviews</span></div>
                   <div class="notif-text">
                     <strong><?php echo $pendingReviewsCount; ?> Customer Reviews Pending</strong>
                     <small>Verify and approve to display on storefront</small>
@@ -383,7 +384,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                 </div>
               <?php endif; ?>
               <div class="notif-item" onclick="window.switchAdminTab('orders');">
-                <div class="notif-icon">🛡️</div>
+                <div class="notif-icon"><span class="material-symbols-outlined">verified_user</span></div>
                 <div class="notif-text">
                   <strong>Studio Security Active</strong>
                   <small>Database connected & live tracking operational</small>
@@ -395,22 +396,22 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
 
         <?php if ($db_connected): ?>
           <span class="db-status-pill db-status-connected" title="MySQL Connected (Database: <?php echo DB_NAME; ?>)">
-            ● MySQL Connected
+            <span class="live-status-dot pulse"></span> <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">database</span> MySQL Connected
           </span>
         <?php else: ?>
           <span class="db-status-pill db-status-disconnected" title="Using JSON Storage. Update config/database.php for MySQL.">
-            ⚠️ JSON Mode
+            <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">storage</span> JSON Mode
           </span>
         <?php endif; ?>
 
         <a href="/index.php" target="_blank" class="topbar-btn">
-          <span>View Site</span> ↗
+          <span class="material-symbols-outlined" style="font-size:17px; vertical-align:middle;">storefront</span> <span>View Site</span> <span class="material-symbols-outlined" style="font-size:15px; vertical-align:middle;">open_in_new</span>
         </a>
         <a href="/track-order.php" target="_blank" class="topbar-btn">
-          <span>Tracking Page</span> ↗
+          <span class="material-symbols-outlined" style="font-size:17px; vertical-align:middle;">local_shipping</span> <span>Tracking Page</span> <span class="material-symbols-outlined" style="font-size:15px; vertical-align:middle;">open_in_new</span>
         </a>
         <button type="button" class="topbar-btn primary portal-logout-btn">
-          <span>Logout</span>
+          <span class="material-symbols-outlined" style="font-size:17px;">logout</span> <span>Logout</span>
         </button>
       </div>
     </header>
@@ -429,28 +430,28 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               <h3>Artworks In Catalog</h3>
               <div class="metric-val"><?php echo $totalProducts; ?></div>
             </div>
-            <div class="metric-icon-wrap">🎨</div>
+            <div class="metric-icon-wrap"><span class="material-symbols-outlined">palette</span></div>
           </div>
           <div class="metric-card">
             <div class="metric-info">
               <h3>Low Stock Alert</h3>
               <div class="metric-val" style="color:<?php echo $lowStockCount > 0 ? '#b91c1c' : '#1c1815'; ?>;"><?php echo $lowStockCount; ?></div>
             </div>
-            <div class="metric-icon-wrap">⚠️</div>
+            <div class="metric-icon-wrap"><span class="material-symbols-outlined">warning</span></div>
           </div>
           <div class="metric-card">
             <div class="metric-info">
               <h3>Total Orders Booked</h3>
               <div class="metric-val"><?php echo $totalOrders; ?></div>
             </div>
-            <div class="metric-icon-wrap">📦</div>
+            <div class="metric-icon-wrap"><span class="material-symbols-outlined">package_2</span></div>
           </div>
           <div class="metric-card">
             <div class="metric-info">
               <h3>Gross Revenue</h3>
               <div class="metric-val">₹<?php echo number_format($totalRevenue); ?></div>
             </div>
-            <div class="metric-icon-wrap">💰</div>
+            <div class="metric-icon-wrap"><span class="material-symbols-outlined">payments</span></div>
           </div>
         </div>
 
@@ -468,19 +469,19 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                   <span>⊞</span> Visual Cards
                 </button>
                 <button type="button" class="view-btn" id="btnViewTable">
-                  <span>☰</span> Table View
+                  <span class="material-symbols-outlined" style="font-size:17px;">table_rows</span> Table View
                 </button>
               </div>
 
               <!-- Power Tools: Export, Bulk Import, Festive Discount -->
               <a href="/api/admin.php?action=export_products_csv" class="btn btn-secondary" title="Export all artworks to CSV spreadsheet">
-                <span>📥</span> Export CSV
+                <span class="material-symbols-outlined" style="font-size:17px;">download</span> Export CSV
               </a>
               <button type="button" class="btn btn-secondary" id="btnOpenBulkImportModal" title="Upload or paste updated CSV to batch update prices and stock">
-                <span>📤</span> Bulk Import
+                <span class="material-symbols-outlined" style="font-size:17px;">upload</span> Bulk Import
               </button>
               <button type="button" class="btn btn-secondary" id="btnOpenFestiveDiscountModal" title="Apply instant festive discount across entire catalog or categories">
-                <span>🏷️</span> Festive Sale
+                <span class="material-symbols-outlined" style="font-size:17px;">percent</span> Festive Sale
               </button>
 
               <button type="button" class="btn btn-gold" id="openAddProductModalBtn">
@@ -492,7 +493,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
           <!-- Filter Toolbar -->
           <div class="admin-toolbar">
             <div class="admin-search-wrap">
-              <span class="admin-search-icon">🔍</span>
+              <span class="admin-search-icon"><span class="material-symbols-outlined">search</span></span>
               <input type="text" id="productSearchInput" class="admin-search-input" placeholder="Search artwork by title, SKU code (e.g. MC/L-001), or material...">
             </div>
 
@@ -544,7 +545,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                   </div>
 
                   <div class="admin-prod-rating-pill">
-                    <span class="star">★</span>
+                    <span class="star"><span class="material-symbols-outlined" style="font-size:16px; color:#F59E0B; vertical-align:middle;">star</span></span>
                     <span><?php echo number_format($p['rating'] ?? 4.9, 1); ?></span>
                     <span style="opacity:0.35;">|</span>
                     <span><?php echo $p['reviewsCount'] ?? 15; ?></span>
@@ -599,10 +600,10 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
 
                   <!-- Direct Card Action Buttons -->
                   <div class="admin-prod-action-row">
-                    <a href="/product.php?slug=<?php echo urlencode($p['slug'] ?? ''); ?>" target="_blank" class="btn btn-secondary" title="View live on customer storefront" style="flex:0 0 32px; padding:0;">👁️</a>
-                    <button type="button" class="btn btn-secondary btn-edit-product" data-product="<?php echo $pJson; ?>">✏️ Edit</button>
+                    <a href="/product.php?slug=<?php echo urlencode($p['slug'] ?? ''); ?>" target="_blank" class="btn btn-secondary" title="View live on customer storefront" style="flex:0 0 34px; padding:0; display:inline-flex; align-items:center; justify-content:center;"><span class="material-symbols-outlined" style="font-size:17px;">visibility</span></a>
+                    <button type="button" class="btn btn-secondary btn-edit-product" data-product="<?php echo $pJson; ?>"><span class="material-symbols-outlined" style="font-size:16px;">edit</span> Edit</button>
                     <button type="button" class="btn btn-secondary btn-inspect-product" data-id="<?php echo htmlspecialchars($p['id']); ?>">Specs</button>
-                    <button type="button" class="btn btn-danger btn-delete-product" data-id="<?php echo htmlspecialchars($p['id']); ?>" data-name="<?php echo htmlspecialchars($p['name']); ?>" style="flex:0 0 32px; padding:0;">🗑️</button>
+                    <button type="button" class="btn btn-danger btn-delete-product" data-id="<?php echo htmlspecialchars($p['id']); ?>" data-name="<?php echo htmlspecialchars($p['name']); ?>" style="flex:0 0 34px; padding:0; display:inline-flex; align-items:center; justify-content:center;"><span class="material-symbols-outlined" style="font-size:17px;">delete</span></button>
                   </div>
                 </div>
               </div>
@@ -677,10 +678,10 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                     </td>
                     <td style="text-align:right;">
                       <div style="display:inline-flex; gap:6px;">
-                        <a href="/product.php?slug=<?php echo urlencode($p['slug'] ?? ''); ?>" target="_blank" class="btn btn-sm btn-secondary" title="View live on storefront">👁️ Store</a>
+                        <a href="/product.php?slug=<?php echo urlencode($p['slug'] ?? ''); ?>" target="_blank" class="btn btn-sm btn-secondary" title="View live on storefront"><span class="material-symbols-outlined" style="font-size:16px;">visibility</span> Store</a>
                         <button type="button" class="btn btn-sm btn-secondary btn-inspect-product" data-id="<?php echo htmlspecialchars($p['id']); ?>">Specs</button>
                         <button type="button" class="btn btn-sm btn-secondary btn-edit-product" data-product="<?php echo $pJson; ?>">Edit</button>
-                        <button type="button" class="btn btn-sm btn-danger btn-delete-product" data-id="<?php echo htmlspecialchars($p['id']); ?>" data-name="<?php echo htmlspecialchars($p['name']); ?>">🗑️</button>
+                        <button type="button" class="btn btn-sm btn-danger btn-delete-product" data-id="<?php echo htmlspecialchars($p['id']); ?>" data-name="<?php echo htmlspecialchars($p['name']); ?>"><span class="material-symbols-outlined" style="font-size:16px;">delete</span></button>
                       </div>
                     </td>
                   </tr>
@@ -700,7 +701,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
         <div class="admin-box" style="margin-bottom:24px;">
           <div class="admin-box-header">
             <div>
-              <h2 class="admin-box-title">📊 Studio Business & Revenue Intelligence</h2>
+              <h2 class="admin-box-title"><span class="material-symbols-outlined" style="font-size:22px; vertical-align:middle; margin-right:8px; color:#1EA659;">analytics</span> Studio Business & Revenue Intelligence</h2>
               <p class="admin-box-subtitle">Live sales trajectories, top handcrafted collections, order statuses, and patron locations</p>
             </div>
             <span class="badge badge-success">● Live Sync</span>
@@ -762,7 +763,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                   foreach ($topCities as $cName => $cCount):
                 ?>
                   <div style="background:#ffffff; border:1px solid rgba(30,166,89,0.18); border-radius:6px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.78rem; font-weight:700; color:var(--admin-text-main);">📍 <?php echo htmlspecialchars($cName); ?></span>
+                    <span style="font-size:0.78rem; font-weight:700; color:var(--admin-text-main);"><span class="material-symbols-outlined" style="font-size:15px; vertical-align:middle; color:#1EA659;">location_on</span> <?php echo htmlspecialchars($cName); ?></span>
                     <span class="badge badge-success" style="font-size:0.7rem; padding:1px 6px;"><?php echo $cCount; ?></span>
                   </div>
                 <?php endforeach; ?>
@@ -778,14 +779,14 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               <p class="admin-box-subtitle">Approve bookings, change status, print 4x6" shipping parcel labels, send WhatsApp tracking, and assign logistics AWBs</p>
             </div>
             <a href="/track-order.php" target="_blank" class="btn btn-secondary">
-              <span>Live Customer Tracking Page</span> ↗
+              <span>Live Customer Tracking Page</span> <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">open_in_new</span>
             </a>
           </div>
 
           <!-- Toolbar -->
           <div class="admin-toolbar">
             <div class="admin-search-wrap">
-              <span class="admin-search-icon">🔍</span>
+              <span class="admin-search-icon"><span class="material-symbols-outlined">search</span></span>
               <input type="text" id="orderSearchInput" class="admin-search-input" placeholder="Search by Order ID (#MURLI-...), patron name, mobile number, or AWB...">
             </div>
             <select id="orderStatusFilter" class="admin-select">
@@ -851,7 +852,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                     </td>
                     <td>
                       <strong><?php echo htmlspecialchars($oName); ?></strong><br>
-                      <small style="color:#555;">📞 <?php echo htmlspecialchars($oPhone); ?> (<?php echo htmlspecialchars($oCity); ?>)</small>
+                      <small style="color:#555;"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">phone</span> <?php echo htmlspecialchars($oPhone); ?> (<?php echo htmlspecialchars($oCity); ?>)</small>
                     </td>
                     <td>
                       <span class="badge badge-gold"><?php echo $itemsCount; ?> Item<?php echo $itemsCount > 1 ? 's' : ''; ?></span>
@@ -888,13 +889,13 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                                 data-carrier="<?php echo htmlspecialchars($oCarrier); ?>" 
                                 data-awb="<?php echo htmlspecialchars($oAwb); ?>" 
                                 title="1-Click Dispatch Tracking Notification to Patron WhatsApp">
-                          📲 WhatsApp
+                          <span class="material-symbols-outlined" style="font-size:16px;">chat</span> WhatsApp
                         </button>
                         <button type="button" class="btn btn-sm btn-secondary btn-print-shipping-label" 
                                 data-id="<?php echo htmlspecialchars($oId); ?>" 
                                 data-order="<?php echo $orderJson; ?>" 
                                 title="Print 4x6 Thermal Shipping Parcel Label">
-                          🏷️ Label
+                          <span class="material-symbols-outlined" style="font-size:16px;">print</span> Label
                         </button>
                         <button type="button" class="btn btn-sm btn-secondary btn-view-order" data-id="<?php echo htmlspecialchars($oId); ?>" title="View & Print Invoice">Invoice</button>
                         <button type="button" class="btn btn-sm btn-primary btn-change-order-status" data-id="<?php echo htmlspecialchars($oId); ?>" data-status="<?php echo htmlspecialchars($oStatus); ?>" title="Change Status / Approve">Status</button>
@@ -927,7 +928,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
           <!-- Webhook API Endpoint Card -->
           <div style="margin-top:28px; background:#fbf9f6; border:1px solid var(--admin-border); border-radius:10px; padding:18px 20px;">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:8px;">
-              <strong style="color:#1c1815; font-size:0.95rem;">⚡ Automated Webhook Status Update API (Shiprocket / Courier):</strong>
+              <strong style="color:#1c1815; font-size:0.95rem;"><span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle; color:#1EA659;">bolt</span> Automated Webhook Status Update API (Shiprocket / Courier):</strong>
               <button type="button" class="btn btn-sm btn-primary" id="btnCreateApiKey">+ Generate New API Key</button>
             </div>
             <p style="font-size:0.82rem; color:#666; margin:0 0 10px 0;">External logistics systems can automatically update order statuses by sending a POST request to <code>/api/webhook.php</code>.</p>
@@ -954,28 +955,28 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               <h3>Total Inquiries</h3>
               <div class="metric-val"><?php echo count($contact_inquiries); ?></div>
             </div>
-            <div class="metric-icon-wrap">📬</div>
+            <div class="metric-icon-wrap"><span class="material-symbols-outlined">inbox</span></div>
           </div>
           <div class="metric-card">
             <div class="metric-info">
               <h3>New Inquiries</h3>
               <div class="metric-val" style="color:<?php echo $newInquiriesCount > 0 ? '#b91c1c' : '#1c1815'; ?>;"><?php echo $newInquiriesCount; ?></div>
             </div>
-            <div class="metric-icon-wrap">🔔</div>
+            <div class="metric-icon-wrap"><span class="material-symbols-outlined">mark_email_unread</span></div>
           </div>
           <div class="metric-card">
             <div class="metric-info">
               <h3>Replied Inquiries</h3>
               <div class="metric-val"><?php echo count(array_filter($contact_inquiries, fn($x) => ($x['status'] ?? '') === 'replied')); ?></div>
             </div>
-            <div class="metric-icon-wrap">💬</div>
+            <div class="metric-icon-wrap"><span class="material-symbols-outlined">chat</span></div>
           </div>
           <div class="metric-card">
             <div class="metric-info">
               <h3>Resolved</h3>
               <div class="metric-val"><?php echo count(array_filter($contact_inquiries, fn($x) => ($x['status'] ?? '') === 'resolved')); ?></div>
             </div>
-            <div class="metric-icon-wrap">✅</div>
+            <div class="metric-icon-wrap"><span class="material-symbols-outlined">check_circle</span></div>
           </div>
         </div>
 
@@ -986,14 +987,14 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               <p class="admin-box-subtitle">Customer messages received from the storefront Contact page. Reply directly via WhatsApp or Email.</p>
             </div>
             <a href="/contact.php" target="_blank" class="btn btn-secondary">
-              <span>View Live Contact Page</span> ↗
+              <span class="material-symbols-outlined" style="font-size:17px; vertical-align:middle;">contact_support</span> <span>View Live Contact Page</span> <span class="material-symbols-outlined" style="font-size:15px; vertical-align:middle;">open_in_new</span>
             </a>
           </div>
 
           <!-- Toolbar -->
           <div class="admin-toolbar">
             <div class="admin-search-wrap">
-              <span class="admin-search-icon">🔍</span>
+              <span class="admin-search-icon"><span class="material-symbols-outlined">search</span></span>
               <input type="text" id="inquirySearchInput" class="admin-search-input" placeholder="Search by patron name, phone (+91...), email, subject, or message keyword...">
             </div>
             <select id="inquiryStatusFilter" class="admin-select">
@@ -1055,9 +1056,9 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                       </td>
                       <td>
                         <strong><?php echo htmlspecialchars($inqName); ?></strong><br>
-                        <small style="color:#555;">📞 <a href="tel:<?php echo htmlspecialchars($inqPhone); ?>"><?php echo htmlspecialchars($inqPhone); ?></a></small><br>
+                        <small style="color:#555;"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">phone</span> <a href="tel:<?php echo htmlspecialchars($inqPhone); ?>"><?php echo htmlspecialchars($inqPhone); ?></a></small><br>
                         <?php if (!empty($inqEmail)): ?>
-                          <small style="color:#777;">✉️ <a href="mailto:<?php echo htmlspecialchars($inqEmail); ?>"><?php echo htmlspecialchars($inqEmail); ?></a></small>
+                          <small style="color:#777;"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">mail</span> <a href="mailto:<?php echo htmlspecialchars($inqEmail); ?>"><?php echo htmlspecialchars($inqEmail); ?></a></small>
                         <?php endif; ?>
                       </td>
                       <td>
@@ -1081,11 +1082,11 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                       <td>
                         <?php if ($inqSt === 'replied' || !empty($inqReplyMsg)): ?>
                           <small style="color:#16a34a; font-weight:600;">
-                            ✓ Replied via <?php echo ucfirst($inqReplyCh ?: 'Studio'); ?>
+                            <span class="material-symbols-outlined" style="font-size:15px; vertical-align:middle; color:#15803d;">check</span> Replied via <?php echo ucfirst($inqReplyCh ?: 'Studio'); ?>
                           </small><br>
                           <small style="color:#777; font-size:0.75rem;"><?php echo htmlspecialchars(substr($inqReplyMsg, 0, 45)); ?>...</small>
                         <?php else: ?>
-                          <small style="color:#b45309; font-weight:600;">⏳ Awaiting Reply</small>
+                          <small style="color:#b45309; font-weight:600;"><span class="material-symbols-outlined" style="font-size:15px; vertical-align:middle; color:#b45309;">hourglass_empty</span> Awaiting Reply</small>
                         <?php endif; ?>
                       </td>
                       <td style="text-align:right;">
@@ -1141,13 +1142,13 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
       <div class="admin-tab-pane" id="tab-pages-content">
         <!-- Subnav Pills -->
         <div class="cms-subnav">
-          <button type="button" class="cms-subnav-btn active" data-sub="contact-info">📞 Studio & Contact Page</button>
-          <button type="button" class="cms-subnav-btn" data-sub="home-page">🏠 Home Page Hero & Story</button>
-          <button type="button" class="cms-subnav-btn" data-sub="header-footer">🌐 Header, Footer & Socials</button>
-          <button type="button" class="cms-subnav-btn" data-sub="shipping-policies">🚚 Shipping & Delivery Policies</button>
-          <button type="button" class="cms-subnav-btn" data-sub="faqs-editor">❓ Interactive FAQs Editor</button>
-          <button type="button" class="cms-subnav-btn" data-sub="media-assets">🖼️ Media Library</button>
-          <button type="button" class="cms-subnav-btn" data-sub="holiday-mode">🛑 Studio Notice & Holiday</button>
+          <button type="button" class="cms-subnav-btn active" data-sub="contact-info"><span class="material-symbols-outlined">storefront</span> Studio & Contact Page</button>
+          <button type="button" class="cms-subnav-btn" data-sub="home-page"><span class="material-symbols-outlined">auto_stories</span> Home Page Hero & Story</button>
+          <button type="button" class="cms-subnav-btn" data-sub="header-footer"><span class="material-symbols-outlined">view_compact</span> Header, Footer & Socials</button>
+          <button type="button" class="cms-subnav-btn" data-sub="shipping-policies"><span class="material-symbols-outlined">local_shipping</span> Shipping & Delivery Policies</button>
+          <button type="button" class="cms-subnav-btn" data-sub="faqs-editor"><span class="material-symbols-outlined">quiz</span> Interactive FAQs Editor</button>
+          <button type="button" class="cms-subnav-btn" data-sub="media-assets"><span class="material-symbols-outlined">photo_library</span> Media Library</button>
+          <button type="button" class="cms-subnav-btn" data-sub="holiday-mode"><span class="material-symbols-outlined">campaign</span> Studio Notice & Holiday</button>
         </div>
 
         <?php 
@@ -1228,18 +1229,18 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
           <!-- 1-Click Festive Campaign Presets Bar -->
           <div class="festive-presets-bar">
             <div class="festive-presets-title">
-              <span style="font-size:1.25rem;">🎉</span>
+              <span class="material-symbols-outlined" style="font-size:24px; color:#D4AF37;">celebration</span>
               <div>
                 <strong>1-Click Festive Campaign Presets:</strong>
                 <span style="color:var(--admin-text-muted); font-size:0.8rem; margin-left:6px;">Instantly load ready-made festive headlines, promo codes, and blessings</span>
               </div>
             </div>
             <div class="festive-presets-buttons">
-              <button type="button" class="btn-preset-theme" data-preset="diwali">🪔 Diwali & Dhanteras</button>
-              <button type="button" class="btn-preset-theme" data-preset="shyamji">🦚 Khatu Shyam Mela</button>
-              <button type="button" class="btn-preset-theme" data-preset="navratri">🌺 Navratri Mahotsav</button>
-              <button type="button" class="btn-preset-theme" data-preset="grihapravesh">🏡 Griha Pravesh</button>
-              <button type="button" class="btn-preset-theme btn-preset-default" data-preset="default">🌿 Standard Heritage</button>
+              <button type="button" class="btn-preset-theme" data-preset="diwali"><span class="material-symbols-outlined" style="font-size:16px;">flare</span> Diwali & Dhanteras</button>
+              <button type="button" class="btn-preset-theme" data-preset="shyamji"><span class="material-symbols-outlined" style="font-size:16px;">spa</span> Khatu Shyam Mela</button>
+              <button type="button" class="btn-preset-theme" data-preset="navratri"><span class="material-symbols-outlined" style="font-size:16px;">local_florist</span> Navratri Mahotsav</button>
+              <button type="button" class="btn-preset-theme" data-preset="grihapravesh"><span class="material-symbols-outlined" style="font-size:16px;">home</span> Griha Pravesh</button>
+              <button type="button" class="btn-preset-theme btn-preset-default" data-preset="default"><span class="material-symbols-outlined" style="font-size:16px;">nature</span> Standard Heritage</button>
             </div>
           </div>
 
@@ -1379,12 +1380,12 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                     <span class="dot green"></span>
                   </div>
                   <div class="browser-url">
-                    <span style="color:#10b981; margin-right:4px;">🔒</span> https://murlicreations.com
+                    <span class="material-symbols-outlined" style="font-size:16px; color:#10b981; vertical-align:middle; margin-right:4px;">lock</span> https://murlicreations.com
                   </div>
                   <div class="preview-device-toggle">
-                    <button type="button" class="btn-device-toggle active" data-device="desktop" title="Preview Desktop Layout">💻</button>
-                    <button type="button" class="btn-device-toggle" data-device="mobile" title="Preview Mobile Layout (375px)">📱</button>
-                    <a href="/" target="_blank" class="preview-ext-link" title="Open Real Storefront in New Tab">↗</a>
+                    <button type="button" class="btn-device-toggle active" data-device="desktop" title="Preview Desktop Layout"><span class="material-symbols-outlined">desktop_windows</span></button>
+                    <button type="button" class="btn-device-toggle" data-device="mobile" title="Preview Mobile Layout (375px)"><span class="material-symbols-outlined">smartphone</span></button>
+                    <a href="/" target="_blank" class="preview-ext-link" title="Open Real Storefront in New Tab"><span class="material-symbols-outlined" style="font-size:15px;">open_in_new</span></a>
                   </div>
                 </div>
 
@@ -1401,7 +1402,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
 
                     <!-- Header Lockup Strip Preview -->
                     <div class="preview-header-strip">
-                      <div style="font-size:1.1rem; color:#fff;">☰</div>
+                      <div style="font-size:1.1rem; color:#fff;"><span class="material-symbols-outlined">menu</span></div>
                       <div class="preview-brand-lockup">
                         <span style="color:#d4af37; font-size:1.2rem;">🦚</span>
                         <div>
@@ -1410,8 +1411,8 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                         </div>
                       </div>
                       <div style="display:flex; gap:10px; font-size:0.9rem; color:#fff;">
-                        <span>🔍</span>
-                        <span>🛍️</span>
+                        <span class="material-symbols-outlined" style="font-size:16px;">search</span>
+                        <span class="material-symbols-outlined" style="font-size:16px;">shopping_bag</span>
                       </div>
                     </div>
 
@@ -1606,7 +1607,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               </div>
               <div style="display:flex; gap:10px; align-items:center;">
                 <button type="button" class="btn btn-secondary" id="btnAddNewFaqRow">+ Add Question</button>
-                <button type="button" class="btn btn-gold btn-submit-cms-form" data-form="formFaqsEditor">💾 Save All FAQs</button>
+                <button type="button" class="btn btn-gold btn-submit-cms-form" data-form="formFaqsEditor"><span class="material-symbols-outlined">save</span> Save All FAQs</button>
               </div>
             </div>
 
@@ -1648,7 +1649,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
           <div class="admin-box">
             <div class="admin-box-header">
               <div>
-                <h3 class="admin-box-title">🖼️ Studio Media & Image Asset Library</h3>
+                <h3 class="admin-box-title"><span class="material-symbols-outlined" style="font-size:22px; vertical-align:middle; margin-right:8px; color:#1EA659;">photo_library</span> Studio Media & Image Asset Library</h3>
                 <p class="admin-box-subtitle">Browse all uploaded sacred artwork photos, banners, and brand insignia. Click any asset to instantly copy its URL for products or CMS.</p>
               </div>
               <span class="badge badge-success"><?php echo count($media_assets); ?> Assets Found</span>
@@ -1666,7 +1667,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                     </small>
                     <small style="color:var(--admin-text-muted); font-size:0.72rem;"><?php echo $ma['size_kb']; ?> KB • <?php echo strtoupper($ma['ext']); ?></small>
                     <button type="button" class="btn btn-sm btn-secondary btn-copy-media-url" data-url="<?php echo htmlspecialchars($ma['url']); ?>" style="margin-top:auto; font-size:0.75rem; padding:4px 8px;">
-                      📋 Copy URL
+                      <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span> Copy URL
                     </button>
                   </div>
                 </div>
@@ -1680,7 +1681,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
           <div class="admin-box">
             <div class="admin-box-header">
               <div>
-                <h3 class="admin-box-title">🛑 Studio Festival Holiday & Vacation Notice</h3>
+                <h3 class="admin-box-title"><span class="material-symbols-outlined" style="font-size:22px; vertical-align:middle; margin-right:8px; color:#EF4444;">campaign</span> Studio Festival Holiday & Vacation Notice</h3>
                 <p class="admin-box-subtitle">Display a top announcement bar during festivals or studio workshop maintenance without interrupting browsing</p>
               </div>
               <button type="button" class="btn btn-gold btn-submit-cms-form" data-form="formHolidayNotice">Save Notice</button>
@@ -1719,8 +1720,8 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               <!-- Live Visual Announcement Bar Preview -->
               <div style="margin-top:20px; padding:16px; background:#f0fdf4; border:1px solid rgba(30,166,89,0.25); border-radius:10px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                  <strong style="font-size:0.85rem; color:#142318;">👁️ Live Announcement Bar Preview:</strong>
-                  <span style="font-size:0.75rem; color:#15803d; font-weight:700;">🟢 Live Responsive Preview</span>
+                  <strong style="font-size:0.85rem; color:#142318;"><span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">visibility</span> Live Announcement Bar Preview:</strong>
+                  <span style="font-size:0.75rem; color:#15803d; font-weight:700;"><span class="live-status-dot pulse"></span> Live Responsive Preview</span>
                 </div>
                 <div id="holidayLivePreviewStrip" style="background:linear-gradient(135deg, #072613 0%, #104825 100%); color:#fff; padding:10px 16px; border-radius:8px; text-align:center; font-size:0.88rem; font-weight:600; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
                   <span id="holidayLiveBadge" style="background:#deb887; color:#1c1815; font-size:0.72rem; font-weight:800; padding:2px 8px; border-radius:12px; margin-right:8px;"><?php echo htmlspecialchars($ann['badge'] ?? '✨ Special Celebration ✨'); ?></span>
@@ -1766,7 +1767,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                 <?php foreach ($reminders as $rem): ?>
                   <tr>
                     <td><strong><?php echo htmlspecialchars($rem['customer_name']); ?></strong></td>
-                    <td>📞 <?php echo htmlspecialchars($rem['customer_phone'] ?? ''); ?><br><small><?php echo htmlspecialchars($rem['customer_email'] ?? ''); ?></small></td>
+                    <td><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">phone</span> <?php echo htmlspecialchars($rem['customer_phone'] ?? ''); ?><br><small><?php echo htmlspecialchars($rem['customer_email'] ?? ''); ?></small></td>
                     <td><?php echo !empty($rem['order_id']) ? '<code>#' . htmlspecialchars($rem['order_id']) . '</code>' : '<span style="color:#888;">Cart Follow-up</span>'; ?></td>
                     <td><span class="badge badge-gold"><?php echo htmlspecialchars($rem['reminder_type']); ?></span></td>
                     <td style="max-width:320px; font-size:0.82rem; color:#555;"><?php echo htmlspecialchars($rem['message_body']); ?></td>
@@ -1791,7 +1792,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
         <div class="admin-box" style="margin-top:24px;">
           <div class="admin-box-header">
             <div>
-              <h3 class="admin-box-title">🛒 Live Abandoned Carts & Patron Recovery</h3>
+              <h3 class="admin-box-title"><span class="material-symbols-outlined" style="font-size:22px; vertical-align:middle; margin-right:8px; color:#1EA659;">shopping_cart_checkout</span> Live Abandoned Carts & Patron Recovery</h3>
               <p class="admin-box-subtitle">Patrons who began checkout but dropped off. Send a 1-click WhatsApp message with an instant 5% discount to complete their order.</p>
             </div>
             <span class="badge badge-warning"><?php echo count($abandoned_carts); ?> Incomplete Checkouts</span>
@@ -1823,14 +1824,14 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                       <td><code>#<?php echo htmlspecialchars($ac['id']); ?></code><br><small style="color:#777;"><?php echo htmlspecialchars($ac['created_at']); ?></small></td>
                       <td>
                         <strong><?php echo htmlspecialchars($ac['customer_name']); ?></strong><br>
-                        <small style="color:#555;">📞 <?php echo htmlspecialchars($ac['customer_phone']); ?></small>
+                        <small style="color:#555;"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">phone</span> <?php echo htmlspecialchars($ac['customer_phone']); ?></small>
                       </td>
                       <td style="max-width:260px; font-size:0.84rem;"><?php echo htmlspecialchars($ac['items_summary']); ?></td>
                       <td><strong style="color:#15803d;">₹<?php echo number_format($ac['total_amount']); ?></strong></td>
                       <td><span class="badge badge-warning">● Incomplete</span></td>
                       <td style="text-align:right;">
                         <a href="https://wa.me/<?php echo $acCleanPhone; ?>?text=<?php echo $acWaMsg; ?>" target="_blank" class="btn btn-sm btn-success" style="font-weight:700;">
-                          📲 Send 5% WhatsApp Offer
+                          <span class="material-symbols-outlined" style="font-size:16px;">chat</span> Send 5% WhatsApp Offer
                         </a>
                       </td>
                     </tr>
@@ -1868,7 +1869,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                     <div>
                       <span class="badge <?php echo $lead['priority'] === 'Urgent' || $lead['priority'] === 'High' ? 'badge-danger' : 'badge-info'; ?>"><?php echo htmlspecialchars($lead['priority']); ?> Priority</span>
                       <h4 style="margin:6px 0 2px 0; font-size:1.05rem; color:#1c1815;"><?php echo htmlspecialchars($lead['name']); ?></h4>
-                      <small style="color:#777;">📞 <?php echo htmlspecialchars($lead['phone'] ?? 'No phone'); ?> • <?php echo htmlspecialchars($lead['email']); ?></small>
+                      <small style="color:#777;"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">phone</span> <?php echo htmlspecialchars($lead['phone'] ?? 'No phone'); ?> • <?php echo htmlspecialchars($lead['email']); ?></small>
                     </div>
                   </div>
 
@@ -1894,7 +1895,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                   <div style="display:flex; gap:6px;">
                     <a href="https://wa.me/91<?php echo preg_replace('/\D/', '', $lead['phone'] ?? ''); ?>?text=<?php echo urlencode('Namaste ' . $lead['name'] . ', Murli Prasad here from Murli Creations studio regarding: ' . $lead['subject']); ?>" target="_blank" class="btn btn-sm btn-success" style="flex:1;">WhatsApp</a>
                     <button type="button" class="btn btn-sm btn-secondary btn-log-interaction" data-id="<?php echo $lead['id']; ?>" data-name="<?php echo htmlspecialchars($lead['name']); ?>" style="flex:1;">Log Call</button>
-                    <button type="button" class="btn btn-sm btn-danger btn-delete-lead" data-id="<?php echo $lead['id']; ?>">🗑️</button>
+                    <button type="button" class="btn btn-sm btn-danger btn-delete-lead" data-id="<?php echo $lead['id']; ?>"><span class="material-symbols-outlined" style="font-size:16px;">delete</span></button>
                   </div>
                 </div>
               </div>
@@ -2211,7 +2212,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
         <div class="admin-box">
           <div class="admin-box-header">
             <div>
-              <h2 class="admin-box-title">⭐ Customer Reviews & Testimonials Management</h2>
+              <h2 class="admin-box-title"><span class="material-symbols-outlined" style="font-size:22px; vertical-align:middle; margin-right:8px; color:#F59E0B;">reviews</span> Customer Reviews & Testimonials Management</h2>
               <p class="admin-box-subtitle">Approve customer feedback for live website display, manage ratings, and add verified reviews from offline exhibitions</p>
             </div>
             <button type="button" class="btn btn-gold" id="btnOpenAddReviewModal">+ Add Offline / WhatsApp Review</button>
@@ -2224,35 +2225,35 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                 <h3>Total Patron Reviews</h3>
                 <div class="metric-val"><?php echo count($admin_reviews); ?></div>
               </div>
-              <div class="metric-icon-wrap">⭐</div>
+              <div class="metric-icon-wrap"><span class="material-symbols-outlined">reviews</span></div>
             </div>
             <div class="metric-card">
               <div class="metric-info">
                 <h3>Average Studio Rating</h3>
-                <div class="metric-val">4.9 ★</div>
+                <div class="metric-val">4.9 <span class="material-symbols-outlined" style="font-size:18px; color:#f59e0b; vertical-align:middle;">star</span></div>
               </div>
-              <div class="metric-icon-wrap">🌟</div>
+              <div class="metric-icon-wrap"><span class="material-symbols-outlined">hotel_class</span></div>
             </div>
             <div class="metric-card">
               <div class="metric-info">
                 <h3>Approved (Live on Site)</h3>
                 <div class="metric-val" style="color:#15803d;"><?php echo count($admin_reviews) - $pendingReviewsCount; ?></div>
               </div>
-              <div class="metric-icon-wrap">✅</div>
+              <div class="metric-icon-wrap"><span class="material-symbols-outlined">check_circle</span></div>
             </div>
             <div class="metric-card">
               <div class="metric-info">
                 <h3>Pending Verification</h3>
                 <div class="metric-val" style="color:<?php echo $pendingReviewsCount > 0 ? '#b91c1c' : 'var(--admin-text-main)'; ?>;"><?php echo $pendingReviewsCount; ?></div>
               </div>
-              <div class="metric-icon-wrap">⏳</div>
+              <div class="metric-icon-wrap"><span class="material-symbols-outlined">pending</span></div>
             </div>
           </div>
 
           <!-- Reviews Filter & Search Toolbar -->
           <div class="reviews-filter-bar">
             <div style="flex:1; min-width:240px;">
-              <input type="text" id="reviewSearchInput" class="admin-search-input" placeholder="🔍 Search reviews by patron name, city, or comment...">
+              <input type="text" id="reviewSearchInput" class="admin-search-input" placeholder="Search reviews by patron name, city, or comment...">
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
               <label for="reviewStatusFilter" style="font-size:0.82rem; font-weight:700; color:var(--admin-text-sub);">Status:</label>
@@ -2295,14 +2296,14 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                       data-status="<?php echo $rApproved ? 'approved' : 'pending'; ?>">
                     <td>
                       <strong><?php echo htmlspecialchars($rName); ?></strong><br>
-                      <small style="color:#777;">📍 <?php echo htmlspecialchars($rev['location'] ?? 'India'); ?></small>
+                      <small style="color:#777;"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle; color:#1EA659;">location_on</span> <?php echo htmlspecialchars($rev['location'] ?? 'India'); ?></small>
                     </td>
                     <td>
                       <small style="font-weight:700; color:#15803d;"><?php echo htmlspecialchars($rProdName); ?></small>
                     </td>
                     <td>
                       <span style="color:#f59e0b; font-weight:800; font-size:0.92rem;">
-                        <?php for($i=1; $i<=5; $i++): echo $i <= $rRating ? '★' : '☆'; endfor; ?>
+                        <?php for($i=1; $i<=5; $i++): echo $i <= $rRating ? '<span class="material-symbols-outlined" style="font-size:16px; color:#F59E0B; vertical-align:middle;">star</span>' : '<span class="material-symbols-outlined" style="font-size:16px; color:#CBD5E1; vertical-align:middle;">star</span>'; endfor; ?>
                       </span>
                       <small style="font-weight:700; color:#444;">(<?php echo number_format($rRating, 1); ?>)</small>
                     </td>
@@ -2318,9 +2319,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                       </button>
                     </td>
                     <td style="text-align:right;">
-                      <button type="button" class="btn btn-sm btn-danger btn-delete-review" data-id="<?php echo htmlspecialchars($rId); ?>" title="Permanently delete review">
-                        🗑️
-                      </button>
+                      <button type="button" class="btn btn-sm btn-danger btn-delete-review" data-id="<?php echo htmlspecialchars($rId); ?>" title="Permanently delete review"><span class=\"material-symbols-outlined\" style=\"font-size:16px;\">delete</span></button>
                     </td>
                   </tr>
                 <?php endforeach; ?>
@@ -2336,10 +2335,10 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
       <div class="admin-tab-pane" id="tab-logins">
         <!-- Subnav Navigation Pills -->
         <div class="cms-subnav" id="loginsSubnav">
-          <button type="button" class="cms-subnav-btn active logins-subnav-btn" data-loginsub="team">👥 Studio Team & Permissions</button>
-          <button type="button" class="cms-subnav-btn logins-subnav-btn" data-loginsub="audit">🔐 Live Login/Logout & Security Trail</button>
-          <button type="button" class="cms-subnav-btn logins-subnav-btn" data-loginsub="customers">🛍️ Customer Accounts & Activity</button>
-          <button type="button" class="cms-subnav-btn logins-subnav-btn" data-loginsub="env">🔑 My Password & Database Environment</button>
+          <button type="button" class="cms-subnav-btn active logins-subnav-btn" data-loginsub="team"><span class="material-symbols-outlined">group</span> Studio Team & Permissions</button>
+          <button type="button" class="cms-subnav-btn logins-subnav-btn" data-loginsub="audit"><span class="material-symbols-outlined">security</span> Live Login & Security Trail</button>
+          <button type="button" class="cms-subnav-btn logins-subnav-btn" data-loginsub="customers"><span class="material-symbols-outlined">person_pin</span> Customer Accounts & Activity</button>
+          <button type="button" class="cms-subnav-btn logins-subnav-btn" data-loginsub="env"><span class="material-symbols-outlined">database</span> Database & Security Environment</button>
         </div>
 
         <!-- 1. STUDIO TEAM & ROLE PERMISSIONS SUBPANEL -->
@@ -2413,7 +2412,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                                   class="btn btn-sm btn-secondary btn-edit-team-user" 
                                   data-user="<?php echo $userJson; ?>"
                                   title="Edit full name, email, role, or status">
-                            ✏️ Edit
+                            <span class="material-symbols-outlined" style="font-size:15px;">edit</span> Edit
                           </button>
                           
                           <!-- Direct Password Reset by Superadmin -->
@@ -2422,7 +2421,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                                   data-id="<?php echo $au['id']; ?>" 
                                   data-username="<?php echo htmlspecialchars($au['username']); ?>"
                                   title="Directly reset this user's password without needing old password">
-                            🔑 Password
+                            <span class="material-symbols-outlined" style="font-size:15px;">key</span> Password
                           </button>
 
                           <!-- Toggle Active / Inactive Status -->
@@ -2432,7 +2431,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                                   data-username="<?php echo htmlspecialchars($au['username']); ?>"
                                   title="Toggle account between active and inactive"
                                   <?php echo $isSelfOrRoot ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''; ?>>
-                            🔄 Status
+                            <span class="material-symbols-outlined" style="font-size:15px;">sync</span> Status
                           </button>
 
                           <!-- Delete Team Member -->
@@ -2441,9 +2440,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                                   data-id="<?php echo $au['id']; ?>" 
                                   data-username="<?php echo htmlspecialchars($au['username']); ?>"
                                   title="Delete user account"
-                                  <?php echo $isSelfOrRoot ? 'disabled style="opacity:0.35; cursor:not-allowed;"' : ''; ?>>
-                            🗑️
-                          </button>
+                                  <?php echo $isSelfOrRoot ? 'disabled style="opacity:0.35; cursor:not-allowed;"' : ''; ?>><span class=\"material-symbols-outlined\" style=\"font-size:16px;\">delete</span></button>
                         </div>
                       </td>
                     </tr>
@@ -2466,10 +2463,10 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                 <label for="loginAuditFilter" style="font-size:0.85rem; font-weight:700; color:#1c1815;">Filter Activity:</label>
                 <select id="loginAuditFilter" class="form-control" style="width:auto; padding:6px 12px; font-size:0.85rem;">
                   <option value="all">All Security Events</option>
-                  <option value="LOGIN_SUCCESS">🟢 Successful Logins</option>
-                  <option value="LOGOUT">⚪ Logouts</option>
-                  <option value="LOGIN_FAILED">🔴 Failed Login Attempts</option>
-                  <option value="PASSWORD">🔑 Password Changes & Resets</option>
+                  <option value="LOGIN_SUCCESS">Successful Logins</option>
+                  <option value="LOGOUT">Logouts</option>
+                  <option value="LOGIN_FAILED">Failed Login Attempts</option>
+                  <option value="PASSWORD">Password Changes & Resets</option>
                 </select>
               </div>
             </div>
@@ -2493,16 +2490,16 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                       $badgeLabel = $act;
                       if ($act === 'LOGIN_SUCCESS') {
                           $badgeClass = 'badge-success';
-                          $badgeLabel = '🟢 Logged In';
+                          $badgeLabel = '<span class="badge-dot badge-success"></span> Logged In';
                       } elseif ($act === 'LOGOUT') {
                           $badgeClass = 'badge-secondary';
-                          $badgeLabel = '⚪ Logged Out';
+                          $badgeLabel = '<span class="badge-dot badge-muted"></span> Logged Out';
                       } elseif ($act === 'LOGIN_FAILED') {
                           $badgeClass = 'badge-danger';
-                          $badgeLabel = '🔴 Login Failed';
+                          $badgeLabel = '<span class="badge-dot badge-danger"></span> Login Failed';
                       } elseif (strpos($act, 'PASSWORD') !== false) {
                           $badgeClass = 'badge-gold';
-                          $badgeLabel = '🔑 Password Updated';
+                          $badgeLabel = '<span class="badge-dot badge-warning"></span> Password Updated';
                       }
                     ?>
                     <tr class="login-audit-row" data-action="<?php echo htmlspecialchars($act); ?>">
@@ -2635,7 +2632,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                 <div style="background:#fff; border:1px solid var(--admin-border); padding:14px; border-radius:10px;">
                   <small style="text-transform:uppercase; color:#888; font-weight:bold; font-size:0.75rem;">MySQL Status</small>
                   <div style="font-size:1.1rem; font-weight:bold; color:<?php echo $db_connected ? '#16a34a' : '#dc2626'; ?>; margin-top:4px;">
-                    <?php echo $db_connected ? '✅ Connected' : '❌ Disconnected'; ?>
+                    <?php echo $db_connected ? '<span class="badge-dot badge-success"></span> Connected' : '<span class="badge-dot badge-danger"></span> Disconnected'; ?>
                   </div>
                 </div>
                 <div style="background:#fff; border:1px solid var(--admin-border); padding:14px; border-radius:10px;">
@@ -2659,7 +2656,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               </div>
 
               <div style="margin-top:16px; background:#f7fdf9; border:1px solid var(--admin-border); border-radius:8px; padding:12px; font-size:0.82rem; color:var(--admin-text-sub);">
-                <strong>💡 Hostinger Deployment Note:</strong> Admin user accounts and customer records reside in MySQL table <code>mc_admins</code> and <code>mc_customers</code>, backed up to JSON fallback storage for 100% zero-downtime reliability.
+                <strong style="display:inline-flex; align-items:center; gap:4px;"><span class="material-symbols-outlined" style="font-size:18px; color:#D4AF37;">lightbulb</span> Hostinger Deployment Note:</strong> Admin user accounts and customer records reside in MySQL table <code>mc_admins</code> and <code>mc_customers</code>, backed up to JSON fallback storage for 100% zero-downtime reliability.
               </div>
             </div>
           </div>
@@ -2819,7 +2816,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
       </div>
       <div class="modal-body" id="orderDetailContent"></div>
       <div class="modal-footer no-print">
-        <button type="button" class="btn btn-gold" id="btnPrintInvoice">🖨️ Print Packing Slip / Invoice</button>
+        <button type="button" class="btn btn-gold" id="btnPrintInvoice"><span class="material-symbols-outlined" style="font-size:18px;">print</span> Print Packing Slip / Invoice</button>
         <button type="button" class="btn btn-secondary btn-modal-cancel">Close</button>
       </div>
     </div>
@@ -3094,7 +3091,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
   <div class="admin-modal-overlay" id="shippingLabelModal">
     <div class="admin-modal" style="max-width:540px;">
       <div class="modal-header">
-        <h3 class="modal-title">🏷️ Print Thermal Parcel Shipping Label</h3>
+        <h3 class="modal-title"><span class="material-symbols-outlined" style="font-size:20px; vertical-align:middle; margin-right:6px;">print</span> Print Thermal Parcel Shipping Label</h3>
         <button type="button" class="modal-close-btn">&times;</button>
       </div>
       <div class="modal-body">
@@ -3124,7 +3121,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
             <div style="font-size:1.05rem; font-weight:800; color:#000; margin-top:2px;" id="lblCustomerName">Radhika Sharma</div>
             <div style="font-size:0.85rem; line-height:1.3; margin-top:2px;" id="lblCustomerAddress">Flat 402, Lotus Towers, Near City Park</div>
             <div style="font-size:0.95rem; font-weight:800; margin-top:4px;" id="lblCustomerCityPin">ROHTAK, HARYANA - 124001</div>
-            <div style="font-size:0.85rem; font-weight:700; margin-top:2px;" id="lblCustomerPhone">📞 Phone: 9876543210</div>
+            <div style="font-size:0.85rem; font-weight:700; margin-top:2px;" id="lblCustomerPhone"><span class="material-symbols-outlined" style="font-size:15px; vertical-align:middle;">phone</span> Phone: 9876543210</div>
           </div>
 
           <!-- Ship From Details -->
@@ -3143,7 +3140,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
             </div>
             <div style="text-align:right;">
               <span style="background:#000; color:#fff; font-size:0.75rem; font-weight:900; padding:3px 8px; border-radius:3px; text-transform:uppercase;">
-                ⚠️ FRAGILE: GLASS/MIRROR
+                <span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle; color:#b45309;">warning</span> FRAGILE: GLASS/MIRROR
               </span>
             </div>
           </div>
@@ -3151,7 +3148,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-modal-cancel">Close</button>
-        <button type="button" class="btn btn-gold" id="btnPrintThermalLabelNow">🖨️ Print Label (4x6")</button>
+        <button type="button" class="btn btn-gold" id="btnPrintThermalLabelNow"><span class="material-symbols-outlined" style="font-size:18px;">print</span> Print Label (4x6")</button>
       </div>
     </div>
   </div>
@@ -3160,7 +3157,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
   <div class="admin-modal-overlay" id="bulkCsvImportModal">
     <div class="admin-modal" style="max-width:620px;">
       <div class="modal-header">
-        <h3 class="modal-title">📤 Bulk Import / Update Catalog via CSV</h3>
+        <h3 class="modal-title"><span class="material-symbols-outlined" style="font-size:20px; vertical-align:middle; margin-right:6px;">upload</span> Bulk Import / Update Catalog via CSV</h3>
         <button type="button" class="modal-close-btn">&times;</button>
       </div>
       <form id="formBulkCsvImport">
@@ -3189,7 +3186,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
   <div class="admin-modal-overlay" id="festiveDiscountModal">
     <div class="admin-modal" style="max-width:540px;">
       <div class="modal-header">
-        <h3 class="modal-title">🏷️ Mass Festive Discount Applicator</h3>
+        <h3 class="modal-title"><span class="material-symbols-outlined" style="font-size:20px; vertical-align:middle; margin-right:6px;">percent</span> Mass Festive Discount Applicator</h3>
         <button type="button" class="modal-close-btn">&times;</button>
       </div>
       <form id="formFestiveDiscount">
@@ -3200,7 +3197,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
           <div class="form-group">
             <label class="form-label" for="discountCategorySelect">Select Target Collection</label>
             <select id="discountCategorySelect" name="category" class="form-control">
-              <option value="all">⭐ Entire Studio Catalog (All 39+ Artworks)</option>
+              <option value="all">Entire Studio Catalog (All 40 Artworks)</option>
               <?php foreach ($categories as $catKey => $catData): ?>
                 <option value="<?php echo htmlspecialchars($catKey); ?>"><?php echo htmlspecialchars($catKey); ?></option>
               <?php endforeach; ?>
@@ -3229,7 +3226,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
   <div class="admin-modal-overlay" id="addReviewModal">
     <div class="admin-modal" style="max-width:580px;">
       <div class="modal-header">
-        <h3 class="modal-title">⭐ Add Verified Patron Review</h3>
+        <h3 class="modal-title"><span class="material-symbols-outlined" style="font-size:20px; vertical-align:middle; margin-right:6px; color:#F59E0B;">rate_review</span> Add Verified Patron Review</h3>
         <button type="button" class="modal-close-btn">&times;</button>
       </div>
       <form id="formAddReview">
