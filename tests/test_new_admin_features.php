@@ -10,9 +10,9 @@
  * - Analytics Intelligence Summary
  */
 
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/functions.php';
-require_once __DIR__ . '/../config/admin_functions.php';
+require_once __DIR__ . '/../backend/config/database.php';
+require_once __DIR__ . '/../backend/config/functions.php';
+require_once __DIR__ . '/../backend/config/admin_functions.php';
 
 $totalPassed = 0;
 $totalFailed = 0;
@@ -51,7 +51,7 @@ $csv = db_export_products_csv();
 assertCondition("db_export_products_csv generates valid CSV", !empty($csv) && str_contains($csv, 'SKU Code,Product ID,Product Name'), "Length: " . strlen($csv) . " bytes");
 
 // 3. Mass Festive Discount & Revert
-$origJsonContent = file_exists(__DIR__ . '/../storage/products.json') ? file_get_contents(__DIR__ . '/../storage/products.json') : null;
+$origJsonContent = file_exists(__DIR__ . '/../backend/storage/products.json') ? file_get_contents(__DIR__ . '/../backend/storage/products.json') : null;
 $allProductsBefore = get_all_products();
 $discountRes = db_apply_bulk_discount('all', 10);
 assertCondition("db_apply_bulk_discount applies 10% discount", $discountRes['success'] === true, $discountRes['message'] ?? '');
@@ -64,7 +64,7 @@ foreach ($allProductsBefore as $origProduct) {
     db_save_product($origProduct);
 }
 if ($origJsonContent !== null) {
-    file_put_contents(__DIR__ . '/../storage/products.json', $origJsonContent);
+    file_put_contents(__DIR__ . '/../backend/storage/products.json', $origJsonContent);
 }
 
 // 4. Abandoned Carts

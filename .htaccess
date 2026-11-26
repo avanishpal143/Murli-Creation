@@ -1,20 +1,30 @@
+<IfModule mod_rewrite.c>
 RewriteEngine On
 
-# Allow direct access to existing files and directories
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
+# Allow existing static files directly (images/, img-prodcut/, favicon.ico)
+RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ - [L]
 
-# Clean URL Rewriting for root pages
-RewriteRule ^shop/?$ shop.php [L,QSA]
-RewriteRule ^about/?$ about.php [L,QSA]
-RewriteRule ^product/([^/]+)/?$ product.php?slug=$1 [L,QSA]
-RewriteRule ^cart/?$ cart.php [L,QSA]
-RewriteRule ^checkout/?$ checkout.php [L,QSA]
-RewriteRule ^order-confirmation/?$ order-confirmation.php [L,QSA]
-RewriteRule ^founder-story/?$ founder-story.php [L,QSA]
-RewriteRule ^contact/?$ contact.php [L,QSA]
-RewriteRule ^admin/?$ admin.php [L,QSA]
+# Map /assets/... to frontend/assets/...
+RewriteRule ^assets/(.*)$ frontend/assets/$1 [L,QSA]
 
-# 404 Fallback
-ErrorDocument 404 /404.php
+# Map /admin.php and /admin to backend/admin.php
+RewriteRule ^admin\.php$ backend/admin.php [L,QSA]
+RewriteRule ^admin/?$ backend/admin.php [L,QSA]
+
+# Map /api/... to backend/api/...
+RewriteRule ^api/(.*)$ backend/api/$1 [L,QSA]
+
+# Map root / to frontend/index.php
+RewriteRule ^$ frontend/index.php [L,QSA]
+
+# Map frontend pages directly
+RewriteCond %{DOCUMENT_ROOT}/frontend/$1 -f
+RewriteRule ^(.*)$ frontend/$1 [L,QSA]
+
+RewriteCond %{DOCUMENT_ROOT}/frontend/$1.php -f
+RewriteRule ^(.*)$ frontend/$1.php [L,QSA]
+
+# Fallback to router.php
+RewriteRule ^(.*)$ router.php [L,QSA]
+</IfModule>

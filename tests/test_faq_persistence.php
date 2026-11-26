@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/functions.php';
+require_once __DIR__ . '/../backend/config/database.php';
+require_once __DIR__ . '/../backend/config/functions.php';
 
 echo "\n================================================================\n";
 echo "MURLI CREATIONS FAQ PERSISTENCE & MULTI-PAGE SYNC TEST SUITE\n";
@@ -69,7 +69,7 @@ if ($hpFaqsCount === 3) {
 // Verify rendering output on contact.php
 ob_start();
 $_SERVER['PHP_SELF'] = '/contact.php';
-include __DIR__ . '/../contact.php';
+include __DIR__ . '/../frontend/contact.php';
 $contactHtml = ob_get_clean();
 
 if (str_contains($contactHtml, 'Test Question 3: Can I request custom sizes?')) {
@@ -82,7 +82,7 @@ if (str_contains($contactHtml, 'Test Question 3: Can I request custom sizes?')) 
 // Verify rendering output on index.php
 ob_start();
 $_SERVER['PHP_SELF'] = '/index.php';
-include __DIR__ . '/../index.php';
+include __DIR__ . '/../frontend/index.php';
 $indexHtml = ob_get_clean();
 
 if (str_contains($indexHtml, 'Test Question 3: Can I request custom sizes?')) {

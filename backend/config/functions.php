@@ -11,11 +11,13 @@ if (!defined('ROOT_PATH')) {
 
 require_once __DIR__ . '/data.php';
 
-// Safe icons helper include (handles root includes or frontend components)
-if (file_exists(ROOT_PATH . '/includes/icons.php')) {
+// Safe icons helper include
+if (file_exists(__DIR__ . '/../../frontend/includes/icons.php')) {
+    require_once __DIR__ . '/../../frontend/includes/icons.php';
+} elseif (file_exists(ROOT_PATH . '/frontend/includes/icons.php')) {
+    require_once ROOT_PATH . '/frontend/includes/icons.php';
+} elseif (file_exists(ROOT_PATH . '/includes/icons.php')) {
     require_once ROOT_PATH . '/includes/icons.php';
-} elseif (file_exists(ROOT_PATH . '/frontend/components/icons.php')) {
-    require_once ROOT_PATH . '/frontend/components/icons.php';
 }
 
 require_once __DIR__ . '/database.php';
@@ -168,10 +170,10 @@ function get_featured_products($limit = 8) {
 
 function render_product_card($product) {
     $root = defined('ROOT_PATH') ? ROOT_PATH : realpath(__DIR__ . '/../..');
-    if (file_exists($root . '/includes/product-card.php')) {
+    if (file_exists($root . '/frontend/includes/product-card.php')) {
+        include $root . '/frontend/includes/product-card.php';
+    } elseif (file_exists($root . '/includes/product-card.php')) {
         include $root . '/includes/product-card.php';
-    } elseif (file_exists($root . '/frontend/components/product-card.php')) {
-        include $root . '/frontend/components/product-card.php';
     }
 }
 

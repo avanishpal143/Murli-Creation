@@ -1,120 +1,108 @@
 # 🏛️ Murli Creations - Project Architecture & Directory Structure
 
-Namaste! Murli Creations project ko 3 primary core layers me divide kiya gaya hai:
-1. **`frontend/`** : Storefront UI, customer pages, components aur styles.
-2. **`backend/`**  : Studio Admin Portal, REST API endpoints, business logic functions aur storage.
-3. **`database/`** : Complete production MySQL schema, 1-click importable SQL dump aur guides.
+Namaste! Murli Creations project ko 3 primary dedicated core folders me divide kiya gaya hai:
+1. **`frontend/`** : Storefront UI, customer-facing pages (`index.php`, `shop.php`, `product.php`, etc.), reusable components (`includes/`) aur styling (`assets/`).
+2. **`backend/`**  : Studio Admin Portal (`admin.php`), REST API controllers (`api/`), business logic functions (`config/`) aur JSON storage (`storage/`).
+3. **`database/`** : Complete production MySQL schema (`schema.sql`), 1-click importable SQL dump (`murli_creations_database.sql`) aur setup guides.
 
-Root directory me transparent delegator entry points hain, jisse **Hostinger shared hosting (`public_html`)** aur **Local development servers** dono par bina kisi configuration ke saari cheezein 100% smoothly chalti hain.
+Root directory bilkul clean aur clutter-free hai, jisme sirf dynamic router (`router.php` / `index.php`), `.htaccess`, images aur test suite maujood hain.
 
 ---
 
-## 📂 Complete Directory Tree
+## 📂 Complete Directory Structure
 
 ```text
 Murli Creation Project/
 │
-├── 🎨 frontend/                     # CUSTOMER STOREFRONT & USER INTERFACE
-│   ├── pages/                       # Full page views (Storefront)
-│   │   ├── home.php                 # Homepage (Hero, collections, artisan story, reviews)
-│   │   ├── shop.php                 # Catalog with filter, sort & search
-│   │   ├── product.php              # Single product detail, specs, image zoom & buy buttons
-│   │   ├── cart.php                 # Shopping cart view
-│   │   ├── checkout.php             # 3-step checkout with address & payment
-│   │   ├── order-confirmation.php   # Order placed success screen with tracking link
-│   │   ├── track-order.php          # Live shipment & AWB delivery tracking
-│   │   ├── contact.php              # Studio contact form, phone, WhatsApp & visiting hours
-│   │   ├── about.php                # Brand story, craftsmanship & authenticity
-│   │   ├── founder-story.php        # Master craftsman Murli Prasad's journey
-│   │   ├── blog.php                 # Lippan art culture & interior decor articles
-│   │   ├── blog-post.php            # Single blog reader
-│   │   └── policies/                # Legal policies & error pages
-│   │       ├── privacy-policy.php
-│   │       ├── terms.php
-│   │       ├── return-policy.php
-│   │       ├── shipping-policy.php
-│   │       ├── cancellation-policy.php
-│   │       └── 404.php
-│   ├── components/                  # Reusable UI Components
-│   │   ├── header.php               # Sticky header, promo banner, search & navigation
-│   │   ├── footer.php               # Site footer with studio contact, links & copyright
-│   │   ├── product-card.php         # Reusable artwork card with badge, rating & buy button
-│   │   ├── cart-drawer.php          # Slide-out interactive cart drawer
-│   │   ├── floating-widgets.php     # WhatsApp quick-chat & back-to-top buttons
-│   │   ├── icons.php                # SVG icons helper library (`icon_svg()`)
-│   │   └── toast.php                # Notification toast alerts
-│   └── assets/                      # Static Assets
-│       ├── css/                     # Page stylesheets (home.css, shop.css, etc.)
-│       └── js/                      # Frontend client JavaScript
+├── 🎨 frontend/                     # SAARA FRONTEND CODE
+│   ├── index.php                    # Storefront Homepage
+│   ├── shop.php                     # Artwork Catalog & Category Filters
+│   ├── product.php                  # Product Details, Image Zoom & Specs
+│   ├── cart.php                     # Shopping Cart Page
+│   ├── checkout.php                 # 3-Step Checkout with Partial COD & UPI
+│   ├── order-confirmation.php       # Order Placed Success Screen
+│   ├── track-order.php              # Live Shipment & Courier AWB Tracking
+│   ├── contact.php                  # Studio Contact, Helpline & Visiting Hours
+│   ├── about.php                    # Brand Heritage & Craftsmanship Process
+│   ├── founder-story.php            # Master Artisan Murli Prasad Journey
+│   ├── blog.php / blog-post.php     # Lippan Art Cultural Articles
+│   ├── privacy-policy.php           # Privacy Policy
+│   ├── terms.php                    # Terms & Conditions
+│   ├── shipping-policy.php          # Shipping & Delivery Guidelines
+│   ├── return-policy.php            # Return & Exchange Policies
+│   ├── cancellation-policy.php      # Cancellation Guidelines
+│   ├── 404.php                      # Not Found Error Page
+│   ├── includes/                    # Reusable Storefront Components
+│   │   ├── header.php               # Sticky Header, Promo Banner & Nav
+│   │   ├── footer.php               # Studio Footer & Copyright
+│   │   ├── product-card.php         # Handcrafted Artwork Card
+│   │   ├── cart-drawer.php          # Interactive Slide-Out Cart Drawer
+│   │   ├── floating-widgets.php     # WhatsApp Quick-Chat & Scroll-To-Top
+│   │   ├── icons.php                # Clean SVG Icon Helper Library
+│   │   └── toast.php                # Instant Notification Alerts
+│   └── assets/                      # Frontend Static Styling & Client JS
+│       ├── css/                     # Page-specific CSS files (home.css, shop.css, etc.)
+│       └── js/                      # Frontend JavaScript (main.js, cart.js, etc.)
 │
-├── ⚙️ backend/                      # STUDIO ADMIN, APIS & CORE LOGIC
-│   ├── admin/                       # Administration Portal
-│   │   ├── index.php                # Main Admin Management Portal (14 Unified Tabs)
-│   │   └── assets/                  # Admin UI styling & scripts (admin.css, admin.js)
+├── ⚙️ backend/                      # SAARA BACKEND CODE
+│   ├── admin.php                    # Studio Administration Portal (14 Modules)
 │   ├── api/                         # REST API Endpoints & AJAX Controllers
-│   │   ├── admin.php                # Admin live CRUD & data synchronization
-│   │   ├── cart.php                 # Cart drawer, quantity adjustments & coupon calculation
-│   │   ├── orders.php               # Order placement & checkout processing
-│   │   ├── contact.php              # Contact inquiry submission handler
-│   │   ├── reviews.php              # Product customer review submissions
-│   │   └── webhook.php              # Third-party logistics & carrier tracking webhook
-│   ├── config/                      # Configuration & Business Logic Functions
-│   │   ├── database.php             # Database credentials & PDO connection
-│   │   ├── admin_functions.php      # Admin database queries, auth, logs & analytics logic
-│   │   ├── functions.php            # Core store functions, prices, discounts & catalog
-│   │   ├── data.php                 # Initial fallback catalog & category tree
-│   │   └── db_init.php              # Database schema auto-migration & initializer
-│   └── storage/                     # JSON Fallback Data Files & Backups
-│       ├── products.json            # 39 handcrafted artworks catalog
-│       ├── orders.json              # Order data backup
-│       ├── site_settings.json       # Studio phone, WhatsApp & visiting hours
-│       ├── homepage_content.json    # Hero banner, artist story & announcements
-│       ├── contact_inquiries.json   # Customer inquiries backup
-│       ├── reviews.json             # Customer testimonials backup
-│       └── coupons.json             # Promo coupons backup
+│   │   ├── admin.php                # Admin CRUD & Live Data Sync
+│   │   ├── cart.php                 # Cart Drawer & Quantity Controls
+│   │   ├── orders.php               # Order Creation & Checkout API
+│   │   ├── contact.php              # Contact Form Handler
+│   │   ├── reviews.php              # Customer Review Submissions
+│   │   └── webhook.php              # Logistics Webhook for Couriers
+│   ├── config/                      # Configuration & Core Store Functions
+│   │   ├── database.php             # PDO Connection & Hostinger Credentials
+│   │   ├── admin_functions.php      # Admin Database Queries, Auth & Analytics
+│   │   ├── functions.php            # Core Pricing, Catalog & Discount Helpers
+│   │   ├── data.php                 # Catalog Structures & Category Tree
+│   │   └── db_init.php              # Auto-Migration & Database Setup
+│   ├── storage/                     # JSON Fallback Data & Backups
+│   │   ├── products.json            # 39 Handcrafted Artworks Backup
+│   │   ├── orders.json              # Orders Backup
+│   │   ├── site_settings.json       # Phone, WhatsApp & Address Backup
+│   │   └── ...                      # Inquiries, Reviews, Coupons
+│   └── assets/                      # Admin UI Styling & Scripts (admin.css, admin.js)
 │
-├── 🗄️ database/                     # DATABASE SCHEMAS & 1-CLICK DUMPS
-│   ├── murli_creations_database.sql # Complete 1-Click Importable SQL Dump (19 Tables + Data)
-│   ├── schema.sql                   # Clean DDL Table Structures & Indexes
-│   └── README.md                    # Step-by-step setup guide for Hostinger & Localhost
+├── 🗄️ database/                     # SAARA DATABASE CODE
+│   ├── murli_creations_database.sql # ⭐ Complete 1-Click Importable SQL Dump (19 Tables + Data)
+│   ├── schema.sql                   # Clean Table Structures & Indexes DDL
+│   └── README.md                    # Step-by-Step Setup Guide in Hindi & English
 │
-├── 🧪 tests/                        # AUTOMATED TEST SUITE (100% Coverage)
-│   ├── test_admin_suite.php         # Tests all 14 core requirements & database operations
-│   ├── test_new_admin_features.php  # Tests reviews toggle, CSV export, bulk discount, media
-│   ├── test_faq_persistence.php     # Tests FAQ saving & cross-page synchronization
-│   ├── test_login_management.php    # Tests user roles, bcrypt auth & audit trail
-│   └── test_stock_and_cleanup.php   # Tests inventory toggle & product deletion
+├── 🧪 tests/                        # AUTOMATED TEST SUITE (100% Passed)
+│   ├── test_admin_suite.php         # 14 Core Requirements & Database Operations
+│   ├── test_new_admin_features.php  # CSV Export, Bulk Discounts, Media Assets
+│   ├── test_faq_persistence.php     # Cross-Page FAQ Persistence
+│   ├── test_login_management.php    # User Roles, Bcrypt Auth & Audit Trail
+│   └── test_stock_and_cleanup.php   # Inventory Toggle & Product Deletion
 │
-├── 🖼️ images/                       # Brand logos, banners & studio photos
-├── 🖼️ img-prodcut/                  # High-resolution artwork catalog photos
+├── 🖼️ images/                       # Studio brand logos & artist photography
+├── 🖼️ img-prodcut/                  # High-resolution artwork product photos
 │
-└── 🌐 [Root Entry Points]           # Web-Root Delegates for Hostinger & Apache
-    ├── index.php                    # Delegates to frontend/pages/home.php
-    ├── shop.php                     # Delegates to frontend/pages/shop.php
-    ├── product.php                  # Delegates to frontend/pages/product.php
-    ├── cart.php                     # Delegates to frontend/pages/cart.php
-    ├── checkout.php                 # Delegates to frontend/pages/checkout.php
-    ├── order-confirmation.php       # Delegates to frontend/pages/order-confirmation.php
-    ├── track-order.php              # Delegates to frontend/pages/track-order.php
-    ├── contact.php                  # Delegates to frontend/pages/contact.php
-    ├── about.php                    # Delegates to frontend/pages/about.php
-    ├── founder-story.php            # Delegates to frontend/pages/founder-story.php
-    ├── blog.php                     # Delegates to frontend/pages/blog.php
-    ├── blog-post.php                # Delegates to frontend/pages/blog-post.php
-    ├── admin.php                    # Delegates to backend/admin/index.php
-    └── Murli_Creations_Hostinger_Ready.zip # Production deployment package
+└── 🌐 [Root Clean Controllers]      # Web Gateway & Server Routers
+    ├── router.php                   # Local development router (php -S 127.0.0.1:8000 router.php)
+    ├── index.php                    # Front Controller Gateway
+    ├── admin.php                    # Quick pointer to backend/admin.php
+    ├── .htaccess                    # Hostinger / Apache mod_rewrite router
+    └── Murli_Creations_Hostinger_Ready.zip # 1-Click Hostinger Production Zip (83MB)
 ```
 
 ---
 
-## 🎯 Important Features
+## 🚀 How to Run Locally & Deploy to Hostinger
 
-1. **Clean Separation of Concerns**:
-   - Kisi ko frontend UI badalna hai to sirf `frontend/` me kaam karega.
-   - Kisi ko admin panel, APIs ya database functions edit karne hain to `backend/` me kaam karega.
-   - Database import ya setup ke liye `database/` folder me full SQL dump aur simple guide maujood hai.
-2. **Zero-Breakage Guarantee**:
-   - Sabhi URLs (`/`, `/shop.php`, `/admin.php`, etc.), form actions (`checkout.php`), aur API endpoints (`/api/cart.php`) pehle ki tarah 100% functioning hain.
-   - Koi bhi button, modal, function ya UI element break nahi hua hai.
-3. **Hostinger Ready**:
-   - Hostinger ke `public_html` me directly upload karne par yeh bina kisi complex rewrite ya subfolder configuration ke directly live ho jata hai.
+### 1. Local Development (Terminal)
+```bash
+php -S 127.0.0.1:8000 router.php
+```
+- Storefront: `http://127.0.0.1:8000/`
+- Shop Catalog: `http://127.0.0.1:8000/shop.php`
+- Admin Portal: `http://127.0.0.1:8000/admin.php`
+
+### 2. Hostinger Live Deployment
+- Hostinger hPanel ke File Manager me `public_html/` ke andar `Murli_Creations_Hostinger_Ready.zip` ko extract karein.
+- phpMyAdmin me `database/murli_creations_database.sql` ko 1 click se import karein.
+- `backend/config/database.php` me database name, user aur password update karein.
+- Site turant live ho jayegi bina kisi configuration ke!

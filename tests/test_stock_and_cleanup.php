@@ -3,9 +3,9 @@
  * Test Suite for In/Out of Stock Feature and Product 2999 Deletion
  */
 
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/admin_functions.php';
-require_once __DIR__ . '/../config/functions.php';
+require_once __DIR__ . '/../backend/config/database.php';
+require_once __DIR__ . '/../backend/config/admin_functions.php';
+require_once __DIR__ . '/../backend/config/functions.php';
 
 $pdo = get_db_connection();
 $testsPassed = 0;
@@ -31,7 +31,7 @@ $stmt = $pdo->query("SELECT * FROM mc_products WHERE id = 'prod-33' OR price = 2
 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 assert_test(count($res) === 0, "Product 2999 (prod-33) deleted from MySQL database");
 
-$json = json_decode(file_get_contents(__DIR__ . '/../storage/products.json'), true);
+$json = json_decode(file_get_contents(__DIR__ . '/../backend/storage/products.json'), true);
 $jsonFound = array_filter($json, fn($p) => ($p['id'] === 'prod-33' || $p['price'] == 2999));
 assert_test(count($jsonFound) === 0, "Product 2999 (prod-33) deleted from storage/products.json");
 

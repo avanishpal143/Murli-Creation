@@ -3,8 +3,8 @@
  * Test Suite for Superadmin Team Management & Login/Logout Activity
  */
 
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/admin_functions.php';
+require_once __DIR__ . '/../backend/config/database.php';
+require_once __DIR__ . '/../backend/config/admin_functions.php';
 
 $pdo = get_db_connection();
 $testsPassed = 0;

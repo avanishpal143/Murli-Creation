@@ -4,7 +4,7 @@
 // Tests All 14 Core Requirements & Database Operations
 // =============================================================================
 
-require_once __DIR__ . '/../config/functions.php';
+require_once __DIR__ . '/../backend/config/functions.php';
 
 echo "================================================================\n";
 echo "MURLI CREATIONS ADMIN PANEL TEST SUITE\n";
