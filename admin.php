@@ -2731,124 +2731,528 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
        MODALS: Product Form, Product Specs Inspector, Invoice, Tracking, CRM
        ========================================================================= -->
 
-  <!-- Add / Edit Product Modal -->
+  <!-- Add / Edit Product Modal: Multi-Step Executive Creation Wizard -->
   <div class="admin-modal-overlay" id="productFormModal">
-    <div class="admin-modal modal-lg">
-      <div class="modal-header">
-        <h3 class="modal-title" id="productModalTitle">Add New Handcrafted Artwork</h3>
-        <button type="button" class="modal-close-btn">&times;</button>
-      </div>
-      <form id="productForm">
-        <div class="modal-body">
-          <input type="hidden" id="prodFormId" name="id" value="">
-          <div class="form-grid">
-            <div class="form-group full-width">
-              <label class="form-label" for="prodFormName">Artwork Title *</label>
-              <input type="text" id="prodFormName" name="name" class="form-control" placeholder="e.g. Royal Peacock Jharokha Wall Art (12x18”)" required>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="prodFormCode">SKU Code</label>
-              <input type="text" id="prodFormCode" name="code" class="form-control" placeholder="MC/L-001">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="prodFormCategory">Collection Category</label>
-              <select id="prodFormCategory" name="category" class="form-control">
-                <?php foreach ($categories as $catKey => $catData): ?>
-                  <option value="<?php echo htmlspecialchars($catKey); ?>"><?php echo htmlspecialchars($catKey); ?></option>
-                <?php endforeach; ?>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="prodFormSubcategory">Subcategory</label>
-              <input type="text" id="prodFormSubcategory" name="subcategory" class="form-control" placeholder="e.g. Wall Decor, Mini Art, Sacred Art">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="prodFormPrice">Patron Price (₹) *</label>
-              <input type="number" id="prodFormPrice" name="price" class="form-control" placeholder="4100" required>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="prodFormMrp">MRP (₹)</label>
-              <input type="number" id="prodFormMrp" name="mrp" class="form-control" placeholder="6500">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="prodFormStockStatus">Stock Availability *</label>
-              <select id="prodFormStockStatus" name="stock_status" class="form-control">
-                <option value="in_stock">● In Stock (Available for Purchase)</option>
-                <option value="out_of_stock">● Out of Stock (Sold Out)</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="prodFormStock">Studio Inventory Units *</label>
-              <input type="number" id="prodFormStock" name="stock" class="form-control" placeholder="6" min="0" required>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="prodFormSize">Size / Dimensions</label>
-              <input type="text" id="prodFormSize" name="size" class="form-control" placeholder="12 x 18 inches">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label" for="prodFormMaterial">Material & Finish</label>
-              <input type="text" id="prodFormMaterial" name="material" class="form-control" placeholder="Solid Wood Arch, Clay Relief Paste, Mirror Glass Inlays">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="prodFormOrigin">Origin</label>
-              <input type="text" id="prodFormOrigin" name="origin" class="form-control" value="Delhi, India">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="prodFormArtist">Master Artisan</label>
-              <input type="text" id="prodFormArtist" name="artist" class="form-control" value="Master Craftsman Murli Prasad">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label" for="prodFormImages">Image URLs (comma-separated)</label>
-              <input type="text" id="prodFormImages" name="images" class="form-control" placeholder="/img-prodcut/IMG_4041.png, /img-prodcut/IMG_4041 2.png">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label" for="prodFormVideo">Showcase Video URL / Embed</label>
-              <input type="text" id="prodFormVideo" name="video" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label" for="prodFormTags">Search Tags (comma-separated)</label>
-              <input type="text" id="prodFormTags" name="tags" class="form-control" placeholder="bestseller, peacock, jharokha, festive">
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label" for="prodFormFolklore">Artisan Heritage Folklore</label>
-              <textarea id="prodFormFolklore" name="folklore" class="form-control" placeholder="Traditional significance behind this sacred artwork..."></textarea>
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label" for="prodFormDesc">Artwork Description</label>
-              <textarea id="prodFormDesc" name="description" class="form-control" placeholder="Detailed handcrafted description..."></textarea>
-            </div>
-
-            <div class="form-group full-width" style="display:flex; gap:24px;">
-              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" id="prodFormFeatured" name="featured" value="1">
-                Featured Artwork
-              </label>
-              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" id="prodFormBestseller" name="bestseller" value="1">
-                Studio Bestseller
-              </label>
-            </div>
+    <div class="admin-modal modal-lg" style="max-width:880px; padding:0; overflow:hidden; border-radius:16px;">
+      <!-- Modal Header -->
+      <div class="modal-header" style="background:#FFFFFF; border-bottom:1px solid #E2E8F0; padding:18px 24px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:36px; height:36px; border-radius:8px; background:#F0FDF4; color:#1EA659; display:flex; align-items:center; justify-content:center;">
+            <span class="material-symbols-outlined" style="font-size:22px;">palette</span>
+          </div>
+          <div>
+            <h3 class="modal-title" id="productModalTitle" style="margin:0; font-size:1.15rem; color:#0F382C; font-weight:800;">Add New Handcrafted Artwork</h3>
+            <p style="margin:2px 0 0; font-size:0.75rem; color:#64748B;">Studio Artisan Catalog Creation & Inventory Management</p>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-modal-cancel">Cancel</button>
-          <button type="submit" class="btn btn-gold">Save Artwork</button>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+
+      <!-- Multi-Step Progress Stepper Bar (Matching Executive Reference) -->
+      <div class="product-wizard-stepper">
+        <div class="wizard-step active" data-step="1">
+          <div class="step-num"><span class="step-num-val">1</span><span class="material-symbols-outlined step-check-icon">check</span></div>
+          <div class="step-meta">
+            <div class="step-label">Category</div>
+            <div class="step-desc">Pick where it belongs</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="wizard-step" data-step="2">
+          <div class="step-num"><span class="step-num-val">2</span><span class="material-symbols-outlined step-check-icon">check</span></div>
+          <div class="step-meta">
+            <div class="step-label">Details</div>
+            <div class="step-desc">Name and description</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="wizard-step" data-step="3">
+          <div class="step-num"><span class="step-num-val">3</span><span class="material-symbols-outlined step-check-icon">check</span></div>
+          <div class="step-meta">
+            <div class="step-label">Variants</div>
+            <div class="step-desc">Sizes, price & stock</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="wizard-step" data-step="4">
+          <div class="step-num"><span class="step-num-val">4</span><span class="material-symbols-outlined step-check-icon">check</span></div>
+          <div class="step-meta">
+            <div class="step-label">Images</div>
+            <div class="step-desc">Photos of the artwork</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="wizard-step" data-step="5">
+          <div class="step-num"><span class="step-num-val">5</span><span class="material-symbols-outlined step-check-icon">check</span></div>
+          <div class="step-meta">
+            <div class="step-label">Publish</div>
+            <div class="step-desc">Review and go live</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Form with 5 Step Panes -->
+      <form id="productForm">
+        <input type="hidden" id="prodFormId" name="id" value="">
+        <input type="hidden" id="prodFormCategory" name="category" value="Lippan Art">
+        <input type="hidden" id="prodFormSubcategory" name="subcategory" value="">
+
+        <div class="modal-body" style="padding:24px 28px; max-height:calc(85vh - 180px); overflow-y:auto;">
+          
+          <!-- ===================================================================
+               STEP 1: CATEGORY SELECTION ("Pick where it belongs")
+               =================================================================== -->
+          <div class="wizard-pane active" id="wizardPane-1" data-step="1">
+            <div class="wizard-pane-header">
+              <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:#0F382C; font-weight:800;">
+                <span class="material-symbols-outlined" style="font-size:20px; color:#1EA659; vertical-align:middle;">category</span> Select Collection Category
+              </h4>
+              <p style="margin:0 0 18px 0; font-size:0.82rem; color:#64748B;">Choose the primary heritage art collection where this artwork belongs. Its attributes, filters, and store section will adapt accordingly.</p>
+            </div>
+
+            <!-- Visual Category Picker Cards Grid -->
+            <div class="category-pick-grid">
+              <?php foreach ($categories as $catKey => $catData): ?>
+                <?php
+                  $iconName = 'category';
+                  if ($catKey === 'Lippan Art') $iconName = 'sparkles';
+                  elseif ($catKey === 'Shyam Ji Decor') $iconName = 'temple_hindu';
+                  elseif ($catKey === 'Vastu Species') $iconName = 'sunny';
+                  elseif ($catKey === 'Diwali & Festive Decor') $iconName = 'local_fire_department';
+                  elseif ($catKey === 'Jharokhas & Frames') $iconName = 'window';
+                  elseif ($catKey === 'Customised Creations') $iconName = 'palette';
+                ?>
+                <div class="category-pick-card <?php echo ($catKey === 'Lippan Art') ? 'selected' : ''; ?>" data-category="<?php echo htmlspecialchars($catKey); ?>">
+                  <div class="cat-card-check">
+                    <span class="material-symbols-outlined">check_circle</span>
+                  </div>
+                  <div class="cat-card-icon">
+                    <span class="material-symbols-outlined"><?php echo $iconName; ?></span>
+                  </div>
+                  <div class="cat-card-badge"><?php echo htmlspecialchars($catData['badge'] ?? 'Authentic'); ?></div>
+                  <div class="cat-card-title"><?php echo htmlspecialchars($catData['name'] ?? $catKey); ?></div>
+                  <div class="cat-card-desc"><?php echo htmlspecialchars($catData['description'] ?? ''); ?></div>
+                </div>
+              <?php endforeach; ?>
+            </div>
+
+            <!-- Dynamic Subcategory Selection Strip -->
+            <div class="wizard-subcat-section" id="wizardSubcatSection" style="margin-top:20px; background:#F8FAFC; border:1.5px solid #E2E8F0; border-radius:12px; padding:16px 18px;">
+              <label class="form-label" style="margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                <span class="material-symbols-outlined" style="font-size:17px; color:#1EA659;">subdirectory_arrow_right</span>
+                <strong>Target Subcategory</strong> 
+                <span style="font-weight:400; color:#64748B; font-size:0.75rem;">(Click to assign specific slice)</span>
+              </label>
+              
+              <div class="wizard-subcat-chips" id="wizardSubcatChips" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+                <!-- Populated dynamically via JS -->
+              </div>
+
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:0.78rem; color:#64748B; white-space:nowrap;">Or custom subcategory:</span>
+                <input type="text" id="wizardCustomSubcatInput" class="form-control" style="font-size:0.82rem; padding:6px 12px; max-width:280px;" placeholder="e.g. Handmade Choker Mala">
+              </div>
+            </div>
+
+            <!-- Step 1 Footer -->
+            <div class="wizard-footer">
+              <div></div>
+              <button type="button" class="btn btn-gold btn-wizard-next" data-next="2">
+                Next: Artwork Details <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               STEP 2: DETAILS & ATTRIBUTES ("Name and description")
+               =================================================================== -->
+          <div class="wizard-pane" id="wizardPane-2" data-step="2">
+            <div class="wizard-pane-header">
+              <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:#0F382C; font-weight:800;">
+                <span class="material-symbols-outlined" style="font-size:20px; color:#1EA659; vertical-align:middle;">edit_note</span> Artwork Identity & Description
+              </h4>
+              <p style="margin:0 0 18px 0; font-size:0.82rem; color:#64748B;">Provide the artwork title, storefront slug, dimension specifications, and artisan materials.</p>
+            </div>
+
+            <div class="form-grid">
+              <!-- Product Name -->
+              <div class="form-group full-width">
+                <label class="form-label" for="prodFormName">
+                  Product name <span style="color:#DC2626;">*</span>
+                </label>
+                <input type="text" id="prodFormName" name="name" class="form-control" placeholder="e.g. Lotus Mandala Wall Art (12x12”)" required>
+              </div>
+
+              <!-- Slug & Brand -->
+              <div class="form-group">
+                <label class="form-label" for="prodFormSlug">
+                  Slug <span style="font-weight:400; color:#64748B; font-size:0.75rem;">(Made from the name)</span>
+                </label>
+                <input type="text" id="prodFormSlug" name="slug" class="form-control" placeholder="lotus-mandala-wall-art">
+                <small style="color:#64748B; font-size:0.72rem; display:block; margin-top:3px;">
+                  Shop URL: <code id="slugUrlPreview">/product/lotus-mandala-wall-art</code>
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="prodFormBrand">Brand / Studio</label>
+                <input type="text" id="prodFormBrand" name="brand" class="form-control" value="Murli Creations" readonly style="background:#F8FAFC; color:#475569;">
+              </div>
+
+              <!-- SKU Code & Origin -->
+              <div class="form-group">
+                <label class="form-label" for="prodFormCode">SKU Code</label>
+                <input type="text" id="prodFormCode" name="code" class="form-control" placeholder="e.g. MC/L-020">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="prodFormOrigin">Craft Origin</label>
+                <input type="text" id="prodFormOrigin" name="origin" class="form-control" value="Delhi, India">
+              </div>
+
+              <!-- Description -->
+              <div class="form-group full-width">
+                <label class="form-label" for="prodFormDesc">Description</label>
+                <textarea id="prodFormDesc" name="description" class="form-control" rows="3" placeholder="Hand-sculpted mud relief with mirror inlay, auspicious motifs, and protective lacquer finish..."></textarea>
+              </div>
+            </div>
+
+            <!-- Sub-Section: Product Details & Attributes -->
+            <div class="wizard-sub-box" style="margin-top:18px; border-top:1px solid #E2E8F0; padding-top:16px;">
+              <div style="margin-bottom:12px;">
+                <strong style="color:#0F382C; font-size:0.92rem; display:block;">Product details</strong>
+                <span style="color:#64748B; font-size:0.75rem;">Set by this category's attributes & dimensions</span>
+              </div>
+
+              <div class="form-grid">
+                <!-- Size Preset -->
+                <div class="form-group">
+                  <label class="form-label" for="prodFormSizeSelect">Size Preset</label>
+                  <select id="prodFormSizeSelect" class="form-control">
+                    <option value="">Choose standard preset...</option>
+                    <option value="12 x 12 inches">12 x 12 inches (30 x 30 cm)</option>
+                    <option value="12 x 18 inches">12 x 18 inches</option>
+                    <option value="8 x 8 inches">8 x 8 inches</option>
+                    <option value="3 inches (Mini)">3 inches (Mini Art)</option>
+                    <option value="18 x 24 inches">18 x 24 inches (Statement)</option>
+                    <option value="Customise">Customise</option>
+                  </select>
+                </div>
+
+                <!-- Exact Dimensions -->
+                <div class="form-group">
+                  <label class="form-label" for="prodFormSize">Dimensions (Exact Text)</label>
+                  <input type="text" id="prodFormSize" name="size" class="form-control" placeholder="12 x 12 inches (30x30 cm)">
+                </div>
+
+                <!-- Artisan Materials -->
+                <div class="form-group">
+                  <label class="form-label" for="prodFormMaterial">Artisan Materials</label>
+                  <input type="text" id="prodFormMaterial" name="material" class="form-control" placeholder="Compact Wood Base, Clay Relief, Mirrors, Gold Inlays">
+                </div>
+
+                <!-- Master Craftsman -->
+                <div class="form-group">
+                  <label class="form-label" for="prodFormArtist">Master Craftsman</label>
+                  <input type="text" id="prodFormArtist" name="artist" class="form-control" value="Master Craftsman Murli Prasad">
+                </div>
+
+                <!-- Folklore & Significance -->
+                <div class="form-group full-width">
+                  <label class="form-label" for="prodFormFolklore">Folklore & Devotional Significance</label>
+                  <textarea id="prodFormFolklore" name="folklore" class="form-control" rows="2" placeholder="Traditional Vedic significance, auspicious placement direction, and positive bhav behind this piece..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 Footer -->
+            <div class="wizard-footer">
+              <button type="button" class="btn btn-secondary btn-wizard-prev" data-prev="1">
+                <span class="material-symbols-outlined" style="font-size:18px;">arrow_back</span> Back: Category
+              </button>
+              <button type="button" class="btn btn-gold btn-wizard-next" data-next="3">
+                Next: Sizes, Price & Stock <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               STEP 3: VARIANTS, PRICING & INVENTORY ("Sizes, price & stock")
+               =================================================================== -->
+          <div class="wizard-pane" id="wizardPane-3" data-step="3">
+            <div class="wizard-pane-header">
+              <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:#0F382C; font-weight:800;">
+                <span class="material-symbols-outlined" style="font-size:20px; color:#1EA659; vertical-align:middle;">payments</span> Pricing, Discount & Studio Stock
+              </h4>
+              <p style="margin:0 0 18px 0; font-size:0.82rem; color:#64748B;">Set patron selling price, original MRP, stock availability units, and storefront merchandising badges.</p>
+            </div>
+
+            <!-- Pricing Row -->
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="prodFormPrice">
+                  Patron Selling Price (₹) <span style="color:#DC2626;">*</span>
+                </label>
+                <div style="position:relative;">
+                  <span style="position:absolute; left:12px; top:50%; transform:translateY(-50%); font-weight:800; color:#1EA659; font-size:1.1rem;">₹</span>
+                  <input type="number" id="prodFormPrice" name="price" class="form-control" placeholder="3199" style="padding-left:32px; font-weight:800; font-size:1.1rem; color:#0F382C;" required min="1">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="prodFormMrp">Original Strikethrough MRP (₹)</label>
+                <div style="position:relative;">
+                  <span style="position:absolute; left:12px; top:50%; transform:translateY(-50%); font-weight:700; color:#94A3B8;">₹</span>
+                  <input type="number" id="prodFormMrp" name="mrp" class="form-control" placeholder="3999" style="padding-left:32px; font-weight:700; color:#475569;" min="1">
+                </div>
+              </div>
+
+              <!-- Calculated Discount Preview Banner -->
+              <div class="form-group full-width">
+                <div id="wizardDiscountBanner" style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:10px; padding:10px 16px; display:flex; align-items:center; justify-content:space-between;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="material-symbols-outlined" style="color:#15803D; font-size:20px;">local_offer</span>
+                    <span style="font-size:0.85rem; color:#14532D; font-weight:700;">Customer Storefront Discount:</span>
+                  </div>
+                  <div id="wizardDiscountDisplay" style="font-size:0.9rem; font-weight:800; color:#15803D;">
+                    20% OFF (Customer saves ₹800)
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stock Availability & Quantity -->
+              <div class="form-group">
+                <label class="form-label" for="prodFormStockStatus">
+                  Stock Status <span style="color:#DC2626;">*</span>
+                </label>
+                <select id="prodFormStockStatus" name="stock_status" class="form-control">
+                  <option value="in_stock">● In Stock (Available for Purchase)</option>
+                  <option value="out_of_stock">● Out of Stock (Sold Out)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="prodFormStock">
+                  Studio Inventory Units <span style="color:#DC2626;">*</span>
+                </label>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <button type="button" class="btn btn-secondary btn-wizard-stock-dec" style="padding:8px 14px; font-size:1.1rem; font-weight:800;">-</button>
+                  <input type="number" id="prodFormStock" name="stock" class="form-control" placeholder="10" value="10" min="0" required style="text-align:center; font-weight:800; font-size:1.1rem;">
+                  <button type="button" class="btn btn-secondary btn-wizard-stock-inc" style="padding:8px 14px; font-size:1.1rem; font-weight:800;">+</button>
+                </div>
+              </div>
+
+              <!-- Search Tags -->
+              <div class="form-group full-width">
+                <label class="form-label" for="prodFormTags">Search & Filter Tags (comma-separated)</label>
+                <input type="text" id="prodFormTags" name="tags" class="form-control" placeholder="mandala, lippan, living room, festive, peacock">
+              </div>
+
+              <!-- Merchandising Badges -->
+              <div class="form-group full-width" style="display:flex; gap:24px; padding-top:8px;">
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; background:#F8FAFC; border:1px solid #E2E8F0; padding:10px 16px; border-radius:10px; font-weight:700; color:#0F382C; font-size:0.86rem;">
+                  <input type="checkbox" id="prodFormBestseller" name="bestseller" value="1" style="width:18px; height:18px; accent-color:#1EA659;">
+                  <span class="material-symbols-outlined" style="color:#D4AF37; font-size:19px;">military_tech</span> Studio Bestseller Badge
+                </label>
+
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; background:#F8FAFC; border:1px solid #E2E8F0; padding:10px 16px; border-radius:10px; font-weight:700; color:#0F382C; font-size:0.86rem;">
+                  <input type="checkbox" id="prodFormFeatured" name="featured" value="1" style="width:18px; height:18px; accent-color:#1EA659;">
+                  <span class="material-symbols-outlined" style="color:#2563EB; font-size:19px;">grade</span> Featured on Homepage
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 3 Footer -->
+            <div class="wizard-footer">
+              <button type="button" class="btn btn-secondary btn-wizard-prev" data-prev="2">
+                <span class="material-symbols-outlined" style="font-size:18px;">arrow_back</span> Back: Details
+              </button>
+              <button type="button" class="btn btn-gold btn-wizard-next" data-next="4">
+                Next: Photos of Artwork <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               STEP 4: IMAGES & MEDIA ("Photos of the artwork")
+               =================================================================== -->
+          <div class="wizard-pane" id="wizardPane-4" data-step="4">
+            <div class="wizard-pane-header">
+              <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:#0F382C; font-weight:800;">
+                <span class="material-symbols-outlined" style="font-size:20px; color:#1EA659; vertical-align:middle;">add_photo_alternate</span> Artwork Photography & Media
+              </h4>
+              <p style="margin:0 0 18px 0; font-size:0.82rem; color:#64748B;">Enter the primary artwork photograph URL, pick from existing studio files, or link showcase video.</p>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 220px; gap:20px; align-items:start;">
+              <!-- Inputs Column -->
+              <div>
+                <div class="form-group" style="margin-bottom:16px;">
+                  <label class="form-label" for="prodFormImages">
+                    Primary Image URL <span style="color:#DC2626;">*</span>
+                  </label>
+                  <input type="text" id="prodFormImages" name="images" class="form-control" placeholder="/img-prodcut/IMG_4041.png" required>
+                  <small style="color:#64748B; font-size:0.75rem; display:block; margin-top:4px;">Main high-resolution photo displayed across storefront cards and cart.</small>
+                </div>
+
+                <!-- Quick Pick from Studio Media Library -->
+                <div class="form-group" style="margin-bottom:16px;">
+                  <label class="form-label" style="font-size:0.78rem;">Quick Select from Studio Photography Assets:</label>
+                  <div class="wizard-media-presets" style="display:flex; flex-wrap:wrap; gap:6px;">
+                    <button type="button" class="btn-media-preset" data-src="/img-prodcut/IMG_4041.png">Peacock Jharokha</button>
+                    <button type="button" class="btn-media-preset" data-src="/img-prodcut/IMG_4057.png">Lotus Mandala</button>
+                    <button type="button" class="btn-media-preset" data-src="/img-prodcut/IMG_4119.png">Teal & Gold Art</button>
+                    <button type="button" class="btn-media-preset" data-src="/img-prodcut/IMG_4140.png">Evil Eye Mandala</button>
+                    <button type="button" class="btn-media-preset" data-src="/img-prodcut/IMG_4150.png">Laxmi Charan Mini</button>
+                    <button type="button" class="btn-media-preset" data-src="/img-prodcut/IMG_4749.PNG">Kalyug Avatar Haar</button>
+                    <button type="button" class="btn-media-preset" data-src="/img-prodcut/IMG_4635.PNG">Neelmani Shingar</button>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom:16px;">
+                  <label class="form-label" for="prodFormAddlImages">Additional Gallery Images (comma-separated)</label>
+                  <input type="text" id="prodFormAddlImages" name="additional_images" class="form-control" placeholder="/img-prodcut/IMG_4041 2.png, /img-prodcut/IMG_4041 3.png">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="prodFormVideo">Showcase Video URL / Embed (Optional)</label>
+                  <input type="text" id="prodFormVideo" name="video" class="form-control" placeholder="https://www.youtube.com/watch?v=... or mp4">
+                </div>
+              </div>
+
+              <!-- Live Photo Preview Column -->
+              <div>
+                <label class="form-label" style="margin-bottom:6px; display:block;">Live Photo Preview</label>
+                <div class="wizard-photo-preview-card" style="width:100%; height:220px; border-radius:12px; border:1.5px solid #E2E8F0; background:#F8FAFC; overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative;">
+                  <img id="wizardPrimaryImagePreview" src="/img-prodcut/IMG_4041.png" alt="Preview" style="width:100%; height:100%; object-fit:cover; display:block;">
+                  <div id="wizardNoImagePlaceholder" style="display:none; text-align:center; color:#94A3B8; padding:20px;">
+                    <span class="material-symbols-outlined" style="font-size:42px;">image</span>
+                    <div style="font-size:0.75rem; margin-top:4px;">No image selected</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 Footer -->
+            <div class="wizard-footer">
+              <button type="button" class="btn btn-secondary btn-wizard-prev" data-prev="3">
+                <span class="material-symbols-outlined" style="font-size:18px;">arrow_back</span> Back: Pricing
+              </button>
+              <button type="button" class="btn btn-gold btn-wizard-next" data-next="5">
+                Next: Review and Go Live <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               STEP 5: PUBLISH & REVIEW ("Review and go live")
+               =================================================================== -->
+          <div class="wizard-pane" id="wizardPane-5" data-step="5">
+            <div class="wizard-pane-header">
+              <h4 style="margin:0 0 6px 0; font-size:1.05rem; color:#0F382C; font-weight:800;">
+                <span class="material-symbols-outlined" style="font-size:20px; color:#1EA659; vertical-align:middle;">rocket_launch</span> Final Review & Storefront Publishing
+              </h4>
+              <p style="margin:0 0 18px 0; font-size:0.82rem; color:#64748B;">Verify all artwork details before publishing live to the customer storefront.</p>
+            </div>
+
+            <div style="display:grid; grid-template-columns:300px 1fr; gap:24px; align-items:start;">
+              <!-- Live Storefront Card Preview -->
+              <div>
+                <label class="form-label" style="margin-bottom:8px; display:block;">Storefront Live Card Preview:</label>
+                <div class="admin-product-card" id="wizardLiveStoreCard" style="box-shadow:0 8px 20px -4px rgba(15, 56, 44, 0.15);">
+                  <div class="admin-prod-img-box">
+                    <img id="revCardImg" src="/img-prodcut/IMG_4041.png" alt="" class="admin-prod-img">
+                    <div class="admin-prod-top-badges">
+                      <span class="card-badge bestseller" id="revCardBadge">Bestseller</span>
+                    </div>
+                    <div class="admin-prod-rating-pill">
+                      <span class="star"><span class="material-symbols-outlined" style="font-size:16px; color:#F59E0B; vertical-align:middle;">star</span></span>
+                      <span>5.0</span>
+                      <span style="opacity:0.35;">|</span>
+                      <span>15</span>
+                    </div>
+                  </div>
+                  <div class="admin-prod-info">
+                    <div class="admin-prod-cat-row">
+                      <span class="admin-prod-code" id="revCardCode">MC/L-001</span>
+                      <span class="admin-prod-cat" id="revCardCat">Lippan Art</span>
+                    </div>
+                    <h3 class="admin-prod-title" id="revCardTitle" style="font-size:0.9rem;">Artwork Name</h3>
+                    <div class="admin-prod-pricing-row" style="margin-bottom:8px;">
+                      <span class="admin-prod-price" id="revCardPrice">₹3,199</span>
+                      <span class="admin-prod-mrp" id="revCardMrp">₹3,999</span>
+                      <span class="admin-prod-discount" id="revCardDiscount">(20% OFF)</span>
+                    </div>
+                    <div class="admin-prod-stock-strip" style="margin-bottom:0;">
+                      <span class="stock-pill in-stock" id="revCardStockPill">● In Stock</span>
+                      <strong id="revCardStockVal" style="font-size:0.82rem; color:#0F382C;">10 units</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dossier Details Table -->
+              <div>
+                <label class="form-label" style="margin-bottom:8px; display:block;">Specifications Dossier:</label>
+                <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:16px 18px;">
+                  <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+                    <tbody>
+                      <tr style="border-bottom:1px solid #E2E8F0;">
+                        <td style="padding:8px 0; color:#64748B; font-weight:600; width:130px;">Collection:</td>
+                        <td style="padding:8px 0; color:#0F382C; font-weight:700;" id="revSummaryCat">Lippan Art</td>
+                      </tr>
+                      <tr style="border-bottom:1px solid #E2E8F0;">
+                        <td style="padding:8px 0; color:#64748B; font-weight:600;">Subcategory:</td>
+                        <td style="padding:8px 0; color:#0F382C; font-weight:700;" id="revSummarySubcat">—</td>
+                      </tr>
+                      <tr style="border-bottom:1px solid #E2E8F0;">
+                        <td style="padding:8px 0; color:#64748B; font-weight:600;">SKU Code:</td>
+                        <td style="padding:8px 0; color:#0F382C; font-weight:700;"><code id="revSummaryCode">MC/L-001</code></td>
+                      </tr>
+                      <tr style="border-bottom:1px solid #E2E8F0;">
+                        <td style="padding:8px 0; color:#64748B; font-weight:600;">Dimensions / Size:</td>
+                        <td style="padding:8px 0; color:#0F382C; font-weight:700;" id="revSummarySize">—</td>
+                      </tr>
+                      <tr style="border-bottom:1px solid #E2E8F0;">
+                        <td style="padding:8px 0; color:#64748B; font-weight:600;">Artisan Materials:</td>
+                        <td style="padding:8px 0; color:#0F382C; font-weight:700;" id="revSummaryMaterial">—</td>
+                      </tr>
+                      <tr style="border-bottom:1px solid #E2E8F0;">
+                        <td style="padding:8px 0; color:#64748B; font-weight:600;">Stock Units:</td>
+                        <td style="padding:8px 0; color:#0F382C; font-weight:700;" id="revSummaryStock">10 units (In Stock)</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0; color:#64748B; font-weight:600;">Storefront Slug:</td>
+                        <td style="padding:8px 0; color:#1EA659; font-weight:700;" id="revSummarySlug">/product/lotus-mandala-wall-art</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div style="margin-top:14px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:10px; padding:12px 14px; display:flex; align-items:center; gap:10px;">
+                  <span class="material-symbols-outlined" style="color:#15803D; font-size:24px;">verified</span>
+                  <div style="font-size:0.8rem; color:#14532D; line-height:1.4;">
+                    <strong>Ready to go live!</strong> Upon publishing, the artwork is instantly indexed into MySQL & JSON fallback, immediately available for customer purchase.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 5 Footer -->
+            <div class="wizard-footer">
+              <button type="button" class="btn btn-secondary btn-wizard-prev" data-prev="4">
+                <span class="material-symbols-outlined" style="font-size:18px;">arrow_back</span> Back: Photos
+              </button>
+              <button type="submit" class="btn btn-gold" id="btnSubmitProduct" style="padding:12px 28px; font-size:0.95rem;">
+                <span class="material-symbols-outlined" style="font-size:20px;">publish</span> Save & Publish Artwork Live &rarr;
+              </button>
+            </div>
+          </div>
+
         </div>
       </form>
     </div>

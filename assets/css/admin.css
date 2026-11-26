@@ -2904,3 +2904,301 @@ textarea.form-control {
   box-shadow: 0 0 0 3px rgba(30, 166, 89, 0.12);
 }
 
+/* =============================================================================
+   MULTI-STEP PRODUCT CREATION & EDITING WIZARD (Executive Studio Edition)
+   ============================================================================= */
+
+.product-wizard-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F8FAFC;
+  border-bottom: 1.5px solid #E2E8F0;
+  padding: 16px 28px;
+  overflow-x: auto;
+  gap: 8px;
+}
+
+.wizard-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.55;
+  transition: all 0.22s ease;
+  flex-shrink: 0;
+}
+
+.wizard-step:hover {
+  opacity: 0.85;
+}
+
+.wizard-step.active {
+  opacity: 1;
+}
+
+.wizard-step.completed {
+  opacity: 0.95;
+}
+
+.step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid #CBD5E1;
+  color: #64748B;
+  font-weight: 800;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.step-check-icon {
+  display: none;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.wizard-step.active .step-num {
+  background: #1EA659;
+  border-color: #1EA659;
+  color: #FFFFFF;
+  box-shadow: 0 3px 10px rgba(30, 166, 89, 0.35);
+  transform: scale(1.05);
+}
+
+.wizard-step.completed .step-num {
+  background: #DCFCE7;
+  border-color: #86EFAC;
+  color: #15803D;
+}
+
+.wizard-step.completed .step-num-val {
+  display: none;
+}
+
+.wizard-step.completed .step-check-icon {
+  display: inline-block;
+}
+
+.step-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.step-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #334155;
+  line-height: 1.2;
+  transition: color 0.2s ease;
+}
+
+.wizard-step.active .step-label {
+  color: #0F382C;
+  font-weight: 800;
+}
+
+.wizard-step.completed .step-label {
+  color: #15803D;
+}
+
+.step-desc {
+  font-size: 0.72rem;
+  color: #64748B;
+  line-height: 1.2;
+}
+
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background: #E2E8F0;
+  margin: 0 6px;
+  min-width: 16px;
+  transition: background 0.3s ease;
+}
+
+.step-connector.active {
+  background: #86EFAC;
+}
+
+/* Step Panes */
+.wizard-pane {
+  display: none;
+}
+
+.wizard-pane.active {
+  display: block;
+  animation: wizardFadeIn 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes wizardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wizard-pane-header {
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+/* Category Pick Grid (Step 1) */
+.category-pick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.category-pick-card {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.category-pick-card:hover {
+  border-color: #1EA659;
+  background: #F9FAF6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 56, 44, 0.06);
+}
+
+.category-pick-card.selected {
+  border-color: #1EA659;
+  background: #F0FDF4;
+  box-shadow: 0 0 0 2px rgba(30, 166, 89, 0.25), 0 8px 16px rgba(30, 166, 89, 0.08);
+}
+
+.cat-card-check {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  color: #1EA659;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-pick-card.selected .cat-card-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.cat-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #F1F5F9;
+  color: #0F382C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
+}
+
+.category-pick-card.selected .cat-card-icon {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.cat-card-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #D4AF37;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.cat-card-title {
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: #0F382C;
+  margin-bottom: 4px;
+}
+
+.cat-card-desc {
+  font-size: 0.75rem;
+  color: #64748B;
+  line-height: 1.35;
+  margin-top: auto;
+}
+
+/* Subcategory Chips (Step 1) */
+.wizard-subcat-chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.2;
+}
+
+.wizard-subcat-chip:hover {
+  border-color: #1EA659;
+  color: #1EA659;
+  background: #F0FDF4;
+  transform: translateY(-1px);
+}
+
+.wizard-subcat-chip.active {
+  background: #1EA659;
+  border-color: #1EA659;
+  color: #FFFFFF;
+  box-shadow: 0 3px 8px rgba(30, 166, 89, 0.25);
+}
+
+/* Media Presets (Step 4) */
+.btn-media-preset {
+  padding: 5px 11px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-media-preset:hover {
+  border-color: #1EA659;
+  background: #F0FDF4;
+  color: #1EA659;
+}
+
+/* Wizard Footer */
+.wizard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid #E2E8F0;
+}
+

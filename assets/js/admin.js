@@ -429,12 +429,294 @@ function initProductHandlers() {
     });
   });
 
-  // Open Add Product Modal
+  // ===========================================================================
+  // MULTI-STEP PRODUCT CREATION & EDITING WIZARD ENGINE
+  // ===========================================================================
   const addProdBtn = document.getElementById('openAddProductModalBtn');
   const prodModal = document.getElementById('productFormModal');
   const prodForm = document.getElementById('productForm');
   const prodStockInput = document.getElementById('prodFormStock');
   const prodStockStatusSelect = document.getElementById('prodFormStockStatus');
+  const prodNameInput = document.getElementById('prodFormName');
+  const prodSlugInput = document.getElementById('prodFormSlug');
+  const slugPreview = document.getElementById('slugUrlPreview');
+  const prodPriceInput = document.getElementById('prodFormPrice');
+  const prodMrpInput = document.getElementById('prodFormMrp');
+  const prodCategoryHidden = document.getElementById('prodFormCategory');
+  const prodSubcatHidden = document.getElementById('prodFormSubcategory');
+  const prodImagesInput = document.getElementById('prodFormImages');
+  const customSubcatInput = document.getElementById('wizardCustomSubcatInput');
+  const sizeSelect = document.getElementById('prodFormSizeSelect');
+  const sizeInput = document.getElementById('prodFormSize');
+
+  let currentWizardStep = 1;
+  let isSlugManuallyEdited = false;
+
+  // Wizard Navigation: Go to specific step (1 to 5)
+  window.goToWizardStep = function(targetStep) {
+    targetStep = parseInt(targetStep, 10);
+    if (isNaN(targetStep) || targetStep < 1 || targetStep > 5) return;
+
+    // Validate if advancing
+    if (targetStep > currentWizardStep) {
+      if (currentWizardStep === 1) {
+        if (!prodCategoryHidden || !prodCategoryHidden.value) {
+          showNotification('Please select a collection category to proceed.', 'error');
+          return;
+        }
+      } else if (currentWizardStep === 2) {
+        if (!prodNameInput || !prodNameInput.value.trim()) {
+          showNotification('Please enter the Artwork Title.', 'error');
+          prodNameInput?.focus();
+          return;
+        }
+      } else if (currentWizardStep === 3) {
+        const price = parseFloat(prodPriceInput ? prodPriceInput.value : '0');
+        if (!price || price <= 0) {
+          showNotification('Please enter a valid Patron Selling Price (₹).', 'error');
+          prodPriceInput?.focus();
+          return;
+        }
+      } else if (currentWizardStep === 4) {
+        if (!prodImagesInput || !prodImagesInput.value.trim()) {
+          showNotification('Please specify at least one Primary Image URL.', 'error');
+          prodImagesInput?.focus();
+          return;
+        }
+      }
+    }
+
+    currentWizardStep = targetStep;
+
+    // Switch active pane
+    document.querySelectorAll('.wizard-pane').forEach(pane => {
+      const step = parseInt(pane.getAttribute('data-step') || '1', 10);
+      if (step === currentWizardStep) {
+        pane.classList.add('active');
+      } else {
+        pane.classList.remove('active');
+      }
+    });
+
+    // Update Stepper Bar Header
+    document.querySelectorAll('.wizard-step').forEach(stepEl => {
+      const step = parseInt(stepEl.getAttribute('data-step') || '1', 10);
+      stepEl.classList.remove('active', 'completed');
+      if (step === currentWizardStep) {
+        stepEl.classList.add('active');
+      } else if (step < currentWizardStep) {
+        stepEl.classList.add('completed');
+      }
+    });
+
+    // Update Step Connectors
+    const connectors = document.querySelectorAll('.step-connector');
+    connectors.forEach((conn, idx) => {
+      if (idx + 1 < currentWizardStep) {
+        conn.classList.add('active');
+      } else {
+        conn.classList.remove('active');
+      }
+    });
+
+    // If reaching Step 5 (Publish Review), refresh live storefront review preview
+    if (currentWizardStep === 5) {
+      updateWizardReviewSummary();
+    }
+  };
+
+  // Stepper Header click listener
+  document.querySelectorAll('.wizard-step').forEach(stepEl => {
+    stepEl.addEventListener('click', () => {
+      const target = stepEl.getAttribute('data-step');
+      if (target) window.goToWizardStep(target);
+    });
+  });
+
+  // Next and Prev buttons inside wizard panes
+  document.addEventListener('click', (e) => {
+    const nextBtn = e.target.closest('.btn-wizard-next');
+    if (nextBtn) {
+      e.preventDefault();
+      const nextStep = nextBtn.getAttribute('data-next');
+      if (nextStep) window.goToWizardStep(nextStep);
+    }
+
+    const prevBtn = e.target.closest('.btn-wizard-prev');
+    if (prevBtn) {
+      e.preventDefault();
+      const prevStep = prevBtn.getAttribute('data-prev');
+      if (prevStep) window.goToWizardStep(prevStep);
+    }
+  });
+
+  // Category Selection in Step 1
+  const selectCategoryCard = (catKey) => {
+    if (!catKey) return;
+    if (prodCategoryHidden) prodCategoryHidden.value = catKey;
+
+    document.querySelectorAll('.category-pick-card').forEach(card => {
+      if (card.getAttribute('data-category') === catKey) {
+        card.classList.add('selected');
+      } else {
+        card.classList.remove('selected');
+      }
+    });
+
+    populateWizardSubcategories(catKey);
+
+    // Auto suggest SKU prefix if empty
+    const codeInput = document.getElementById('prodFormCode');
+    if (codeInput && (!codeInput.value || codeInput.value.startsWith('MC/'))) {
+      if (catKey === 'Shyam Ji Decor' && !codeInput.value.startsWith('MC/S-')) {
+        codeInput.value = 'MC/S-020';
+      } else if (catKey === 'Lippan Art' && !codeInput.value.startsWith('MC/L-')) {
+        codeInput.value = 'MC/L-025';
+      }
+    }
+  };
+
+  document.querySelectorAll('.category-pick-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const catKey = card.getAttribute('data-category');
+      selectCategoryCard(catKey);
+    });
+  });
+
+  // Dynamic Subcategory Chips Generator
+  const populateWizardSubcategories = (catKey, activeSubcat = '') => {
+    const chipContainer = document.getElementById('wizardSubcatChips');
+    if (!chipContainer) return;
+    chipContainer.innerHTML = '';
+
+    const catData = window.MURLI_CATEGORIES ? window.MURLI_CATEGORIES[catKey] : null;
+    const subcats = new Set();
+    if (catData && catData.subcategories) {
+      Object.keys(catData.subcategories).forEach(s => subcats.add(s));
+    }
+    if (window.MURLI_PRODUCTS) {
+      window.MURLI_PRODUCTS.forEach(p => {
+        const pCat = p.category || '';
+        const match = (pCat === catKey) || (catData && pCat === catData.name);
+        if (match && p.subcategory) subcats.add(p.subcategory);
+      });
+    }
+
+    subcats.forEach(sub => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'wizard-subcat-chip';
+      btn.setAttribute('data-sub', sub);
+      btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:14px;">check</span> ${sub}`;
+
+      if (activeSubcat && activeSubcat === sub) {
+        btn.classList.add('active');
+        if (prodSubcatHidden) prodSubcatHidden.value = sub;
+      }
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        chipContainer.querySelectorAll('.wizard-subcat-chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        if (prodSubcatHidden) prodSubcatHidden.value = sub;
+        if (customSubcatInput) customSubcatInput.value = '';
+      });
+
+      chipContainer.appendChild(btn);
+    });
+
+    // If activeSubcat was custom, put it into custom input
+    if (activeSubcat && !subcats.has(activeSubcat)) {
+      if (customSubcatInput) customSubcatInput.value = activeSubcat;
+      if (prodSubcatHidden) prodSubcatHidden.value = activeSubcat;
+    }
+  };
+
+  if (customSubcatInput) {
+    customSubcatInput.addEventListener('input', () => {
+      const val = customSubcatInput.value.trim();
+      if (val) {
+        document.querySelectorAll('.wizard-subcat-chip').forEach(c => c.classList.remove('active'));
+        if (prodSubcatHidden) prodSubcatHidden.value = val;
+      }
+    });
+  }
+
+  // Auto Slug Generator in Step 2
+  if (prodNameInput && prodSlugInput) {
+    prodNameInput.addEventListener('input', () => {
+      if (!isSlugManuallyEdited) {
+        const slug = prodNameInput.value.toLowerCase().trim()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        prodSlugInput.value = slug;
+        if (slugPreview) slugPreview.textContent = '/product/' + (slug || 'your-slug');
+      }
+    });
+
+    prodSlugInput.addEventListener('input', () => {
+      isSlugManuallyEdited = true;
+      const slug = prodSlugInput.value.toLowerCase().trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      if (slugPreview) slugPreview.textContent = '/product/' + (slug || 'your-slug');
+    });
+  }
+
+  // Size Preset in Step 2
+  if (sizeSelect && sizeInput) {
+    sizeSelect.addEventListener('change', () => {
+      if (sizeSelect.value) {
+        sizeInput.value = sizeSelect.value;
+      }
+    });
+  }
+
+  // Real-Time Discount Calculator in Step 3
+  const updateWizardDiscountCalculation = () => {
+    const price = parseFloat(prodPriceInput ? prodPriceInput.value : '0') || 0;
+    let mrp = parseFloat(prodMrpInput ? prodMrpInput.value : '0') || 0;
+    const discountDisplay = document.getElementById('wizardDiscountDisplay');
+
+    if (!mrp && price > 0) {
+      mrp = Math.round(price * 1.3);
+      if (prodMrpInput && !prodMrpInput.value) {
+        prodMrpInput.placeholder = String(mrp);
+      }
+    }
+
+    if (discountDisplay) {
+      if (mrp > price && price > 0) {
+        const pct = Math.round(((mrp - price) / mrp) * 100);
+        const saved = mrp - price;
+        discountDisplay.innerHTML = `<span style="color:#15803D;">${pct}% OFF</span> (Customer saves ₹${saved.toLocaleString('en-IN')})`;
+      } else {
+        discountDisplay.innerHTML = `<span style="color:#64748B;">Standard Catalog Price (0% Discount)</span>`;
+      }
+    }
+  };
+
+  if (prodPriceInput) prodPriceInput.addEventListener('input', updateWizardDiscountCalculation);
+  if (prodMrpInput) prodMrpInput.addEventListener('input', updateWizardDiscountCalculation);
+
+  // Stock Stepper in Step 3
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.btn-wizard-stock-inc')) {
+      e.preventDefault();
+      if (prodStockInput) {
+        prodStockInput.value = Math.max(0, parseInt(prodStockInput.value || '0', 10) + 1);
+        if (prodStockStatusSelect) prodStockStatusSelect.value = 'in_stock';
+      }
+    }
+    if (e.target.closest('.btn-wizard-stock-dec')) {
+      e.preventDefault();
+      if (prodStockInput) {
+        const val = Math.max(0, parseInt(prodStockInput.value || '0', 10) - 1);
+        prodStockInput.value = val;
+        if (val === 0 && prodStockStatusSelect) prodStockStatusSelect.value = 'out_of_stock';
+      }
+    }
+  });
 
   if (prodStockStatusSelect && prodStockInput) {
     prodStockStatusSelect.addEventListener('change', () => {
@@ -454,18 +736,151 @@ function initProductHandlers() {
     });
   }
 
+  // Media Presets & Live Photo Preview in Step 4
+  const updateWizardPhotoPreview = () => {
+    const rawVal = prodImagesInput ? prodImagesInput.value.trim() : '';
+    const firstImg = rawVal ? rawVal.split(',')[0].trim() : '';
+    const imgEl = document.getElementById('wizardPrimaryImagePreview');
+    const noImgEl = document.getElementById('wizardNoImagePlaceholder');
+
+    if (imgEl && noImgEl) {
+      if (firstImg) {
+        imgEl.src = firstImg;
+        imgEl.style.display = 'block';
+        noImgEl.style.display = 'none';
+        imgEl.onerror = () => {
+          imgEl.style.display = 'none';
+          noImgEl.style.display = 'block';
+        };
+      } else {
+        imgEl.style.display = 'none';
+        noImgEl.style.display = 'block';
+      }
+    }
+  };
+
+  if (prodImagesInput) {
+    prodImagesInput.addEventListener('input', updateWizardPhotoPreview);
+  }
+
+  document.querySelectorAll('.btn-media-preset').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const src = btn.getAttribute('data-src');
+      if (src && prodImagesInput) {
+        prodImagesInput.value = src;
+        updateWizardPhotoPreview();
+      }
+    });
+  });
+
+  // Step 5 Review & Storefront Live Summary Updater
+  const updateWizardReviewSummary = () => {
+    const name = prodNameInput ? prodNameInput.value.trim() : 'Artwork Name';
+    const cat = prodCategoryHidden ? prodCategoryHidden.value : 'Lippan Art';
+    const subcat = prodSubcatHidden ? prodSubcatHidden.value : '';
+    const code = document.getElementById('prodFormCode')?.value || 'MC/L-001';
+    const size = sizeInput ? sizeInput.value : '';
+    const material = document.getElementById('prodFormMaterial')?.value || '';
+    const price = parseFloat(prodPriceInput ? prodPriceInput.value : '0') || 0;
+    const mrp = parseFloat(prodMrpInput ? prodMrpInput.value : '0') || Math.round(price * 1.3);
+    const stock = parseInt(prodStockInput ? prodStockInput.value : '0', 10);
+    const isBestseller = document.getElementById('prodFormBestseller')?.checked;
+    const isFeatured = document.getElementById('prodFormFeatured')?.checked;
+    const slug = prodSlugInput ? prodSlugInput.value : '';
+    const imgRaw = prodImagesInput ? prodImagesInput.value.trim() : '';
+    const imgUrl = imgRaw ? imgRaw.split(',')[0].trim() : '/img-prodcut/IMG_4041.png';
+
+    // Update Storefront Card Preview
+    const cardImg = document.getElementById('revCardImg');
+    const cardTitle = document.getElementById('revCardTitle');
+    const cardCat = document.getElementById('revCardCat');
+    const cardCode = document.getElementById('revCardCode');
+    const cardPrice = document.getElementById('revCardPrice');
+    const cardMrp = document.getElementById('revCardMrp');
+    const cardDiscount = document.getElementById('revCardDiscount');
+    const cardBadge = document.getElementById('revCardBadge');
+    const cardStockPill = document.getElementById('revCardStockPill');
+    const cardStockVal = document.getElementById('revCardStockVal');
+
+    if (cardImg) cardImg.src = imgUrl;
+    if (cardTitle) cardTitle.textContent = name;
+    if (cardCat) cardCat.textContent = cat;
+    if (cardCode) cardCode.textContent = code;
+    if (cardPrice) cardPrice.textContent = '₹' + price.toLocaleString('en-IN');
+    if (cardMrp) cardMrp.textContent = '₹' + mrp.toLocaleString('en-IN');
+
+    if (cardDiscount) {
+      if (mrp > price && price > 0) {
+        const pct = Math.round(((mrp - price) / mrp) * 100);
+        cardDiscount.textContent = `(${pct}% OFF)`;
+        cardDiscount.style.display = 'inline';
+      } else {
+        cardDiscount.style.display = 'none';
+      }
+    }
+
+    if (cardBadge) {
+      if (isBestseller) {
+        cardBadge.textContent = 'Bestseller';
+        cardBadge.className = 'card-badge bestseller';
+        cardBadge.style.display = 'inline-block';
+      } else if (isFeatured) {
+        cardBadge.textContent = 'Featured';
+        cardBadge.className = 'card-badge featured';
+        cardBadge.style.display = 'inline-block';
+      } else {
+        cardBadge.style.display = 'none';
+      }
+    }
+
+    if (cardStockPill && cardStockVal) {
+      if (stock > 0) {
+        cardStockPill.className = 'stock-pill in-stock';
+        cardStockPill.textContent = '● In Stock';
+        cardStockVal.textContent = `${stock} units`;
+        cardStockVal.style.color = '#0F382C';
+      } else {
+        cardStockPill.className = 'stock-pill out-of-stock';
+        cardStockPill.textContent = '● Out of Stock';
+        cardStockVal.textContent = '0 units';
+        cardStockVal.style.color = '#DC2626';
+      }
+    }
+
+    // Update Dossier Table
+    const setElem = (id, text) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text || '—';
+    };
+    setElem('revSummaryCat', cat);
+    setElem('revSummarySubcat', subcat);
+    setElem('revSummaryCode', code);
+    setElem('revSummarySize', size);
+    setElem('revSummaryMaterial', material);
+    setElem('revSummaryStock', `${stock} units (${stock > 0 ? 'In Stock' : 'Sold Out'})`);
+    setElem('revSummarySlug', slug ? `/product/${slug}` : '/product/artwork');
+  };
+
+  // Open Add Product Modal handler
   if (addProdBtn && prodModal) {
     addProdBtn.addEventListener('click', () => {
       if (prodForm) prodForm.reset();
+      isSlugManuallyEdited = false;
       document.getElementById('productModalTitle').textContent = 'Add New Handcrafted Artwork';
       document.getElementById('prodFormId').value = '';
       if (prodStockStatusSelect) prodStockStatusSelect.value = 'in_stock';
       if (prodStockInput) prodStockInput.value = '10';
+      if (prodImagesInput) prodImagesInput.value = '/img-prodcut/IMG_4041.png';
+      selectCategoryCard('Lippan Art');
+      updateWizardDiscountCalculation();
+      updateWizardPhotoPreview();
+      window.goToWizardStep(1);
       prodModal.classList.add('active');
     });
   }
 
-  // Helper to open Edit Product modal safely
+  // Helper to open Edit Product modal safely in multi-step wizard
   window.openEditProductModal = function(dataStr) {
     if (!dataStr) return;
     try {
@@ -480,13 +895,20 @@ function initProductHandlers() {
       };
 
       const titleEl = document.getElementById('productModalTitle');
-      if (titleEl) titleEl.textContent = `Edit Product: ${p.name || ''}`;
+      if (titleEl) titleEl.textContent = `Edit Artwork: ${p.name || ''}`;
 
       setVal('prodFormId', p.id || '');
       setVal('prodFormName', p.name || '');
       setVal('prodFormCode', p.code || '');
-      setVal('prodFormCategory', p.category || 'Lippan Art');
-      setVal('prodFormSubcategory', p.subcategory || '');
+      setVal('prodFormSlug', p.slug || '');
+      if (slugPreview) slugPreview.textContent = '/product/' + (p.slug || 'artwork');
+      isSlugManuallyEdited = true;
+
+      const pCat = p.category || 'Lippan Art';
+      const pSubcat = p.subcategory || '';
+      selectCategoryCard(pCat);
+      populateWizardSubcategories(pCat, pSubcat);
+
       setVal('prodFormPrice', p.price || '');
       setVal('prodFormMrp', p.mrp || '');
       const currentStock = Number(p.stock ?? 0);
@@ -503,6 +925,10 @@ function initProductHandlers() {
       setVal('prodFormDesc', p.description || '');
       setChecked('prodFormFeatured', p.featured);
       setChecked('prodFormBestseller', p.bestseller);
+
+      updateWizardDiscountCalculation();
+      updateWizardPhotoPreview();
+      window.goToWizardStep(1);
 
       const modal = document.getElementById('productFormModal');
       if (modal) {
@@ -529,6 +955,13 @@ function initProductHandlers() {
   if (prodForm) {
     prodForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const submitBtn = document.getElementById('btnSubmitProduct') || prodForm.querySelector('button[type="submit"]');
+      const origHtml = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="material-symbols-outlined" style="animation:spin 1s linear infinite; font-size:18px; vertical-align:middle; margin-right:6px;">progress_activity</span> Publishing Artwork...`;
+      }
+
       const isEdit = !!document.getElementById('prodFormId').value;
       const formData = new FormData(prodForm);
       formData.append('action', isEdit ? 'edit_product' : 'add_product');
@@ -537,13 +970,22 @@ function initProductHandlers() {
         const res = await fetch('/api/admin.php', { method: 'POST', body: formData });
         const data = await res.json();
         if (data.success) {
-          showNotification(data.message, 'success');
-          setTimeout(() => window.location.reload(), 700);
+          showNotification(data.message || (isEdit ? 'Artwork updated successfully!' : 'New artwork published successfully!'), 'success');
+          prodModal?.classList.remove('active');
+          setTimeout(() => window.location.reload(), 650);
         } else {
           showNotification(data.message || 'Error saving product.', 'error');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = origHtml;
+          }
         }
       } catch (err) {
         showNotification('Server communication error.', 'error');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origHtml;
+        }
       }
     });
   }
