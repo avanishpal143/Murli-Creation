@@ -2819,7 +2819,7 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               <?php foreach ($categories as $catKey => $catData): ?>
                 <?php
                   $iconName = 'category';
-                  if ($catKey === 'Lippan Art') $iconName = 'sparkles';
+                  if ($catKey === 'Lippan Art') $iconName = 'auto_awesome';
                   elseif ($catKey === 'Shyam Ji Decor') $iconName = 'temple_hindu';
                   elseif ($catKey === 'Vastu Species') $iconName = 'sunny';
                   elseif ($catKey === 'Diwali & Festive Decor') $iconName = 'local_fire_department';

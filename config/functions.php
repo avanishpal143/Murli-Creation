@@ -60,7 +60,7 @@ function get_category_tree() {
         'Lippan Art' => [
             'name' => 'Lippan Art Collections',
             'slug' => 'Lippan Art',
-            'icon' => 'sparkles',
+            'icon' => 'auto_awesome',
             'badge' => 'Signature Heritage',
             'description' => 'Traditional mud clay relief & mirror artwork handcrafted by Murli Prasad',
             'subcategories' => [
