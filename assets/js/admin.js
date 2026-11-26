@@ -151,7 +151,9 @@ function initAuthHandlers() {
 function initProductHandlers() {
   const searchInput = document.getElementById('productSearchInput');
   const catSelect = document.getElementById('productCategoryFilter');
+  const subcatSelect = document.getElementById('productSubcategoryFilter');
   const stockSelect = document.getElementById('productStockFilter');
+  const sortSelect = document.getElementById('productSortFilter');
 
   // View Switcher (Grid vs Table)
   const btnGrid = document.getElementById('btnViewGrid');
@@ -174,35 +176,127 @@ function initProductHandlers() {
     });
   }
 
+  // Populate dynamic subcategories for product filter
+  const updateProductSubcategories = () => {
+    if (!subcatSelect) return;
+    const cat = catSelect ? catSelect.value : 'all';
+    subcatSelect.innerHTML = '<option value="all">All Subcategories</option>';
+
+    if (cat === 'all') {
+      subcatSelect.disabled = false;
+      return;
+    }
+
+    const catData = window.MURLI_CATEGORIES ? window.MURLI_CATEGORIES[cat] : null;
+    const subcats = new Set();
+    if (catData && catData.subcategories) {
+      Object.keys(catData.subcategories).forEach(s => subcats.add(s));
+    }
+    if (window.MURLI_PRODUCTS) {
+      window.MURLI_PRODUCTS.forEach(p => {
+        const pCat = p.category || '';
+        const match = (pCat === cat) || (catData && pCat === catData.name);
+        if (match && p.subcategory) subcats.add(p.subcategory);
+      });
+    }
+
+    subcats.forEach(sub => {
+      let count = 0;
+      if (window.MURLI_PRODUCTS) {
+        count = window.MURLI_PRODUCTS.filter(p => {
+          const pCat = p.category || '';
+          const match = (pCat === cat) || (catData && pCat === catData.name);
+          return match && (p.subcategory === sub);
+        }).length;
+      }
+      const opt = document.createElement('option');
+      opt.value = sub;
+      opt.textContent = `${sub} (${count})`;
+      subcatSelect.appendChild(opt);
+    });
+  };
+
+  const sortProducts = () => {
+    const sortBy = sortSelect ? sortSelect.value : 'default';
+    if (!sortBy || sortBy === 'default') return;
+
+    const sortFn = (a, b) => {
+      if (sortBy === 'price-asc') {
+        return parseFloat(a.getAttribute('data-price') || 0) - parseFloat(b.getAttribute('data-price') || 0);
+      } else if (sortBy === 'price-desc') {
+        return parseFloat(b.getAttribute('data-price') || 0) - parseFloat(a.getAttribute('data-price') || 0);
+      } else if (sortBy === 'stock-desc') {
+        return parseInt(b.getAttribute('data-stock') || 0, 10) - parseInt(a.getAttribute('data-stock') || 0, 10);
+      } else if (sortBy === 'name-asc') {
+        return (a.getAttribute('data-name') || '').localeCompare(b.getAttribute('data-name') || '');
+      }
+      return 0;
+    };
+
+    if (gridView) {
+      const cards = Array.from(gridView.querySelectorAll('.product-item-container'));
+      cards.sort(sortFn);
+      cards.forEach(c => gridView.appendChild(c));
+    }
+
+    const tableBody = document.querySelector('#productsTableView tbody');
+    if (tableBody) {
+      const rows = Array.from(tableBody.querySelectorAll('.product-table-row'));
+      rows.sort(sortFn);
+      rows.forEach(r => tableBody.appendChild(r));
+    }
+  };
+
   const filterProducts = () => {
     const term = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const cat = catSelect ? catSelect.value : 'all';
+    const subcat = subcatSelect ? subcatSelect.value : 'all';
     const stock = stockSelect ? stockSelect.value : 'all';
+
+    const catData = (window.MURLI_CATEGORIES && cat !== 'all') ? window.MURLI_CATEGORIES[cat] : null;
 
     const items = document.querySelectorAll('.product-item-container, .product-table-row');
     items.forEach(el => {
       const name = el.getAttribute('data-name')?.toLowerCase() || '';
       const code = el.getAttribute('data-code')?.toLowerCase() || '';
       const category = el.getAttribute('data-category') || '';
+      const itemSubcat = el.getAttribute('data-subcategory') || '';
       const qty = parseInt(el.getAttribute('data-stock') || '0', 10);
 
       const matchesSearch = !term || 
         name.includes(term) || 
         code.includes(term) || 
+        category.toLowerCase().includes(term) ||
+        itemSubcat.toLowerCase().includes(term) ||
         (term.replace(/[^a-z0-9]/g, '') && code.replace(/[^a-z0-9]/g, '').includes(term.replace(/[^a-z0-9]/g, '')));
-      const matchesCat = cat === 'all' || category === cat;
+
+      const matchesCat = (cat === 'all') || (category === cat) || (catData && category === catData.name);
+      const matchesSubcat = (subcat === 'all') || (itemSubcat === subcat);
+
       let matchesStock = true;
       if (stock === 'low') matchesStock = (qty > 0 && qty <= 3);
       if (stock === 'out') matchesStock = (qty <= 0);
       if (stock === 'in') matchesStock = (qty > 0);
 
-      el.style.display = (matchesSearch && matchesCat && matchesStock) ? '' : 'none';
+      el.style.display = (matchesSearch && matchesCat && matchesSubcat && matchesStock) ? '' : 'none';
     });
   };
 
   if (searchInput) searchInput.addEventListener('input', filterProducts);
-  if (catSelect) catSelect.addEventListener('change', filterProducts);
+  if (catSelect) {
+    catSelect.addEventListener('change', () => {
+      updateProductSubcategories();
+      filterProducts();
+    });
+  }
+  if (subcatSelect) subcatSelect.addEventListener('change', filterProducts);
   if (stockSelect) stockSelect.addEventListener('change', filterProducts);
+  if (sortSelect) {
+    sortSelect.addEventListener('change', () => {
+      sortProducts();
+      filterProducts();
+    });
+  }
 
   // 1-Click In Stock / Out of Stock Status Toggle
   document.querySelectorAll('.btn-toggle-stock-status').forEach(btn => {
@@ -2314,12 +2408,146 @@ function initStudioPowerTools() {
     });
   }
 
+  // 5. Category & Subcategory Bulk Discount Manager Handlers
   const btnOpenFestive = document.getElementById('btnOpenFestiveDiscountModal');
   const modalFestive = document.getElementById('festiveDiscountModal');
   const formFestive = document.getElementById('formFestiveDiscount');
+  const discountCatSelect = document.getElementById('discountCategorySelect');
+  const discountSubcatSelect = document.getElementById('discountSubcategorySelect');
+  const discountInput = document.getElementById('discountPercentInput');
+  const discountScopeText = document.getElementById('discountScopeText');
+  const discountScopePercent = document.getElementById('discountScopePercent');
+
+  const updateDiscountScopeDisplay = () => {
+    if (!discountCatSelect || !discountInput) return;
+    const catVal = discountCatSelect.value;
+    const subcatVal = discountSubcatSelect ? discountSubcatSelect.value : 'all';
+    const percentVal = parseInt(discountInput.value || '0', 10);
+
+    const catData = (window.MURLI_CATEGORIES && catVal !== 'all') ? window.MURLI_CATEGORIES[catVal] : null;
+    const catDisplayName = catData ? (catData.name || catVal) : catVal;
+
+    let matchedCount = 0;
+    if (window.MURLI_PRODUCTS) {
+      matchedCount = window.MURLI_PRODUCTS.filter(p => {
+        const pCat = p.category || '';
+        const matchCat = (catVal === 'all') || (pCat === catVal) || (catData && pCat === catData.name);
+        if (!matchCat) return false;
+        if (subcatVal !== 'all') {
+          return p.subcategory === subcatVal;
+        }
+        return true;
+      }).length;
+    }
+
+    if (discountScopeText) {
+      if (catVal === 'all') {
+        discountScopeText.innerHTML = `All <strong>${matchedCount} artworks</strong> across the entire studio catalog`;
+      } else if (subcatVal === 'all') {
+        discountScopeText.innerHTML = `All <strong>${matchedCount} artworks</strong> in <em>${catDisplayName}</em>`;
+      } else {
+        discountScopeText.innerHTML = `<strong>${matchedCount} artworks</strong> in <em>${catDisplayName} &gt; ${subcatVal}</em>`;
+      }
+    }
+
+    if (discountScopePercent) {
+      if (percentVal <= 0) {
+        discountScopePercent.innerHTML = `<span style="color:#dc2626;">Reset to Standard Catalog MRP</span>`;
+      } else {
+        discountScopePercent.innerHTML = `<span style="color:#15803d;">${percentVal}% OFF</span>`;
+      }
+    }
+  };
+
+  const populateDiscountSubcategories = () => {
+    if (!discountCatSelect || !discountSubcatSelect) return;
+    const catVal = discountCatSelect.value;
+    discountSubcatSelect.innerHTML = '';
+
+    if (catVal === 'all') {
+      const opt = document.createElement('option');
+      opt.value = 'all';
+      opt.textContent = 'All Subcategories in Entire Studio Catalog';
+      discountSubcatSelect.appendChild(opt);
+      discountSubcatSelect.disabled = true;
+    } else {
+      discountSubcatSelect.disabled = false;
+      const optAll = document.createElement('option');
+      optAll.value = 'all';
+      optAll.textContent = 'All Subcategories in this Collection';
+      discountSubcatSelect.appendChild(optAll);
+
+      const catData = window.MURLI_CATEGORIES ? window.MURLI_CATEGORIES[catVal] : null;
+      const subcats = new Set();
+      if (catData && catData.subcategories) {
+        Object.keys(catData.subcategories).forEach(s => subcats.add(s));
+      }
+      if (window.MURLI_PRODUCTS) {
+        window.MURLI_PRODUCTS.forEach(p => {
+          const pCat = p.category || '';
+          const match = (pCat === catVal) || (catData && pCat === catData.name);
+          if (match && p.subcategory) subcats.add(p.subcategory);
+        });
+      }
+
+      subcats.forEach(sub => {
+        let count = 0;
+        if (window.MURLI_PRODUCTS) {
+          count = window.MURLI_PRODUCTS.filter(p => {
+            const pCat = p.category || '';
+            const match = (pCat === catVal) || (catData && pCat === catData.name);
+            return match && (p.subcategory === sub);
+          }).length;
+        }
+        const opt = document.createElement('option');
+        opt.value = sub;
+        opt.textContent = `${sub} (${count} artworks)`;
+        discountSubcatSelect.appendChild(opt);
+      });
+    }
+
+    updateDiscountScopeDisplay();
+  };
+
+  if (discountCatSelect) {
+    discountCatSelect.addEventListener('change', populateDiscountSubcategories);
+  }
+  if (discountSubcatSelect) {
+    discountSubcatSelect.addEventListener('change', updateDiscountScopeDisplay);
+  }
+
+  // Quick Preset Chips (5%, 10%, 15%, 20%, 25%, 30%, 50%, Reset)
+  document.querySelectorAll('.btn-preset-discount').forEach(chip => {
+    chip.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.btn-preset-discount').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const val = chip.getAttribute('data-discount') || '0';
+      if (discountInput) {
+        discountInput.value = val;
+      }
+      updateDiscountScopeDisplay();
+    });
+  });
+
+  if (discountInput) {
+    discountInput.addEventListener('input', () => {
+      const val = discountInput.value;
+      document.querySelectorAll('.btn-preset-discount').forEach(c => {
+        if (c.getAttribute('data-discount') === val) {
+          c.classList.add('active');
+        } else {
+          c.classList.remove('active');
+        }
+      });
+      updateDiscountScopeDisplay();
+    });
+  }
 
   if (btnOpenFestive && modalFestive) {
     btnOpenFestive.addEventListener('click', () => {
+      populateDiscountSubcategories();
+      updateDiscountScopeDisplay();
       modalFestive.classList.add('active');
     });
   }
@@ -2327,6 +2555,13 @@ function initStudioPowerTools() {
   if (formFestive) {
     formFestive.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const submitBtn = formFestive.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="material-symbols-outlined" style="animation:spin 1s linear infinite; vertical-align:middle; font-size:18px;">progress_activity</span> Applying Bulk Discount...`;
+      }
+
       const formData = new FormData(formFestive);
       formData.append('action', 'apply_bulk_discount');
 
@@ -2334,14 +2569,22 @@ function initStudioPowerTools() {
         const res = await fetch('/api/admin.php', { method: 'POST', body: formData });
         const data = await res.json();
         if (data.success) {
-          showNotification(data.message || 'Festive discount applied successfully!', 'success');
+          showNotification(data.message || 'Category discount applied successfully!', 'success');
           modalFestive?.classList.remove('active');
-          setTimeout(() => window.location.reload(), 700);
+          setTimeout(() => window.location.reload(), 600);
         } else {
           showNotification(data.message || 'Failed to apply discount.', 'error');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+          }
         }
       } catch (err) {
         showNotification('Server communication error.', 'error');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
       }
     });
   }

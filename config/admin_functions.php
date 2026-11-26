@@ -1702,17 +1702,35 @@ function db_import_products_csv($csvContent) {
     ];
 }
 
-function db_apply_bulk_discount($category, $discountPercent) {
+function db_apply_bulk_discount($category, $discountPercent, $subcategory = 'all') {
     $discountPercent = (float)$discountPercent;
     if ($discountPercent < 0 || $discountPercent > 90) {
         return ['success' => false, 'message' => 'Invalid discount percentage (must be between 0% and 90%).'];
     }
     $products = function_exists('db_get_all_products') ? db_get_all_products() : get_all_products();
     $affectedCount = 0;
+
+    $categoryLower = strtolower(trim($category));
+    $subcategoryLower = strtolower(trim($subcategory));
+
     foreach ($products as $p) {
-        if ($category !== 'all' && ($p['category'] ?? '') !== $category) {
-            continue;
+        $pCat = strtolower(trim($p['category'] ?? ''));
+        $pSub = strtolower(trim($p['subcategory'] ?? ''));
+
+        // Category matching: exact match or bidirectional substring match
+        if ($category !== 'all' && !empty($category)) {
+            if ($pCat !== $categoryLower && strpos($categoryLower, $pCat) === false && strpos($pCat, $categoryLower) === false) {
+                continue;
+            }
         }
+
+        // Subcategory matching: exact match or substring match
+        if ($subcategory !== 'all' && !empty($subcategory)) {
+            if ($pSub !== $subcategoryLower && strpos($subcategoryLower, $pSub) === false && strpos($pSub, $subcategoryLower) === false) {
+                continue;
+            }
+        }
+
         $mrp = (float)($p['mrp'] ?? round($p['price'] * 1.3));
         if ($discountPercent == 0) {
             $p['price'] = round($mrp * 0.8);
@@ -1722,14 +1740,20 @@ function db_apply_bulk_discount($category, $discountPercent) {
         db_save_product($p);
         $affectedCount++;
     }
-    $catName = ($category === 'all') ? 'All Collections' : $category;
+
+    $catName = ($category === 'all' || empty($category)) ? 'All Collections' : $category;
+    $targetDesc = $catName;
+    if ($subcategory !== 'all' && !empty($subcategory)) {
+        $targetDesc .= " > {$subcategory}";
+    }
+
     if (function_exists('db_log_admin_action')) {
-        db_log_admin_action('Festive Discount Applied', "Applied {$discountPercent}% discount to {$catName} ({$affectedCount} items)");
+        db_log_admin_action('Category Discount Applied', "Applied {$discountPercent}% discount to {$targetDesc} ({$affectedCount} items)");
     }
     return [
         'success' => true,
         'affected_count' => $affectedCount,
-        'message' => "Successfully updated {$affectedCount} products in '{$catName}' with {$discountPercent}% festive discount!"
+        'message' => "Successfully updated {$affectedCount} products in '{$targetDesc}' with {$discountPercent}% discount!"
     ];
 }
 

@@ -51,6 +51,7 @@ $csv = db_export_products_csv();
 assertCondition("db_export_products_csv generates valid CSV", !empty($csv) && str_contains($csv, 'SKU Code,Product ID,Product Name'), "Length: " . strlen($csv) . " bytes");
 
 // 3. Mass Festive Discount & Revert
+$origJsonContent = file_exists(__DIR__ . '/../storage/products.json') ? file_get_contents(__DIR__ . '/../storage/products.json') : null;
 $allProductsBefore = get_all_products();
 $discountRes = db_apply_bulk_discount('all', 10);
 assertCondition("db_apply_bulk_discount applies 10% discount", $discountRes['success'] === true, $discountRes['message'] ?? '');
@@ -58,9 +59,12 @@ assertCondition("db_apply_bulk_discount applies 10% discount", $discountRes['suc
 $discountRevert = db_apply_bulk_discount('all', 0);
 assertCondition("db_apply_bulk_discount reverts back to standard catalog pricing", $discountRevert['success'] === true, $discountRevert['message'] ?? '');
 
-// Restore exact original catalog prices so test execution never alters custom product pricing
+// Restore exact original catalog prices and storage file
 foreach ($allProductsBefore as $origProduct) {
     db_save_product($origProduct);
+}
+if ($origJsonContent !== null) {
+    file_put_contents(__DIR__ . '/../storage/products.json', $origJsonContent);
 }
 
 // 4. Abandoned Carts

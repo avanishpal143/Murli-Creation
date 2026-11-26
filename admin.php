@@ -113,6 +113,23 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
 
   <script>
     // Bulletproof Tab Switching Engine - Runs immediately without external dependencies
+    window.MURLI_CATEGORIES = <?php echo json_encode($categories); ?>;
+    window.MURLI_PRODUCTS = <?php 
+      $minProds = array_map(function($p) {
+        return [
+          "id" => $p["id"] ?? "",
+          "code" => $p["code"] ?? "",
+          "name" => $p["name"] ?? "",
+          "category" => $p["category"] ?? "",
+          "subcategory" => $p["subcategory"] ?? "",
+          "price" => (float)($p["price"] ?? 0),
+          "mrp" => (float)($p["mrp"] ?? round(($p["price"] ?? 0) * 1.3)),
+          "stock" => (int)($p["stock"] ?? 0)
+        ];
+      }, $products);
+      echo json_encode($minProds);
+    ?>;
+
     window.switchAdminTab = function(targetTab) {
       try {
         var navBtns = document.querySelectorAll('.admin-nav-item');
@@ -480,8 +497,8 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
               <button type="button" class="btn btn-secondary" id="btnOpenBulkImportModal" title="Upload or paste updated CSV to batch update prices and stock">
                 <span class="material-symbols-outlined" style="font-size:17px;">upload</span> Bulk Import
               </button>
-              <button type="button" class="btn btn-secondary" id="btnOpenFestiveDiscountModal" title="Apply instant festive discount across entire catalog or categories">
-                <span class="material-symbols-outlined" style="font-size:17px;">percent</span> Festive Sale
+              <button type="button" class="btn btn-secondary" id="btnOpenFestiveDiscountModal" title="Category & Subcategory Wise Bulk Price & Discount Manager">
+                <span class="material-symbols-outlined" style="font-size:18px; color:#1EA659;">percent</span> Category Discount
               </button>
 
               <button type="button" class="btn btn-gold" id="openAddProductModalBtn">
@@ -490,29 +507,53 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
             </div>
           </div>
 
-          <!-- Filter Toolbar -->
-          <div class="admin-toolbar">
-            <div class="admin-search-wrap">
+          <!-- Filter Toolbar with Category & Subcategory Drilldown -->
+          <div class="admin-toolbar" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:24px;">
+            <div class="admin-search-wrap" style="flex:1; min-width:250px; position:relative;">
               <span class="admin-search-icon"><span class="material-symbols-outlined">search</span></span>
-              <input type="text" id="productSearchInput" class="admin-search-input" placeholder="Search artwork by title, SKU code (e.g. MC/L-001), or material...">
+              <input type="text" id="productSearchInput" class="admin-search-input" placeholder="Search artwork by title, SKU code (e.g. MC/L-001), material...">
             </div>
 
-            <select id="productCategoryFilter" class="admin-select">
-              <option value="all">All Art Collections</option>
+            <!-- Category Filter -->
+            <select id="productCategoryFilter" class="admin-select" style="min-width:180px;">
+              <option value="all">All Categories (<?php echo count($products); ?>)</option>
               <?php foreach ($categories as $catKey => $catData): ?>
-                <option value="<?php echo htmlspecialchars($catKey); ?>"><?php echo htmlspecialchars($catKey); ?></option>
+                <?php 
+                  $catPCount = count(array_filter($products, function($item) use ($catKey, $catData) {
+                    $c = $item['category'] ?? '';
+                    return $c === $catKey || $c === ($catData['name'] ?? '');
+                  }));
+                ?>
+                <option value="<?php echo htmlspecialchars($catKey); ?>">
+                  <?php echo htmlspecialchars($catData['name'] ?? $catKey); ?> (<?php echo $catPCount; ?>)
+                </option>
               <?php endforeach; ?>
             </select>
 
+            <!-- Subcategory Filter (Populated dynamically) -->
+            <select id="productSubcategoryFilter" class="admin-select" style="min-width:180px;">
+              <option value="all">All Subcategories</option>
+            </select>
+
+            <!-- Stock Filter -->
             <select id="productStockFilter" class="admin-select">
               <option value="all">All Inventory</option>
               <option value="in">In Stock (>3)</option>
               <option value="low">Low Stock (≤3)</option>
               <option value="out">Sold Out (0)</option>
             </select>
+
+            <!-- Sort Filter -->
+            <select id="productSortFilter" class="admin-select">
+              <option value="default">Sort: Default</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="stock-desc">Stock: High to Low</option>
+              <option value="name-asc">Name: A to Z</option>
+            </select>
           </div>
 
-          <!-- 1. Visual Cards Grid (Looks Exactly Like Frontend Website) -->
+          <!-- 1. Visual Cards Grid (Luxury Studio Aesthetic) -->
           <div class="frontend-products-grid" id="productsGridView">
             <?php foreach ($products as $p): ?>
               <?php 
@@ -528,6 +569,8 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                    data-name="<?php echo htmlspecialchars($p['name']); ?>"
                    data-code="<?php echo htmlspecialchars($p['code'] ?? ''); ?>"
                    data-category="<?php echo htmlspecialchars($p['category']); ?>"
+                   data-subcategory="<?php echo htmlspecialchars($p['subcategory'] ?? ''); ?>"
+                   data-price="<?php echo $pPrice; ?>"
                    data-stock="<?php echo $pStock; ?>">
                 
                 <!-- Image Container with Badges -->
@@ -630,25 +673,42 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                   <?php 
                     $pImg = !empty($p['images'][0]) ? $p['images'][0] : '/img-prodcut/IMG_4041.png';
                     $pStock = (int)($p['stock'] ?? 0);
+                    $pPrice = (float)($p['price'] ?? 0);
+                    $pMrp = (float)($p['mrp'] ?? round($pPrice * 1.3));
+                    $pDiscount = $pMrp > 0 ? round((($pMrp - $pPrice) / $pMrp) * 100) : 0;
                     $pJson = htmlspecialchars(json_encode($p), ENT_QUOTES, 'UTF-8');
                   ?>
                   <tr class="product-table-row" id="prod-row-<?php echo htmlspecialchars($p['id']); ?>"
                       data-name="<?php echo htmlspecialchars($p['name']); ?>"
                       data-code="<?php echo htmlspecialchars($p['code'] ?? ''); ?>"
                       data-category="<?php echo htmlspecialchars($p['category']); ?>"
+                      data-subcategory="<?php echo htmlspecialchars($p['subcategory'] ?? ''); ?>"
+                      data-price="<?php echo $pPrice; ?>"
                       data-stock="<?php echo $pStock; ?>">
                     <td>
-                      <img src="<?php echo htmlspecialchars($pImg); ?>" alt="" style="width:48px; height:48px; object-fit:cover; border-radius:6px; border:1px solid #e2d9cc;">
+                      <img src="<?php echo htmlspecialchars($pImg); ?>" alt="" style="width:48px; height:48px; object-fit:cover; border-radius:8px; border:1px solid #e2e8f0;">
                     </td>
-                    <td><code><?php echo htmlspecialchars($p['code'] ?? 'MC/L-000'); ?></code></td>
+                    <td><code style="font-size:0.75rem; background:#f8fafc; border:1px solid #e2e8f0; padding:2px 6px; border-radius:4px; font-weight:700; color:#0f382c;"><?php echo htmlspecialchars($p['code'] ?? 'MC/L-000'); ?></code></td>
                     <td>
-                      <strong><?php echo htmlspecialchars($p['name']); ?></strong><br>
-                      <small style="color:#777;"><?php echo htmlspecialchars($p['size'] ?? ''); ?></small>
+                      <strong style="color:#0f382c; font-size:0.9rem;"><?php echo htmlspecialchars($p['name']); ?></strong><br>
+                      <small style="color:#64748b;"><?php echo htmlspecialchars($p['size'] ?? ($p['subcategory'] ?? 'Handmade')); ?></small>
                     </td>
-                    <td><span class="badge badge-gold"><?php echo htmlspecialchars($p['category']); ?></span></td>
                     <td>
-                      <strong>₹<?php echo number_format($p['price']); ?></strong><br>
-                      <small style="color:#888; text-decoration:line-through;">₹<?php echo number_format($p['mrp'] ?? round($p['price'] * 1.3)); ?></small>
+                      <span class="badge" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; font-size:0.72rem; padding:3px 8px; border-radius:6px; font-weight:600;">
+                        <?php echo htmlspecialchars($p['category']); ?>
+                      </span>
+                      <?php if (!empty($p['subcategory'])): ?>
+                        <div style="font-size:0.72rem; color:#64748b; margin-top:3px;"><?php echo htmlspecialchars($p['subcategory']); ?></div>
+                      <?php endif; ?>
+                    </td>
+                    <td>
+                      <div class="table-price-wrap" style="line-height:1.25;">
+                        <strong style="font-size:0.92rem; color:#0f382c;">₹<?php echo number_format($pPrice); ?></strong>
+                        <?php if ($pMrp > $pPrice): ?>
+                          <span style="color:#94a3b8; font-size:0.78rem; text-decoration:line-through; margin-left:4px;">₹<?php echo number_format($pMrp); ?></span>
+                          <span style="color:#16a34a; font-size:0.72rem; font-weight:700; margin-left:4px;">(<?php echo $pDiscount; ?>% OFF)</span>
+                        <?php endif; ?>
+                      </div>
                     </td>
                     <td>
                       <div style="display:inline-flex; align-items:center; gap:8px;">
@@ -673,15 +733,16 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
                       </div>
                     </td>
                     <td>
-                      <?php if (!empty($p['bestseller'])): ?><span class="badge badge-danger">Bestseller</span><?php endif; ?>
-                      <?php if (!empty($p['featured'])): ?><span class="badge badge-info">Featured</span><?php endif; ?>
+                      <span class="badge" style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd; font-size:0.72rem; padding:3px 8px; border-radius:12px; font-weight:700; display:inline-flex; align-items:center; gap:3px;">
+                        <span class="material-symbols-outlined" style="font-size:12px;">check_circle</span> Published
+                      </span>
                     </td>
                     <td style="text-align:right;">
                       <div style="display:inline-flex; gap:6px;">
-                        <a href="/product.php?slug=<?php echo urlencode($p['slug'] ?? ''); ?>" target="_blank" class="btn btn-sm btn-secondary" title="View live on storefront"><span class="material-symbols-outlined" style="font-size:16px;">visibility</span> Store</a>
-                        <button type="button" class="btn btn-sm btn-secondary btn-inspect-product" data-id="<?php echo htmlspecialchars($p['id']); ?>">Specs</button>
-                        <button type="button" class="btn btn-sm btn-secondary btn-edit-product" data-product="<?php echo $pJson; ?>">Edit</button>
-                        <button type="button" class="btn btn-sm btn-danger btn-delete-product" data-id="<?php echo htmlspecialchars($p['id']); ?>" data-name="<?php echo htmlspecialchars($p['name']); ?>"><span class="material-symbols-outlined" style="font-size:16px;">delete</span></button>
+                        <a href="/product.php?slug=<?php echo urlencode($p['slug'] ?? ''); ?>" target="_blank" class="btn btn-sm btn-secondary" title="View live on storefront" style="padding:6px 9px; font-size:0.75rem;"><span class="material-symbols-outlined" style="font-size:15px;">visibility</span></a>
+                        <button type="button" class="btn btn-sm btn-secondary btn-inspect-product" data-id="<?php echo htmlspecialchars($p['id']); ?>" style="padding:6px 9px; font-size:0.75rem;">Specs</button>
+                        <button type="button" class="btn btn-sm btn-secondary btn-edit-product" data-product="<?php echo $pJson; ?>" style="padding:6px 9px; font-size:0.75rem;"><span class="material-symbols-outlined" style="font-size:15px;">edit</span> Edit</button>
+                        <button type="button" class="btn btn-sm btn-danger btn-delete-product" data-id="<?php echo htmlspecialchars($p['id']); ?>" data-name="<?php echo htmlspecialchars($p['name']); ?>" style="padding:6px 9px; font-size:0.75rem;"><span class="material-symbols-outlined" style="font-size:15px;">delete</span></button>
                       </div>
                     </td>
                   </tr>
@@ -3182,41 +3243,99 @@ $currentRole = $_SESSION['mc_admin_role'] ?? 'super_admin';
     </div>
   </div>
 
-  <!-- Festive Bulk Discount Modal -->
+  <!-- Category & Subcategory Bulk Price Discount Modal -->
   <div class="admin-modal-overlay" id="festiveDiscountModal">
-    <div class="admin-modal" style="max-width:540px;">
+    <div class="admin-modal" style="max-width:580px;">
       <div class="modal-header">
-        <h3 class="modal-title"><span class="material-symbols-outlined" style="font-size:20px; vertical-align:middle; margin-right:6px;">percent</span> Mass Festive Discount Applicator</h3>
+        <h3 class="modal-title">
+          <span class="material-symbols-outlined" style="font-size:24px; vertical-align:middle; margin-right:8px; color:#1EA659;">percent</span> 
+          Category & Subcategory Bulk Discount Manager
+        </h3>
         <button type="button" class="modal-close-btn">&times;</button>
       </div>
       <form id="formFestiveDiscount">
         <div class="modal-body">
-          <p style="font-size:0.85rem; color:var(--admin-text-sub); margin-top:0;">
-            Apply an instant festival or celebratory discount across an entire collection or the whole studio catalog with a single click.
+          <p style="font-size:0.86rem; color:#475569; margin-top:0; line-height:1.5;">
+            Select a target category or drill down to a specific subcategory to apply festive discounts, custom price cuts, or revert back to standard catalog pricing in 1-click.
           </p>
+
+          <!-- Category Select -->
           <div class="form-group">
-            <label class="form-label" for="discountCategorySelect">Select Target Collection</label>
+            <label class="form-label" for="discountCategorySelect">
+              <span class="material-symbols-outlined" style="font-size:16px;">category</span> Target Category
+            </label>
             <select id="discountCategorySelect" name="category" class="form-control">
-              <option value="all">Entire Studio Catalog (All 40 Artworks)</option>
+              <option value="all">Entire Studio Catalog (All 39+ Artworks)</option>
               <?php foreach ($categories as $catKey => $catData): ?>
-                <option value="<?php echo htmlspecialchars($catKey); ?>"><?php echo htmlspecialchars($catKey); ?></option>
+                <?php 
+                  $countInCat = count(array_filter($products, function($item) use ($catKey, $catData) {
+                    $c = $item['category'] ?? '';
+                    return $c === $catKey || $c === ($catData['name'] ?? '');
+                  }));
+                ?>
+                <option value="<?php echo htmlspecialchars($catKey); ?>">
+                  <?php echo htmlspecialchars($catData['name'] ?? $catKey); ?> (<?php echo $countInCat; ?> artworks)
+                </option>
               <?php endforeach; ?>
             </select>
           </div>
+
+          <!-- Subcategory Select (Populated dynamically) -->
           <div class="form-group">
-            <label class="form-label" for="discountPercentSelect">Discount Percentage</label>
-            <select id="discountPercentSelect" name="discount" class="form-control">
-              <option value="5">5% OFF (Subtle Festive)</option>
-              <option value="10" selected>10% OFF (Festive Special - Standard)</option>
-              <option value="15">15% OFF (Grand Diwali / Griha Pravesh Rush)</option>
-              <option value="20">20% OFF (Mega Studio Clearance)</option>
-              <option value="0">0% (Revert All Back to Standard Catalog Prices)</option>
+            <label class="form-label" for="discountSubcategorySelect">
+              <span class="material-symbols-outlined" style="font-size:16px;">subdirectory_arrow_right</span> Target Subcategory
+            </label>
+            <select id="discountSubcategorySelect" name="subcategory" class="form-control">
+              <option value="all">All Subcategories in Selected Collection</option>
             </select>
+            <small style="color:#64748B; font-size:0.75rem;">Optional: Select a subcategory to only discount that specific slice of products.</small>
           </div>
+
+          <!-- Quick Preset Chips -->
+          <div class="form-group">
+            <label class="form-label">
+              <span class="material-symbols-outlined" style="font-size:16px;">bolt</span> Quick Discount Presets
+            </label>
+            <div class="discount-preset-chips" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+              <button type="button" class="btn-preset-discount" data-discount="5">5% OFF</button>
+              <button type="button" class="btn-preset-discount active" data-discount="10">10% OFF</button>
+              <button type="button" class="btn-preset-discount" data-discount="15">15% OFF</button>
+              <button type="button" class="btn-preset-discount" data-discount="20">20% OFF</button>
+              <button type="button" class="btn-preset-discount" data-discount="25">25% OFF</button>
+              <button type="button" class="btn-preset-discount" data-discount="30">30% OFF</button>
+              <button type="button" class="btn-preset-discount" data-discount="50">50% OFF</button>
+              <button type="button" class="btn-preset-discount reset" data-discount="0">Reset (0%)</button>
+            </div>
+          </div>
+
+          <!-- Discount Value Input -->
+          <div class="form-group">
+            <label class="form-label" for="discountPercentInput">
+              <span class="material-symbols-outlined" style="font-size:16px;">price_change</span> Discount Percentage (%)
+            </label>
+            <div style="position:relative;">
+              <input type="number" id="discountPercentInput" name="discount" class="form-control" min="0" max="90" step="1" value="10" required style="padding-right:45px; font-weight:700; font-size:1.1rem; color:#0F382C;">
+              <span style="position:absolute; right:15px; top:50%; transform:translateY(-50%); font-weight:800; color:#64748B;">%</span>
+            </div>
+            <small style="color:#64748B; font-size:0.75rem;">Prices will be recalculated against original MRP. Entering 0% resets to standard catalog prices.</small>
+          </div>
+
+          <!-- Real-Time Live Scope Impact Box -->
+          <div class="discount-impact-box" id="discountImpactBox" style="background:#F0FDF4; border:1.5px solid #BBF7D0; border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:12px; margin-top:14px;">
+            <div style="width:36px; height:36px; border-radius:8px; background:#DCFCE7; color:#15803D; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <span class="material-symbols-outlined">track_changes</span>
+            </div>
+            <div style="font-size:0.84rem; color:#14532D; line-height:1.4;">
+              <strong>Target Scope:</strong> <span id="discountScopeText">All 39 artworks across all collections</span> will receive <strong id="discountScopePercent">10% OFF</strong>.
+            </div>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-modal-cancel">Cancel</button>
-          <button type="submit" class="btn btn-gold">Apply Discount Now &rarr;</button>
+          <button type="submit" class="btn btn-gold" id="btnSubmitDiscount" style="padding:12px 24px;">
+            <span class="material-symbols-outlined">check_circle</span> Apply Category Discount Now &rarr;
+          </button>
         </div>
       </form>
     </div>

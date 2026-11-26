@@ -1030,8 +1030,9 @@ if ($action === 'import_products_csv') {
 
 if ($action === 'apply_bulk_discount') {
     $category = $_POST['category'] ?? 'all';
+    $subcategory = $_POST['subcategory'] ?? 'all';
     $discount = (float)($_POST['discount'] ?? 10);
-    $res = function_exists('db_apply_bulk_discount') ? db_apply_bulk_discount($category, $discount) : ['success' => false];
+    $res = function_exists('db_apply_bulk_discount') ? db_apply_bulk_discount($category, $discount, $subcategory) : ['success' => false];
     echo json_encode($res);
     exit;
 }
